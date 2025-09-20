@@ -17,7 +17,7 @@ export default function DashboardPage() {
       <main className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-8">
-          <div className="flex justify-between items-center">
+          <div className="flex flex-col gap-4 sm:gap-0 sm:flex-row justify-center sm:justify-between items-end sm:items-center">
             <div>
               <h1 className="text-3xl font-bold text-gray-900">
                 Welcome back, {user.email.split(" ")[0]}!

@@ -11,9 +11,9 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   const breadcrumbs = getBreadcrumbs(pathname);
   return (
     <SidebarProvider>
-      <AppSidebar />
+      {/* <AppSidebar /> */}
       <SidebarInset>
-        <AppHeader breadcrumbs={breadcrumbs} />
+        <AppHeader />
         <main>{children}</main>
       </SidebarInset>
     </SidebarProvider>

@@ -121,13 +121,13 @@ export default function LoginForm() {
             <p className="font-medium mb-2">Demo Accounts:</p>
             <div className="space-y-1">
               <p>
-                <strong>Mechanic:</strong> mechanic1 / password123
+                <strong>Mechanic:</strong> mechanic@gmail.com / password
               </p>
               <p>
-                <strong>Leader:</strong> leader1 / password123
+                <strong>Leader:</strong> leader@gmail.com / password
               </p>
               <p>
-                <strong>Admin:</strong> admin1 / password123
+                <strong>Admin:</strong> admin@gmail.com / password
               </p>
             </div>
           </div>

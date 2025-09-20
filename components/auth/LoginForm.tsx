@@ -26,6 +26,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { toast } from "sonner";
 
 export default function LoginForm() {
   // 1. Initialize the form using useForm, this now holds all form state
@@ -44,7 +45,13 @@ export default function LoginForm() {
   const onSubmit = (data: LoginSchema) => {
     mutate(data, {
       onSuccess: () => {
+        toast.success("Login successful! Redirecting...", {});
         router.replace("/dashboard");
+      },
+      onError: (error) => {
+        // 4. Update the toast to an error message
+        console.log({ error });
+        toast.error(error.message || "An unknown error occurred.");
       },
     });
   };

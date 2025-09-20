@@ -18,24 +18,33 @@ export const getProtectedRoutes = () => {
   });
 };
 
-export const getRequiredRoles = (url: string) => {
-  const allItems = NAV_LINKS.navMain.flatMap((section) => section.items);
-  const foundItem = allItems.find((item) => item.url === url);
+// ✅ Replace the old getRequiredRoles with this new version
+export const getRequiredRoles = (pathname: string): string[] => {
+  // 1. Combine all links (parent and children) into one flat array
+  const allLinks = NAV_LINKS.navMain.flatMap((section) => {
+    const parentLink =
+      section.url && section.url !== "#" ? [{ ...section }] : [];
+    return [...parentLink, ...section.items];
+  });
 
-  if (foundItem?.roles) {
-    return foundItem.roles;
-  }
-  // If a role wasn't found on the item, check if the parent section has roles
-  const parentSection = NAV_LINKS.navMain.find(
-    (section) => section.url === url
+  // 2. Find all routes that are a prefix of the current path
+  const matchingRoutes = allLinks.filter(
+    (link) => link.url && link.url !== "#" && pathname.startsWith(link.url)
   );
-  if (parentSection?.roles) {
-    return parentSection.roles;
+
+  if (matchingRoutes.length === 0) {
+    return ["user"]; // Fallback if no match is found
   }
-  // Fallback to a default role if no specific roles are defined for the URL
-  // This is a good practice to prevent unintended access
-  return ["user"];
+
+  // 3. Find the most specific match (the one with the longest URL)
+  const bestMatch = matchingRoutes.reduce((longest, current) => {
+    return current.url.length > longest.url.length ? current : longest;
+  });
+
+  return bestMatch.roles || ["user"]; // Return roles of the best match
 };
+
+// ... (keep the rest of your middleware logic)
 
 const validateToken = async (token: string) => {
   try {

@@ -7,7 +7,7 @@ export const NAV_LINKS = {
         {
           title: "dashboard",
           url: "/dashboard",
-          roles: ["mechanic"],
+          roles: ["mechanic", "admin", "leader"],
         },
         {
           title: "inspections",
@@ -18,6 +18,11 @@ export const NAV_LINKS = {
           title: "inspections",
           url: "/inspections/new",
           roles: ["mechanic"],
+        },
+        {
+          title: "verification",
+          url: "/verification",
+          roles: ["leader"],
         },
         {
           title: "Users",

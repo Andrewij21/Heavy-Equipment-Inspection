@@ -93,19 +93,19 @@ export function DashboardStats({ userRole }: DashboardStatsProps) {
             description: "Inspections processed",
             icon: <CheckCircle className="h-4 w-4 text-muted-foreground" />,
           },
-          {
-            title: "Team Inspections",
-            value: 156,
-            description: "Total this month",
-            icon: <FileText className="h-4 w-4 text-muted-foreground" />,
-            trend: { value: 15, isPositive: true },
-          },
-          {
-            title: "Critical Issues",
-            value: 3,
-            description: "Requiring immediate attention",
-            icon: <AlertTriangle className="h-4 w-4 text-muted-foreground" />,
-          },
+          // {
+          //   title: "Team Inspections",
+          //   value: 156,
+          //   description: "Total this month",
+          //   icon: <FileText className="h-4 w-4 text-muted-foreground" />,
+          //   trend: { value: 15, isPositive: true },
+          // },
+          // {
+          //   title: "Critical Issues",
+          //   value: 3,
+          //   description: "Requiring immediate attention",
+          //   icon: <AlertTriangle className="h-4 w-4 text-muted-foreground" />,
+          // },
         ];
 
       case "admin":

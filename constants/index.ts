@@ -7,24 +7,24 @@ export const NAV_LINKS = {
         {
           title: "dashboard",
           url: "/dashboard",
-          roles: ["user"],
+          roles: ["mechanic"],
         },
         {
           title: "Users",
           url: "/users",
-          roles: ["user"],
+          roles: ["mechanic"],
         },
         {
           title: "Todo",
           url: "/todo",
-          roles: ["user", "admin"],
+          roles: ["mechanic", "admin"],
         },
       ],
     },
     {
       title: "admin",
       url: "/admin",
-      roles: ["user", "admin"],
+      roles: ["admin"],
       items: [],
     },
   ],

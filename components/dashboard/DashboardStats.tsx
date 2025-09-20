@@ -72,7 +72,7 @@ export function DashboardStats({ userRole }: DashboardStatsProps) {
             trend: { value: 8, isPositive: true },
           },
           {
-            title: "Issues Found",
+            title: "Rejected",
             value: 5,
             description: "Equipment requiring attention",
             icon: <AlertTriangle className="h-4 w-4 text-muted-foreground" />,

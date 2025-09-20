@@ -159,7 +159,7 @@ export default function DashboardPage() {
             </div>
 
             {/* System Status */}
-            <div className="bg-white p-6 rounded-lg border">
+            {/* <div className="bg-white p-6 rounded-lg border">
               <h3 className="text-lg font-medium mb-4">System Status</h3>
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
@@ -176,8 +176,8 @@ export default function DashboardPage() {
                   <span className="text-sm text-gray-600">Active Users</span>
                   <span className="text-sm text-gray-900">12</span>
                 </div>
-              </div>
-            </div>
+              </div> 
+            </div> */}
           </div>
         </div>
       </main>

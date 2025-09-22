@@ -10,6 +10,11 @@ export const NAV_LINKS = {
           roles: ["mechanic", "admin", "leader"],
         },
         {
+          title: "profile",
+          url: "/profile",
+          roles: ["mechanic", "admin", "leader"],
+        },
+        {
           title: "inspections",
           url: "/inspections",
           roles: ["mechanic"],

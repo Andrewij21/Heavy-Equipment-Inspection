@@ -110,8 +110,8 @@ export default function InspectionsPage() {
             <CardTitle className="text-lg">Filters</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              <div className="relative">
+            <div className="flex items-center justify-between gap-4">
+              <div className="relative flex-1">
                 <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                 <Input placeholder="Search equipment ID..." className="pl-10" />
               </div>
@@ -167,14 +167,14 @@ export default function InspectionsPage() {
                       </Badge>
                     </div>
                     <div className="mt-2 flex items-center space-x-6 text-sm text-muted-foreground">
-                      <span>📍 {inspection.location}</span>
+                      {/* <span>📍 {inspection.location}</span> */}
                       <span>📅 {formatDate(inspection.createdAt)}</span>
-                      {inspection.issues > 0 && (
+                      {/* {inspection.issues > 0 && (
                         <span className="text-orange-600">
                           ⚠️ {inspection.issues} issue
                           {inspection.issues > 1 ? "s" : ""}
                         </span>
-                      )}
+                      )} */}
                     </div>
                   </div>
                   <div className="flex space-x-2">

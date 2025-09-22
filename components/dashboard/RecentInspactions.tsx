@@ -10,6 +10,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Eye, Edit } from "lucide-react";
+import Link from "next/link";
 
 interface Inspection {
   id: string;
@@ -134,8 +135,9 @@ export function RecentInspections({ userRole }: RecentInspectionsProps) {
                   </Badge>
                 </div>
                 <div className="mt-2 flex items-center space-x-4 text-sm text-muted-foreground">
-                  <span>By {inspection.mechanicName}</span>
-                  <span>{formatDate(inspection.createdAt)}</span>
+                  {/* <span>By {inspection.mechanicName}</span> */}
+                  <span>📅 {formatDate(inspection.createdAt)}</span>
+
                   {/* {inspection.issues > 0 && (
                     <span className="text-orange-600">
                       {inspection.issues} issue
@@ -161,7 +163,9 @@ export function RecentInspections({ userRole }: RecentInspectionsProps) {
           ))}
         </div>
         <div className="mt-4 text-center">
-          <Button variant="outline">View All Inspections</Button>
+          <Link href="/inspections">
+            <Button variant="outline">View All Inspections</Button>
+          </Link>
         </div>
       </CardContent>
     </Card>

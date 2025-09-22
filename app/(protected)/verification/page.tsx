@@ -179,25 +179,13 @@ export default function VerificationPage() {
                     inspection.status.slice(1)}
                 </span>
               </Badge>
-              <Badge className={getPriorityColor(inspection.priority)}>
-                {inspection.priority.charAt(0).toUpperCase() +
-                  inspection.priority.slice(1)}{" "}
-                Priority
-              </Badge>
             </div>
             <p className="text-sm text-muted-foreground mb-2">
               {getEquipmentTypeLabel(inspection.equipmentType)}
             </p>
             <div className="flex items-center space-x-4 text-sm text-muted-foreground">
               <span>👤 {inspection.mechanicName}</span>
-              <span>📍 {inspection.location}</span>
               <span>📅 {formatDate(inspection.createdAt)}</span>
-              {inspection.issues > 0 && (
-                <span className="text-orange-600 flex items-center">
-                  <AlertTriangle className="w-3 h-3 mr-1" />
-                  {inspection.issues} issue{inspection.issues > 1 ? "s" : ""}
-                </span>
-              )}
             </div>
           </div>
           <div className="flex space-x-2">
@@ -275,8 +263,8 @@ export default function VerificationPage() {
             <CardTitle className="text-lg">Filters</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              <div className="relative">
+            <div className="flex items-center justify-between gap-4">
+              <div className="relative flex-1">
                 <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                 <Input placeholder="Search equipment ID..." className="pl-10" />
               </div>
@@ -289,17 +277,6 @@ export default function VerificationPage() {
                   <SelectItem value="track">Track Equipment</SelectItem>
                   <SelectItem value="wheel">Wheel Equipment</SelectItem>
                   <SelectItem value="support">Support Equipment</SelectItem>
-                </SelectContent>
-              </Select>
-              <Select>
-                <SelectTrigger>
-                  <SelectValue placeholder="Priority" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Priorities</SelectItem>
-                  <SelectItem value="high">High Priority</SelectItem>
-                  <SelectItem value="medium">Medium Priority</SelectItem>
-                  <SelectItem value="low">Low Priority</SelectItem>
                 </SelectContent>
               </Select>
               <Button variant="outline">

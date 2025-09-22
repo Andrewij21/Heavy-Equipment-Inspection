@@ -163,7 +163,11 @@ export function RecentInspections({ userRole }: RecentInspectionsProps) {
           ))}
         </div>
         <div className="mt-4 text-center">
-          <Link href="/inspections">
+          <Link
+            href={`${
+              userRole === "mechanic" ? "/inspections" : "/verification"
+            }`}
+          >
             <Button variant="outline">View All Inspections</Button>
           </Link>
         </div>

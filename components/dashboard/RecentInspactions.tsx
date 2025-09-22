@@ -136,12 +136,12 @@ export function RecentInspections({ userRole }: RecentInspectionsProps) {
                 <div className="mt-2 flex items-center space-x-4 text-sm text-muted-foreground">
                   <span>By {inspection.mechanicName}</span>
                   <span>{formatDate(inspection.createdAt)}</span>
-                  {inspection.issues > 0 && (
+                  {/* {inspection.issues > 0 && (
                     <span className="text-orange-600">
                       {inspection.issues} issue
                       {inspection.issues > 1 ? "s" : ""}
                     </span>
-                  )}
+                  )} */}
                 </div>
               </div>
               <div className="flex space-x-2">

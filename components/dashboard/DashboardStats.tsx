@@ -18,12 +18,12 @@ interface StatsCardProps {
 
 function StatsCard({ title, value, description, icon, trend }: StatsCardProps) {
   return (
-    <Card>
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+    <Card className="gap-3">
+      <CardHeader className="flex flex-row items-center justify-between space-y-0">
         <CardTitle className="text-sm font-medium">{title}</CardTitle>
         {icon}
       </CardHeader>
-      <CardContent>
+      <CardContent className="">
         <div className="text-2xl font-bold">{value}</div>
         <p className="text-xs text-muted-foreground">{description}</p>
         {trend && (
@@ -31,10 +31,7 @@ function StatsCard({ title, value, description, icon, trend }: StatsCardProps) {
             className={`text-xs ${
               trend.isPositive ? "text-green-600" : "text-red-600"
             } mt-1`}
-          >
-            {trend.isPositive ? "+" : ""}
-            {trend.value}% from last month
-          </div>
+          ></div>
         )}
       </CardContent>
     </Card>

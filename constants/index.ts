@@ -22,7 +22,7 @@ export const NAV_LINKS = {
         {
           title: "Users",
           url: "/users",
-          roles: ["mechanic"],
+          roles: ["admin"],
         },
         {
           title: "Todo",

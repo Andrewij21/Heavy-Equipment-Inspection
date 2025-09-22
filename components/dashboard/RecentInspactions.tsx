@@ -11,6 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Eye, Edit } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 interface Inspection {
   id: string;
@@ -79,6 +80,7 @@ export function RecentInspections({ userRole }: RecentInspectionsProps) {
         return "bg-gray-100 text-gray-800";
     }
   };
+  const router = useRouter();
 
   const getEquipmentTypeLabel = (type: string) => {
     switch (type) {
@@ -147,13 +149,23 @@ export function RecentInspections({ userRole }: RecentInspectionsProps) {
                 </div>
               </div>
               <div className="flex space-x-2">
-                <Button variant="outline" size="sm">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => router.push(`/inspections/${inspection.id}`)}
+                >
                   <Eye className="w-4 h-4 mr-1" />
                   View
                 </Button>
                 {userRole === "mechanic" &&
                   inspection.status === "rejected" && (
-                    <Button variant="outline" size="sm">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() =>
+                        router.push(`/inspections/${inspection.id}/edit`)
+                      }
+                    >
                       <Edit className="w-4 h-4 mr-1" />
                       Edit
                     </Button>

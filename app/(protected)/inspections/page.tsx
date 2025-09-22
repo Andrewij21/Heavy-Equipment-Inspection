@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/select";
 import { Plus, Search, Eye, Edit, Filter, FileText } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function InspectionsPage() {
   // Mock data - replace with real data from API
@@ -81,7 +82,7 @@ export default function InspectionsPage() {
       minute: "2-digit",
     });
   };
-
+  const router = useRouter();
   return (
     <div className="min-h-screen bg-gray-50">
       <main className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
@@ -178,12 +179,24 @@ export default function InspectionsPage() {
                     </div>
                   </div>
                   <div className="flex space-x-2">
-                    <Button variant="outline" size="sm">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() =>
+                        router.push(`/inspections/${inspection.id}`)
+                      }
+                    >
                       <Eye className="w-4 h-4 mr-1" />
                       View
                     </Button>
                     {inspection.status === "rejected" && (
-                      <Button variant="outline" size="sm">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() =>
+                          router.push(`/inspections/${inspection.id}/edit`)
+                        }
+                      >
                         <Edit className="w-4 h-4 mr-1" />
                         Edit
                       </Button>

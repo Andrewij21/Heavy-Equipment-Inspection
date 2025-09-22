@@ -30,9 +30,9 @@ export const NAV_LINKS = {
           roles: ["admin"],
         },
         {
-          title: "Todo",
-          url: "/todo",
-          roles: ["mechanic", "admin"],
+          title: "Reports",
+          url: "/reports",
+          roles: ["admin"],
         },
       ],
     },

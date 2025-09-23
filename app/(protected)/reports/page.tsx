@@ -39,7 +39,6 @@ import {
   Download,
   BarChart3,
   Search,
-  Filter,
 } from "lucide-react";
 import {
   type ExportFilters,
@@ -56,6 +55,8 @@ export default function ReportsPage() {
   const [typeFilter, setTypeFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
   const [dateFilter, setDateFilter] = useState("all");
+  const [dateFrom, setDateFrom] = useState<string>("");
+  const [dateTo, setDateTo] = useState<string>("");
 
   // Mock data - replace with real data from API
   const mockInspections: ExportInspection[] = [
@@ -150,27 +151,41 @@ export default function ReportsPage() {
     const matchesStatus =
       statusFilter === "all" || inspection.status === statusFilter;
 
-    let matchesDate = true;
+    const created = new Date(inspection.createdAt);
+    let matchesQuickDate = true;
     if (dateFilter !== "all") {
-      const inspectionDate = new Date(inspection.createdAt);
       const now = new Date();
-
       switch (dateFilter) {
         case "today":
-          matchesDate = inspectionDate.toDateString() === now.toDateString();
+          matchesQuickDate = created.toDateString() === now.toDateString();
           break;
         case "week":
-          const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-          matchesDate = inspectionDate >= weekAgo;
+          matchesQuickDate =
+            created >= new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
           break;
         case "month":
-          const monthAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
-          matchesDate = inspectionDate >= monthAgo;
+          matchesQuickDate =
+            created >= new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
           break;
       }
     }
 
-    return matchesSearch && matchesType && matchesStatus && matchesDate;
+    let matchesRange = true;
+    if (dateFrom) matchesRange = matchesRange && created >= new Date(dateFrom);
+    if (dateTo) {
+      // include entire end day
+      const end = new Date(dateTo);
+      end.setHours(23, 59, 59, 999);
+      matchesRange = matchesRange && created <= end;
+    }
+
+    return (
+      matchesSearch &&
+      matchesType &&
+      matchesStatus &&
+      matchesQuickDate &&
+      matchesRange
+    );
   });
 
   const summary = generateReportSummary(mockInspections);
@@ -197,12 +212,12 @@ export default function ReportsPage() {
       minute: "2-digit",
     });
   };
-
   const handleExport = async (
     filters: ExportFilters,
     format: "csv" | "excel"
   ) => {
     setIsExporting(true);
+    const toastId = toast.loading("Exporting data...");
     try {
       // Apply filters to mock data
       let filteredInspections = mockInspections;
@@ -246,12 +261,40 @@ export default function ReportsPage() {
       // Download file
       downloadCSV(csvContent, filename);
 
-      toast.success(
-        `${filteredInspections.length} inspections exported to ${filename}`
-      );
+      toast.success("Export Successful", {
+        id: toastId,
+        description: `${filteredInspections.length} inspections exported to ${filename}`,
+      });
     } catch (error) {
       console.error("Export error:", error);
-      toast.error("There was an error exporting the data. Please try again.");
+      toast.error("Export Failed", {
+        id: toastId,
+        description: "There was an error exporting the data. Please try again.",
+      });
+    } finally {
+      setIsExporting(false);
+    }
+  };
+
+  const handleInlineDownload = () => {
+    setIsExporting(true);
+    try {
+      const csv = generateCSVContent(filteredInspections);
+      const filenameBase = "equipment-inspections";
+      const stamp =
+        dateFrom || dateTo
+          ? `${dateFrom || "start"}_to_${dateTo || "end"}`
+          : new Date().toISOString().split("T")[0];
+      const filename = `${filenameBase}-${stamp}.csv`;
+      downloadCSV(csv, filename);
+      toast.info("Download started", {
+        description: `${filteredInspections.length} rows using current filters`,
+      });
+    } catch (e) {
+      console.error("Export error:", e);
+      toast.error("Export Failed", {
+        description: "There was an error exporting the data. Please try again.",
+      });
     } finally {
       setIsExporting(false);
     }
@@ -432,25 +475,6 @@ export default function ReportsPage() {
         </div>
 
         {/* Mechanic Performance */}
-        {/* <Card className="mb-8">
-          <CardHeader>
-            <CardTitle>Mechanic Performance</CardTitle>
-            <CardDescription>
-              Number of inspections completed by each mechanic
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={mechanicData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis />
-                <Tooltip />
-                <Bar dataKey="inspections" fill="#3b82f6" />
-              </BarChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card> */}
 
         <Card className="mb-8">
           <CardHeader>
@@ -461,8 +485,8 @@ export default function ReportsPage() {
           </CardHeader>
           <CardContent>
             {/* Filters */}
-            <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
-              <div className="relative">
+            <div className="flex items-center justify-between gap-4 mb-6">
+              <div className="relative flex-1">
                 <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                 <Input
                   placeholder="Search inspections..."
@@ -495,7 +519,7 @@ export default function ReportsPage() {
               </Select>
               <Select value={dateFilter} onValueChange={setDateFilter}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Date Range" />
+                  <SelectValue placeholder="Quick Date" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All Time</SelectItem>
@@ -504,18 +528,29 @@ export default function ReportsPage() {
                   <SelectItem value="month">Last 30 Days</SelectItem>
                 </SelectContent>
               </Select>
-              <Button
-                variant="outline"
-                onClick={() => {
-                  setSearchTerm("");
-                  setTypeFilter("all");
-                  setStatusFilter("all");
-                  setDateFilter("all");
-                }}
-              >
-                <Filter className="w-4 h-4 mr-2" />
-                Clear
-              </Button>
+              <Input
+                type="date"
+                value={dateFrom}
+                onChange={(e) => setDateFrom(e.target.value)}
+                aria-label="From date"
+                className="w-fit"
+              />
+              <div className="flex items-center gap-2">
+                <Input
+                  type="date"
+                  value={dateTo}
+                  onChange={(e) => setDateTo(e.target.value)}
+                  aria-label="To date"
+                />
+                <Button
+                  variant="default"
+                  onClick={handleInlineDownload}
+                  disabled={isExporting}
+                >
+                  <Download className="w-4 h-4 mr-2" />
+                  Download
+                </Button>
+              </div>
             </div>
 
             {/* Table */}
@@ -584,60 +619,6 @@ export default function ReportsPage() {
         </Card>
 
         {/* Export Options */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Data Export</CardTitle>
-            <CardDescription>
-              Export inspection data for external analysis
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="grid gap-4 md:grid-cols-3">
-              <div className="p-4 border rounded-lg">
-                <div className="flex items-center space-x-3 mb-2">
-                  <FileSpreadsheet className="w-6 h-6 text-blue-600" />
-                  <h3 className="font-medium">CSV Export</h3>
-                </div>
-                <p className="text-sm text-muted-foreground mb-3">
-                  Export all inspection data in CSV format for use in Excel or
-                  other analysis tools.
-                </p>
-                <ExportDialog
-                  onExport={handleExport}
-                  isExporting={isExporting}
-                />
-              </div>
-              <div className="p-4 border rounded-lg">
-                <div className="flex items-center space-x-3 mb-2">
-                  <BarChart3 className="w-6 h-6 text-green-600" />
-                  <h3 className="font-medium">Summary Report</h3>
-                </div>
-                <p className="text-sm text-muted-foreground mb-3">
-                  Generate a comprehensive summary report with charts and
-                  statistics.
-                </p>
-                <Button variant="outline" disabled>
-                  <Download className="w-4 h-4 mr-2" />
-                  Coming Soon
-                </Button>
-              </div>
-              <div className="p-4 border rounded-lg">
-                <div className="flex items-center space-x-3 mb-2">
-                  <Calendar className="w-6 h-6 text-purple-600" />
-                  <h3 className="font-medium">Scheduled Reports</h3>
-                </div>
-                <p className="text-sm text-muted-foreground mb-3">
-                  Set up automated reports to be sent via email on a regular
-                  schedule.
-                </p>
-                <Button variant="outline" disabled>
-                  <Calendar className="w-4 h-4 mr-2" />
-                  Coming Soon
-                </Button>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
       </main>
     </div>
   );

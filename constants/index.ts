@@ -22,7 +22,7 @@ export const NAV_LINKS = {
         {
           title: "verification",
           url: "/verification",
-          roles: ["leader"],
+          roles: ["leader", "admin"],
         },
         {
           title: "Users",

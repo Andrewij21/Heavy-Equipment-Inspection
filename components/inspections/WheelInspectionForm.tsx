@@ -61,6 +61,16 @@ export function WheelInspectionForm({
       tirePressureFrontRight: 0,
       tirePressureRearLeft: 0,
       tirePressureRearRight: 0,
+      tireConditionFront: undefined,
+      tireConditionRear: undefined,
+      wheelAlignment: undefined,
+      wheelBoltTightness: undefined,
+      brakeFunction: undefined,
+      brakePadCondition: undefined,
+      brakeFluidLevel: undefined,
+      frontSuspension: undefined,
+      rearSuspension: undefined,
+      shockAbsorber: undefined,
       engineOilLeakage: false,
       coolantLeakage: false,
       transmissionLeakage: false,
@@ -82,11 +92,11 @@ export function WheelInspectionForm({
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              Basic Information
+              Header Information
               <Badge variant="outline">Wheel Equipment</Badge>
             </CardTitle>
             <CardDescription>
-              General equipment and inspection details
+              CN Unit, model, location, personnel, date & HM
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -218,9 +228,9 @@ export function WheelInspectionForm({
 
         <Card>
           <CardHeader>
-            <CardTitle>Tire Pressure & Wheel Inspection</CardTitle>
+            <CardTitle>Wheel & Tire Inspection</CardTitle>
             <CardDescription>
-              Individual wheel pressure measurements and condition assessment
+              Pressure, condition, alignment, and fasteners
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -425,7 +435,7 @@ export function WheelInspectionForm({
           <CardHeader>
             <CardTitle>Brake & Suspension System</CardTitle>
             <CardDescription>
-              Brake and suspension system inspection
+              Brake function and suspension components
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -589,16 +599,29 @@ export function WheelInspectionForm({
           </CardContent>
         </Card>
 
-        {/* Wheel System Inspection */}
         <Card>
           <CardHeader>
-            <CardTitle>Wheel System Inspection</CardTitle>
+            <CardTitle>Cabin, Electric & Safety</CardTitle>
             <CardDescription>
-              Detailed assessment of wheel components
+              Indicators, wiper, horn, lamps, safety belt
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {/* Placeholder for existing fields */}
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Leak Checks</CardTitle>
+            <CardDescription>
+              Engine, coolant, transmission, and hydraulic
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               <FormField
                 control={form.control}
                 name="engineOilLeakage"

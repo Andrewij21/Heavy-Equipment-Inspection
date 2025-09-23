@@ -432,7 +432,7 @@ export default function ReportsPage() {
         </div>
 
         {/* Mechanic Performance */}
-        <Card className="mb-8">
+        {/* <Card className="mb-8">
           <CardHeader>
             <CardTitle>Mechanic Performance</CardTitle>
             <CardDescription>
@@ -450,7 +450,7 @@ export default function ReportsPage() {
               </BarChart>
             </ResponsiveContainer>
           </CardContent>
-        </Card>
+        </Card> */}
 
         <Card className="mb-8">
           <CardHeader>

@@ -120,56 +120,6 @@ export const trackInspectionSchema = baseInspectionSchema.extend({
 
 export const wheelInspectionSchema = baseInspectionSchema.extend({
   equipmentType: z.literal("wheel"),
-  transmissionLeakage: z.boolean(),
-  // Engine checks (similar to track)
-  engineOilLevel: z.enum(["good", "low", "empty"], {
-    message: "Engine oil level is required",
-  }),
-  engineOilLeakage: z.boolean(),
-  engineMounting: z.enum(["good", "loose", "damaged"], {
-    message: "Engine mounting condition is required",
-  }),
-  coolantLevel: z.enum(["good", "low", "empty"], {
-    message: "Coolant level is required",
-  }),
-  coolantLeakage: z.boolean(),
-  fuelSystemCondition: z.enum(["good", "leak", "damaged"], {
-    message: "Fuel system condition is required",
-  }),
-  beltTension: z.enum(["proper", "loose", "tight"], {
-    message: "Belt tension is required",
-  }),
-
-  // Transmission & Clutch
-  transmissionOilLevel: z.enum(["adequate", "low", "empty"], {
-    message: "Transmission oil level is required",
-  }),
-  clutchFunction: z.enum(["good", "slipping", "damaged"], {
-    message: "Clutch function is required",
-  }),
-  universalJoint: z.enum(["good", "worn", "damaged"], {
-    message: "Universal joint condition is required",
-  }),
-
-  // Hydraulic System
-  hydraulicOilLevel: z.enum(["adequate", "low", "empty"], {
-    message: "Hydraulic oil level is required",
-  }),
-  hydraulicLeakage: z.boolean(),
-  hydraulicPumpCondition: z.enum(["good", "noisy", "damaged"], {
-    message: "Hydraulic pump condition is required",
-  }),
-
-  // Wheel & Axle System
-  frontAxleOilLevel: z.enum(["adequate", "low", "empty"], {
-    message: "Front axle oil level is required",
-  }),
-  rearAxleOilLevel: z.enum(["adequate", "low", "empty"], {
-    message: "Rear axle oil level is required",
-  }),
-  differentialCondition: z.enum(["good", "noisy", "damaged"], {
-    message: "Differential condition is required",
-  }),
 
   // Tire & Wheel Inspection
   tirePressureFrontLeft: z.number().min(0, "Tire pressure must be positive"),
@@ -211,38 +161,13 @@ export const wheelInspectionSchema = baseInspectionSchema.extend({
     message: "Shock absorber condition is required",
   }),
 
-  // Steering
-  steeringFunction: z.enum(["smooth", "heavy", "loose"], {
-    message: "Steering function is required",
-  }),
-  steeringFluidLevel: z.enum(["adequate", "low", "empty"], {
-    message: "Steering fluid level is required",
-  }),
-  ballJointCondition: z.enum(["good", "worn", "damaged"], {
-    message: "Ball joint condition is required",
-  }),
+  // Leak Checks (Booleans)
+  engineOilLeakage: z.boolean(),
+  coolantLeakage: z.boolean(),
+  transmissionLeakage: z.boolean(),
+  hydraulicLeakage: z.boolean(),
 
-  // Safety & Cabin
-  cabinCondition: z.enum(["clean", "dirty", "damaged"], {
-    message: "Cabin condition is required",
-  }),
-  safetyBelt: z.enum(["good", "worn", "missing"], {
-    message: "Safety belt condition is required",
-  }),
-  mirrorCondition: z.enum(["good", "cracked", "missing"], {
-    message: "Mirror condition is required",
-  }),
-  wiperFunction: z.enum(["good", "poor", "not_working"], {
-    message: "Wiper function is required",
-  }),
-  hornFunction: z.enum(["good", "weak", "not_working"], {
-    message: "Horn function is required",
-  }),
-  lampFunction: z.enum(["all_working", "some_out", "major_issues"], {
-    message: "Lamp function is required",
-  }),
-
-  // Top-up requirements
+  // Top-up requirements (Booleans)
   engineOilTopUp: z.boolean(),
   hydraulicOilTopUp: z.boolean(),
   coolantTopUp: z.boolean(),

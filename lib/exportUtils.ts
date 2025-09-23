@@ -47,17 +47,16 @@ export interface ExportFilters {
 export function generateCSVContent(inspections: ExportInspection[]): string {
   if (inspections.length === 0) return "";
 
-  // Define headers based on common fields and equipment-specific fields
   const headers = [
     "ID",
     "Equipment ID",
-    "Equipment Type",
+    "Type", // was "Equipment Type"
     "Mechanic",
     "Status",
-    "Created Date",
+    "Date", // was "Created Date"
     "Location",
     "Operator Name",
-    "Working Hours",
+    "HM", // was "Working Hours"
     "Verified By",
     "Verified Date",
     "Notes",
@@ -93,26 +92,26 @@ export function generateCSVContent(inspections: ExportInspection[]): string {
       inspection.equipmentType,
       inspection.mechanicName,
       inspection.status,
-      new Date(inspection.createdAt).toLocaleDateString(),
+      new Date(inspection.createdAt).toLocaleDateString("en-GB"), // dd/mm/yyyy
       inspection.location,
       inspection.operatorName,
-      inspection.workingHours,
+      inspection.workingHours ?? "",
       inspection.verifiedBy || "",
       inspection.verifiedAt
-        ? new Date(inspection.verifiedAt).toLocaleDateString()
+        ? new Date(inspection.verifiedAt).toLocaleDateString("en-GB")
         : "",
       inspection.notes || "",
       // Track specific
       inspection.trackCondition || "",
       inspection.trackTension || "",
       inspection.sprocketWear || "",
-      inspection.trackPadWear || "",
+      inspection.trackPadWear ?? "",
       inspection.hydraulicLeaks ? "Yes" : "No",
       inspection.greaseLevels || "",
       // Wheel specific
       inspection.tireCondition || "",
-      inspection.tirePressure || "",
-      inspection.treadDepth || "",
+      inspection.tirePressure ?? "",
+      inspection.treadDepth ?? "",
       inspection.wheelAlignment || "",
       inspection.brakeCondition || "",
       inspection.oilLevels || "",
@@ -120,12 +119,11 @@ export function generateCSVContent(inspections: ExportInspection[]): string {
       inspection.structuralIntegrity || "",
       inspection.weldingCondition || "",
       inspection.boltTightness || "",
-      inspection.loadCapacity || "",
+      inspection.loadCapacity ?? "",
       inspection.stabilityCheck || "",
       inspection.hydraulicSystems ? "Yes" : "No",
     ];
 
-    // Escape commas and quotes in CSV data
     const escapedRow = row.map((field) => {
       const stringField = String(field);
       if (
@@ -145,9 +143,9 @@ export function generateCSVContent(inspections: ExportInspection[]): string {
 }
 
 export function downloadCSV(content: string, filename: string): void {
-  const blob = new Blob([content], { type: "text/csv;charset=utf-8;" });
+  const BOM = "\uFEFF";
+  const blob = new Blob([BOM + content], { type: "text/csv;charset=utf-8;" });
   const link = document.createElement("a");
-
   if (link.download !== undefined) {
     const url = URL.createObjectURL(blob);
     link.setAttribute("href", url);

@@ -16,7 +16,16 @@ const baseInspectionSchema = z.object({
 
 export const trackInspectionSchema = baseInspectionSchema.extend({
   equipmentType: z.literal("track"),
-
+  trackCondition: z.enum(["excellent", "good", "fair", "poor"], {
+    message: "Track condition is required",
+  }),
+  sprocketWear: z.enum(["good", "worn", "replace"], {
+    message: "Sprocket wear is required",
+  }),
+  hydraulicLeaks: z.boolean(),
+  greaseLevels: z.enum(["adequate", "low", "empty"], {
+    message: "Grease levels are required",
+  }),
   // Engine checks
   engineOilLevel: z.enum(["good", "low", "empty"], {
     message: "Engine oil level is required",
@@ -118,62 +127,104 @@ export const trackInspectionSchema = baseInspectionSchema.extend({
   greaseTopUp: z.boolean(),
 });
 
+// Pilihan kondisi standar untuk sebagian besar item
+const conditionEnum = z.enum(["good", "bad", "na"]).optional();
+
+// Skema Roda (Wheel) yang sudah lengkap
 export const wheelInspectionSchema = baseInspectionSchema.extend({
   equipmentType: z.literal("wheel"),
 
-  // Tire & Wheel Inspection
-  tirePressureFrontLeft: z.number().min(0, "Tire pressure must be positive"),
-  tirePressureFrontRight: z.number().min(0, "Tire pressure must be positive"),
-  tirePressureRearLeft: z.number().min(0, "Tire pressure must be positive"),
-  tirePressureRearRight: z.number().min(0, "Tire pressure must be positive"),
-  tireConditionFront: z.enum(["good", "worn", "damaged"], {
-    message: "Front tire condition is required",
-  }),
-  tireConditionRear: z.enum(["good", "worn", "damaged"], {
-    message: "Rear tire condition is required",
-  }),
-  wheelBoltTightness: z.enum(["proper", "loose", "missing"], {
-    message: "Wheel bolt tightness is required",
-  }),
-  wheelAlignment: z.enum(["proper", "misaligned"], {
-    message: "Wheel alignment is required",
-  }),
+  // A. Engine
+  engineOilLevel: conditionEnum,
+  engineMounting: conditionEnum,
+  coolantLevel: conditionEnum,
+  fuelSystem: conditionEnum,
+  beltTension: conditionEnum,
+  airIntakeExhaust: conditionEnum,
+  unusualSound: conditionEnum,
+  alternator: conditionEnum,
+  starterMotor: conditionEnum,
+  acCompressor: conditionEnum,
+  turbocharger: conditionEnum,
+  waterPump: conditionEnum,
+  engineOilLeakage: z.boolean().optional(),
+  coolantLeakage: z.boolean().optional(),
 
-  // Brake System
-  brakeFunction: z.enum(["good", "weak", "failed"], {
-    message: "Brake function is required",
-  }),
-  brakePadCondition: z.enum(["good", "worn", "replace"], {
-    message: "Brake pad condition is required",
-  }),
-  brakeFluidLevel: z.enum(["adequate", "low", "empty"], {
-    message: "Brake fluid level is required",
-  }),
+  // B. Powertrain (Transmission, Clutch, Axle)
+  transmissionOilLevel: conditionEnum,
+  clutchFunction: conditionEnum,
+  universalJoint: conditionEnum,
+  differentialOilLevel: conditionEnum,
+  driveShaft: conditionEnum,
+  transmissionLeakage: z.boolean().optional(),
 
-  // Suspension
-  frontSuspension: z.enum(["good", "worn", "damaged"], {
-    message: "Front suspension condition is required",
-  }),
-  rearSuspension: z.enum(["good", "worn", "damaged"], {
-    message: "Rear suspension condition is required",
-  }),
-  shockAbsorber: z.enum(["good", "worn", "leaking"], {
-    message: "Shock absorber condition is required",
-  }),
+  // C. Hydraulic System
+  hydraulicOilLevel: conditionEnum,
+  hydraulicCylinder: conditionEnum,
+  hydraulicPump: conditionEnum,
+  hydraulicMotor: conditionEnum,
+  hydraulicControlValve: conditionEnum,
+  hydraulicLeakage: z.boolean().optional(),
 
-  // Leak Checks (Booleans)
-  engineOilLeakage: z.boolean(),
-  coolantLeakage: z.boolean(),
-  transmissionLeakage: z.boolean(),
-  hydraulicLeakage: z.boolean(),
+  // D. Brake & Suspension System
+  brakeFunction: conditionEnum,
+  brakePadCondition: conditionEnum,
+  brakeFluidLevel: conditionEnum,
+  frontSuspension: conditionEnum,
+  rearSuspension: conditionEnum,
+  shockAbsorber: conditionEnum,
+  hollowSpring: conditionEnum,
 
-  // Top-up requirements (Booleans)
-  engineOilTopUp: z.boolean(),
-  hydraulicOilTopUp: z.boolean(),
-  coolantTopUp: z.boolean(),
-  greaseTopUp: z.boolean(),
-  brakeFluidTopUp: z.boolean(),
-  steeringFluidTopUp: z.boolean(),
+  // E. Wheel & Tire System
+  tirePressureFrontLeft: z.number().optional(),
+  tirePressureFrontRight: z.number().optional(),
+  tirePressureRearLeft: z.number().optional(),
+  tirePressureRearRight: z.number().optional(),
+  tireConditionFront: conditionEnum,
+  tireConditionRear: conditionEnum,
+  wheelBoltTightness: conditionEnum,
+  wheelAlignment: conditionEnum,
+
+  // F. Steering System
+  steeringFunction: conditionEnum,
+  steeringFluidLevel: conditionEnum,
+  ballJointTieRod: conditionEnum,
+  ballJointDrakLink: conditionEnum,
+
+  // G. Cabin, Electrical & Safety
+  cabinCleanliness: conditionEnum,
+  panelFunction: conditionEnum,
+  cabinLock: conditionEnum,
+  seatAndSeatbelt: conditionEnum,
+  controlLevers: conditionEnum,
+  acBlower: conditionEnum,
+  mirrorCondition: conditionEnum,
+  switchFunction: conditionEnum,
+  wiperFunction: conditionEnum,
+  hornFunction: conditionEnum,
+  allLamps: conditionEnum,
+  battery: conditionEnum,
+  radioCommunication: conditionEnum,
+  emergencyStop: conditionEnum,
+  reverseCamera: conditionEnum,
+  mdvr: conditionEnum,
+  apar: conditionEnum, // Fire Extinguisher
+
+  // H. Attachment & Structure
+  dumpBody: conditionEnum,
+  safetyDumpFunction: conditionEnum,
+  centralGrease: conditionEnum,
+  allGreasingPoints: conditionEnum,
+  chassisFrame: conditionEnum,
+
+  // I. Top-Up Checklist
+  engineOilTopUp: z.boolean().optional(),
+  transmissionOilTopUp: z.boolean().optional(),
+  hydraulicOilTopUp: z.boolean().optional(),
+  differentialOilTopUp: z.boolean().optional(),
+  steeringFluidTopUp: z.boolean().optional(),
+  greaseTopUp: z.boolean().optional(),
+  coolantTopUp: z.boolean().optional(),
 });
 
 export const supportInspectionSchema = baseInspectionSchema.extend({

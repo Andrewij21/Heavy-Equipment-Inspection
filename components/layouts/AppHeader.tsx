@@ -110,7 +110,7 @@ export default function Navigation() {
                 >
                   <Avatar className="h-8 w-8">
                     <AvatarFallback>
-                      {user.email
+                      {user.username
                         .split(" ")
                         .map((n) => n[0])
                         .join("")}
@@ -121,7 +121,7 @@ export default function Navigation() {
               <DropdownMenuContent className="w-56" align="end" forceMount>
                 <div className="flex items-center justify-start gap-2 p-2">
                   <div className="flex flex-col space-y-1 leading-none">
-                    <p className="font-medium">{user.email}</p>
+                    <p className="font-medium">{user.username}</p>
                     <p className="w-[200px] truncate text-sm text-muted-foreground">
                       {user.email}
                     </p>

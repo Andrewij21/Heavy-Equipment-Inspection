@@ -9,7 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { User, MapPin, Calendar, Edit, Save, X } from "lucide-react";
+import { User, MapPin, Calendar, Edit, Save, X, Mail } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
@@ -19,10 +19,9 @@ export default function ProfilePage() {
   const [isEditing, setIsEditing] = useState(false);
   const router = useRouter();
   const [formData, setFormData] = useState({
-    name: user?.name || "",
+    username: user?.username || "",
     email: user?.email || "",
-    phone: "+1 (555) 123-4567",
-    location: "Site A - Main Office",
+    contact: user?.contact || "",
     bio: "Experienced heavy equipment mechanic with 8+ years in the field.",
     employeeId: "EMP-001",
     department: "Maintenance",
@@ -136,25 +135,32 @@ export default function ProfilePage() {
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex items-center space-x-4">
-                <Avatar className="h-20 w-20">
-                  <AvatarImage src="/placeholder-avatar.jpg" />
-                  <AvatarFallback className="text-lg">
-                    {user?.name
+                <Avatar className="h-24 w-24">
+                  <AvatarImage src={""} />
+                  <AvatarFallback className="text-3xl">
+                    {user?.username
                       ?.split(" ")
                       .map((n) => n[0])
-                      .join("") || "U"}
+                      .join("")}
                   </AvatarFallback>
                 </Avatar>
-                <div className="space-y-2">
-                  <div className="flex items-center space-x-2">
-                    <h2 className="text-xl font-semibold">{user?.name}</h2>
+
+                {/* Informasi Pengguna */}
+                <div className="flex-grow space-y-2">
+                  <div className="flex items-center gap-4">
+                    <h1 className="text-2xl font-bold">{user?.username}</h1>
                     <Badge className={getRoleColor(user?.role || "")}>
                       {user?.role &&
-                        user?.role?.charAt(0).toUpperCase() +
-                          user?.role?.slice(1)}
+                        user?.role.charAt(0).toUpperCase() +
+                          user?.role.slice(1)}
                     </Badge>
                   </div>
-                  <p className="text-gray-600">{formData.department}</p>
+                  <div className="flex items-center text-muted-foreground text-sm">
+                    <p>{user?.email}</p>
+                  </div>
+                  <div className="flex items-center text-muted-foreground text-sm">
+                    <p>User ID: {user?.id}</p>
+                  </div>
                 </div>
               </div>
 
@@ -162,17 +168,19 @@ export default function ProfilePage() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="name">Full Name</Label>
+                  <Label htmlFor="username">Full Name</Label>
                   {isEditing ? (
                     <Input
-                      id="name"
-                      value={formData.name}
+                      id="username"
+                      value={formData.username}
                       onChange={(e) =>
-                        handleInputChange("name", e.target.value)
+                        handleInputChange("username", e.target.value)
                       }
                     />
                   ) : (
-                    <p className="p-2 bg-gray-50 rounded">{formData.name}</p>
+                    <p className="p-2 bg-gray-50 rounded">
+                      {formData.username}
+                    </p>
                   )}
                 </div>
                 <div className="space-y-2">
@@ -191,33 +199,17 @@ export default function ProfilePage() {
                   )}
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="phone">Phone</Label>
+                  <Label htmlFor="contact">Phone</Label>
                   {isEditing ? (
                     <Input
-                      id="phone"
-                      value={formData.phone}
+                      id="contact"
+                      value={formData.contact}
                       onChange={(e) =>
-                        handleInputChange("phone", e.target.value)
+                        handleInputChange("contact", e.target.value)
                       }
                     />
                   ) : (
-                    <p className="p-2 bg-gray-50 rounded">{formData.phone}</p>
-                  )}
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="location">Location</Label>
-                  {isEditing ? (
-                    <Input
-                      id="location"
-                      value={formData.location}
-                      onChange={(e) =>
-                        handleInputChange("location", e.target.value)
-                      }
-                    />
-                  ) : (
-                    <p className="p-2 bg-gray-50 rounded">
-                      {formData.location}
-                    </p>
+                    <p className="p-2 bg-gray-50 rounded">{formData.contact}</p>
                   )}
                 </div>
               </div>
@@ -225,36 +217,6 @@ export default function ProfilePage() {
           </Card>
 
           {/* Work Information */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Work Information</CardTitle>
-            </CardHeader>
-            <CardContent className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="flex items-center space-x-2">
-                <User className="h-4 w-4 text-gray-500" />
-                <div>
-                  <p className="text-sm text-gray-500">Employee ID</p>
-                  <p className="font-medium">{formData.employeeId}</p>
-                </div>
-              </div>
-              <div className="flex items-center space-x-2">
-                <MapPin className="h-4 w-4 text-gray-500" />
-                <div>
-                  <p className="text-sm text-gray-500">Department</p>
-                  <p className="font-medium">{formData.department}</p>
-                </div>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Calendar className="h-4 w-4 text-gray-500" />
-                <div>
-                  <p className="text-sm text-gray-500">Join Date</p>
-                  <p className="font-medium">
-                    {new Date(formData.joinDate).toLocaleDateString()}
-                  </p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
         </div>
 
         {/* Statistics */}

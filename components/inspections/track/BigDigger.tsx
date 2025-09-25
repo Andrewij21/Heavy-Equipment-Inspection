@@ -346,11 +346,13 @@ export const trackFormSections = [
 ];
 // Letakkan ini di atas komponen form Anda
 
-const equipmentModels = {
-  "Big Digger": ["PC 1250", "PC2000", "395", "6015"],
-  "Small PC": ["PC500", "PC400", "PC300"],
-  Bulldozer: ["D85", "D155", "D375"],
-};
+const equipmentModels = ["PC 1250", "PC2000", "395", "6015"];
+
+// const equipmentModels = {
+//   "Big Digger": ["PC 1250", "PC2000", "395", "6015"],
+//   "Small PC": ["PC500", "PC400", "PC300"],
+//   Bulldozer: ["D85", "D155", "D375"],
+// };
 type EquipmentType = keyof typeof equipmentModels;
 // 3. Komponen untuk input pengukuran temperatur silinder
 
@@ -517,39 +519,6 @@ export function BigDiggerInspectionForm({
                   </FormItem>
                 )}
               />
-              {/* ===== FIELD BARU UNTUK TIPE EQUIPMENT ===== */}
-              <FormField
-                control={form.control}
-                name="equipmentGeneralType" // Tambahkan field ini ke skema Zod Anda
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Equipment Type</FormLabel>
-                    <Select
-                      onValueChange={(value: EquipmentType) => {
-                        field.onChange(value);
-                        setSelectedType(value); // Update state saat tipe berubah
-                        form.setValue("modelUnit", ""); // Reset pilihan model
-                      }}
-                      defaultValue={field.value}
-                    >
-                      <FormControl className="w-full">
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select Type" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {Object.keys(equipmentModels).map((type) => (
-                          <SelectItem key={type} value={type}>
-                            {type}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
               {/* ===== FIELD MODEL UNIT YANG SUDAH DINAMIS ===== */}
               <FormField
                 control={form.control}
@@ -560,7 +529,6 @@ export function BigDiggerInspectionForm({
                     <Select
                       onValueChange={field.onChange}
                       value={field.value} // Gunakan value agar bisa di-reset
-                      disabled={!selectedType} // Nonaktif jika tipe belum dipilih
                     >
                       <FormControl className="w-full">
                         <SelectTrigger>
@@ -568,12 +536,11 @@ export function BigDiggerInspectionForm({
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {selectedType &&
-                          equipmentModels[selectedType].map((model) => (
-                            <SelectItem key={model} value={model}>
-                              {model}
-                            </SelectItem>
-                          ))}
+                        {equipmentModels.map((model) => (
+                          <SelectItem key={model} value={model}>
+                            {model}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                     <FormMessage />

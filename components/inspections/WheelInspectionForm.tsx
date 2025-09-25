@@ -3,6 +3,7 @@ import { type WheelInspection } from "@/schemas/inspectionSchema"; // Pastikan p
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import DumpTruckInspectionForm from "./wheel/DumpTruck";
 import HeavyDumpTruckInspectionForm from "./wheel/HeavyDumpTruck";
+import GraderInspectionForm from "./wheel/Grader";
 
 interface WheelInspectionFormProps {
   onSubmit: (data: WheelInspection) => void;
@@ -17,9 +18,11 @@ export function WheelInspectionForm({
 }: WheelInspectionFormProps) {
   return (
     <Tabs defaultValue="dump-truck" className="w-full">
-      <TabsList className="grid w-full grid-cols-2">
+      {/* <TabsList className="grid w-full grid-cols-3"> */}
+      <TabsList className="w-full flex overflow-x-auto">
         <TabsTrigger value="dump-truck">Dump Truck</TabsTrigger>
         <TabsTrigger value="heavy-dump-truck">Heavy Dump Truck</TabsTrigger>
+        <TabsTrigger value="grader">Grader</TabsTrigger>
       </TabsList>
       <TabsContent value="dump-truck" className="mt-6">
         <DumpTruckInspectionForm
@@ -32,6 +35,9 @@ export function WheelInspectionForm({
           onSubmit={onSubmit}
           isSubmitting={isSubmitting}
         />
+      </TabsContent>
+      <TabsContent value="grader" className="mt-6">
+        <GraderInspectionForm onSubmit={onSubmit} isSubmitting={isSubmitting} />
       </TabsContent>
     </Tabs>
   );

@@ -2,27 +2,9 @@
 
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  Eye,
-  Search,
-  Filter,
-  Clock,
-  CheckCircle,
-  XCircle,
-  AlertTriangle,
-} from "lucide-react";
-import Link from "next/link";
+import { Clock, CheckCircle, XCircle } from "lucide-react";
+import { VerificationTable } from "@/components/tables/VerificationTable";
 
 interface PendingInspection {
   id: string;
@@ -85,73 +67,29 @@ export default function VerificationPage() {
       priority: "medium",
       issues: 5,
     },
+    {
+      id: "5",
+      equipmentId: "WHL-005",
+      equipmentType: "wheel",
+      mechanicName: "Mike Davis",
+      status: "pending",
+      createdAt: "2024-01-13T11:00:00Z",
+      location: "Site D, Zone 1",
+      priority: "low",
+      issues: 0,
+    },
+    {
+      id: "6",
+      equipmentId: "SUP-006",
+      equipmentType: "support",
+      mechanicName: "Sarah Brown",
+      status: "approved",
+      createdAt: "2024-01-12T15:30:00Z",
+      location: "Site B, Zone 3",
+      priority: "high",
+      issues: 2,
+    },
   ];
-
-  const getStatusIcon = (status: string) => {
-    switch (status) {
-      case "approved":
-        return <CheckCircle className="w-4 h-4 text-green-600" />;
-      case "rejected":
-        return <XCircle className="w-4 h-4 text-red-600" />;
-      case "pending":
-        return <Clock className="w-4 h-4 text-yellow-600" />;
-      default:
-        return <Clock className="w-4 h-4 text-gray-600" />;
-    }
-  };
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "approved":
-        return "bg-green-100 text-green-800";
-      case "rejected":
-        return "bg-red-100 text-red-800";
-      case "pending":
-        return "bg-yellow-100 text-yellow-800";
-      default:
-        return "bg-gray-100 text-gray-800";
-    }
-  };
-
-  const getPriorityColor = (priority: string) => {
-    switch (priority) {
-      case "high":
-        return "bg-red-100 text-red-800";
-      case "medium":
-        return "bg-yellow-100 text-yellow-800";
-      case "low":
-        return "bg-green-100 text-green-800";
-      default:
-        return "bg-gray-100 text-gray-800";
-    }
-  };
-
-  const getEquipmentTypeLabel = (type: string) => {
-    switch (type) {
-      case "track":
-        return "Track Equipment";
-      case "wheel":
-        return "Wheel Equipment";
-      case "support":
-        return "Support Equipment";
-      default:
-        return type;
-    }
-  };
-
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("en-US", {
-      month: "short",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-  };
-
-  const filterInspections = (status: string) => {
-    if (status === "all") return mockInspections;
-    return mockInspections.filter((inspection) => inspection.status === status);
-  };
 
   const pendingCount = mockInspections.filter(
     (i) => i.status === "pending"
@@ -163,52 +101,14 @@ export default function VerificationPage() {
     (i) => i.status === "rejected"
   ).length;
 
-  const renderInspectionCard = (inspection: PendingInspection) => (
-    <Card key={inspection.id} className="hover:shadow-md transition-shadow">
-      <CardContent className="p-6">
-        <div className="flex items-center justify-between">
-          <div className="flex-1">
-            <div className="flex items-center space-x-3 mb-2">
-              <h3 className="text-lg font-semibold">
-                {inspection.equipmentId}
-              </h3>
-              <Badge className={getStatusColor(inspection.status)}>
-                {getStatusIcon(inspection.status)}
-                <span className="ml-1">
-                  {inspection.status.charAt(0).toUpperCase() +
-                    inspection.status.slice(1)}
-                </span>
-              </Badge>
-            </div>
-            <p className="text-sm text-muted-foreground mb-2">
-              {getEquipmentTypeLabel(inspection.equipmentType)}
-            </p>
-            <div className="flex items-center space-x-4 text-sm text-muted-foreground">
-              <span>👤 {inspection.mechanicName}</span>
-              <span>📅 {formatDate(inspection.createdAt)}</span>
-            </div>
-          </div>
-          <div className="flex space-x-2">
-            <Link href={`/verification/${inspection.id}`}>
-              <Button variant="outline" size="sm">
-                <Eye className="w-4 h-4 mr-1" />
-                Review
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </CardContent>
-    </Card>
-  );
-
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       <main className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">
+          <h1 className="text-3xl font-bold text-foreground">
             Inspection Verification
           </h1>
-          <p className="mt-1 text-sm text-gray-600">
+          <p className="mt-1 text-sm text-muted-foreground">
             Review and verify equipment inspections submitted by mechanics
           </p>
         </div>
@@ -257,37 +157,6 @@ export default function VerificationPage() {
           </Card>
         </div>
 
-        {/* Filters */}
-        <Card className="mb-6">
-          <CardHeader>
-            <CardTitle className="text-lg">Filters</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="flex items-center justify-between gap-4">
-              <div className="relative flex-1">
-                <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                <Input placeholder="Search equipment ID..." className="pl-10" />
-              </div>
-              <Select>
-                <SelectTrigger>
-                  <SelectValue placeholder="Equipment Type" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Types</SelectItem>
-                  <SelectItem value="track">Track Equipment</SelectItem>
-                  <SelectItem value="wheel">Wheel Equipment</SelectItem>
-                  <SelectItem value="support">Support Equipment</SelectItem>
-                </SelectContent>
-              </Select>
-              <Button variant="outline">
-                <Filter className="w-4 h-4 mr-2" />
-                Apply Filters
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Inspections Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab}>
           <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="pending">Pending ({pendingCount})</TabsTrigger>
@@ -302,33 +171,20 @@ export default function VerificationPage() {
             </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="pending" className="space-y-4 mt-6">
-            {filterInspections("pending").map(renderInspectionCard)}
-            {filterInspections("pending").length === 0 && (
-              <Card>
-                <CardContent className="text-center py-12">
-                  <Clock className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
-                  <h3 className="text-lg font-medium">
-                    No pending inspections
-                  </h3>
-                  <p className="text-sm text-muted-foreground">
-                    All inspections have been reviewed.
-                  </p>
-                </CardContent>
-              </Card>
-            )}
+          <TabsContent value="pending" className="mt-6">
+            <VerificationTable data={mockInspections} statusFilter="pending" />
           </TabsContent>
 
-          <TabsContent value="approved" className="space-y-4 mt-6">
-            {filterInspections("approved").map(renderInspectionCard)}
+          <TabsContent value="approved" className="mt-6">
+            <VerificationTable data={mockInspections} statusFilter="approved" />
           </TabsContent>
 
-          <TabsContent value="rejected" className="space-y-4 mt-6">
-            {filterInspections("rejected").map(renderInspectionCard)}
+          <TabsContent value="rejected" className="mt-6">
+            <VerificationTable data={mockInspections} statusFilter="rejected" />
           </TabsContent>
 
-          <TabsContent value="all" className="space-y-4 mt-6">
-            {filterInspections("all").map(renderInspectionCard)}
+          <TabsContent value="all" className="mt-6">
+            <VerificationTable data={mockInspections} statusFilter="all" />
           </TabsContent>
         </Tabs>
       </main>

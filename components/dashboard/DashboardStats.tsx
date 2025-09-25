@@ -127,12 +127,12 @@ export function DashboardStats({ userRole }: DashboardStatsProps) {
             icon: <Clock className="h-4 w-4 text-muted-foreground" />,
             trend: { value: 22, isPositive: true },
           },
-          {
-            title: "Equipment Issues",
-            value: 18,
-            description: "Requiring maintenance",
-            icon: <AlertTriangle className="h-4 w-4 text-muted-foreground" />,
-          },
+          // {
+          //   title: "Equipment Issues",
+          //   value: 18,
+          //   description: "Requiring maintenance",
+          //   icon: <AlertTriangle className="h-4 w-4 text-muted-foreground" />,
+          // },
         ];
     }
   };

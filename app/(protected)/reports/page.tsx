@@ -334,78 +334,15 @@ export default function ReportsPage() {
                 View inspection statistics and export data for analysis
               </p>
             </div>
-            <div className="flex space-x-3">
-              <ExportDialog onExport={handleExport} isExporting={isExporting} />
-              <Button variant="outline">
-                <BarChart3 className="w-4 h-4 mr-2" />
-                Generate Report
-              </Button>
-            </div>
           </div>
         </div>
 
         {/* Summary Stats */}
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-8">
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">
-                Total Inspections
-              </CardTitle>
-              <FileSpreadsheet className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{summary.total}</div>
-              <p className="text-xs text-muted-foreground">All time</p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">
-                Approval Rate
-              </CardTitle>
-              <TrendingUp className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{summary.approvalRate}%</div>
-              <p className="text-xs text-muted-foreground">
-                {summary.approved} of {summary.total} approved
-              </p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">
-                Active Mechanics
-              </CardTitle>
-              <Users className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">
-                {Object.keys(summary.byMechanic).length}
-              </div>
-              <p className="text-xs text-muted-foreground">
-                Contributing to inspections
-              </p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">This Month</CardTitle>
-              <Calendar className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{summary.total}</div>
-              <p className="text-xs text-muted-foreground">
-                Inspections completed
-              </p>
-            </CardContent>
-          </Card>
-        </div>
 
         {/* Charts */}
         <div className="grid gap-6 lg:grid-cols-2 mb-8">
           {/* Equipment Type Distribution */}
-          <Card>
+          {/* <Card>
             <CardHeader>
               <CardTitle>Equipment Type Distribution</CardTitle>
               <CardDescription>
@@ -438,7 +375,7 @@ export default function ReportsPage() {
                 </PieChart>
               </ResponsiveContainer>
             </CardContent>
-          </Card>
+          </Card> */}
 
           {/* Status Distribution */}
           <Card>
@@ -472,6 +409,66 @@ export default function ReportsPage() {
               </ResponsiveContainer>
             </CardContent>
           </Card>
+          <div className="grid gap-4 lg:grid-cols-2">
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">
+                  Total Inspections
+                </CardTitle>
+                <FileSpreadsheet className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{summary.total}</div>
+                <p className="text-xs text-muted-foreground">All time</p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">
+                  Approval Rate
+                </CardTitle>
+                <TrendingUp className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">
+                  {summary.approvalRate}%
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  {summary.approved} of {summary.total} approved
+                </p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">
+                  Active Mechanics
+                </CardTitle>
+                <Users className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">
+                  {Object.keys(summary.byMechanic).length}
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  Contributing to inspections
+                </p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">
+                  This Month
+                </CardTitle>
+                <Calendar className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{summary.total}</div>
+                <p className="text-xs text-muted-foreground">
+                  Inspections completed
+                </p>
+              </CardContent>
+            </Card>
+          </div>
         </div>
 
         {/* Mechanic Performance */}

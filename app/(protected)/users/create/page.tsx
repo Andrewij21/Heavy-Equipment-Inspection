@@ -103,7 +103,7 @@ export default function CreateUserPage() {
                   value={formData.role}
                   onValueChange={(value) => handleInputChange("role", value)}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger className="w-full">
                     <SelectValue placeholder="Select role" />
                   </SelectTrigger>
                   <SelectContent>

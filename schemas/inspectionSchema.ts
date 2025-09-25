@@ -12,119 +12,108 @@ const baseInspectionSchema = z.object({
   notes: z.string().optional(),
   mechanicName: z.string().min(1, "Mechanic name is required"),
   groupLeaderName: z.string().optional(),
+
+  // --- ADD THESE NEW FIELDS ---
+  smr: z.number().optional(), // SMR is likely a number
+  timeDown: z.string().optional(),
+  timeOut: z.string().optional(),
+  shift: z.enum(["day", "night"]).optional(), // Example options for Shift
 });
+
+const resultEnum = z.enum(["ok", "failure"]).optional();
 
 export const trackInspectionSchema = baseInspectionSchema.extend({
   equipmentType: z.literal("track"),
-  trackCondition: z.enum(["excellent", "good", "fair", "poor"], {
-    message: "Track condition is required",
-  }),
-  sprocketWear: z.enum(["good", "worn", "replace"], {
-    message: "Sprocket wear is required",
-  }),
-  hydraulicLeaks: z.boolean(),
-  greaseLevels: z.enum(["adequate", "low", "empty"], {
-    message: "Grease levels are required",
-  }),
-  // Engine checks
-  engineOilLevel: z.enum(["good", "low", "empty"], {
-    message: "Engine oil level is required",
-  }),
-  engineOilLeakage: z.boolean(),
-  engineMounting: z.enum(["good", "loose", "damaged"], {
-    message: "Engine mounting condition is required",
-  }),
-  coolantLevel: z.enum(["good", "low", "empty"], {
-    message: "Coolant level is required",
-  }),
-  coolantLeakage: z.boolean(),
-  fuelSystemCondition: z.enum(["good", "leak", "damaged"], {
-    message: "Fuel system condition is required",
-  }),
-  beltTension: z.enum(["proper", "loose", "tight"], {
-    message: "Belt tension is required",
-  }),
-  airIntakeCondition: z.enum(["clean", "dirty", "blocked"], {
-    message: "Air intake condition is required",
+
+  // Field baru untuk pemilihan tipe model
+  equipmentGeneralType: z.enum(["Big Digger", "Small PC", "Bulldozer"], {
+    message: "Equipment type is required",
   }),
 
-  // Transmission & Clutch
-  transmissionOilLevel: z.enum(["adequate", "low", "empty"], {
-    message: "Transmission oil level is required",
-  }),
-  transmissionLeakage: z.boolean(),
-  clutchFunction: z.enum(["good", "slipping", "damaged"], {
-    message: "Clutch function is required",
-  }),
-  clutchPadWear: z.enum(["good", "worn", "replace"], {
-    message: "Clutch pad wear is required",
-  }),
-  universalJoint: z.enum(["good", "worn", "damaged"], {
-    message: "Universal joint condition is required",
-  }),
+  // Lower Frame Area Check
+  lowerLockOutSwitch: resultEnum,
+  lowerTrackLinkTension: resultEnum,
+  lowerTrackShoeBolt: resultEnum,
+  lowerIdlerRollerGuard: resultEnum,
+  lowerUnderGuard: resultEnum,
+  lowerFinalDriveSprocket: resultEnum,
+  lowerSwingCircle: resultEnum,
+  lowerAttachmentCondition: resultEnum,
+  lowerDrainWaterSediment: resultEnum,
+  lowerHydraulicOilLevel: resultEnum,
 
-  // Hydraulic System
-  hydraulicOilLevel: z.enum(["adequate", "low", "empty"], {
-    message: "Hydraulic oil level is required",
-  }),
-  hydraulicLeakage: z.boolean(),
-  hydraulicPumpCondition: z.enum(["good", "noisy", "damaged"], {
-    message: "Hydraulic pump condition is required",
-  }),
-  controlValveCondition: z.enum(["good", "sticky", "damaged"], {
-    message: "Control valve condition is required",
-  }),
+  // Upper Structure Area Check
+  upperEngineOilLevel: resultEnum,
+  upperEngineVisual: resultEnum,
+  upperCoolantLevel: resultEnum,
+  upperRadiatorEtc: resultEnum,
+  upperTurboInlet: resultEnum,
+  upperAirCleaner: resultEnum,
+  upperCompartmentLeaks: resultEnum,
+  upperHydraulicPump: resultEnum,
+  upperControlValve: resultEnum,
+  upperSwingMachineOil: resultEnum,
+  upperElectricWiring: resultEnum,
+  upperBatteryElectrolyte: resultEnum,
+  upperFanBelts: resultEnum,
+  upperCylinderLeaks: resultEnum,
+  upperCoverHandRail: resultEnum,
 
-  // Track System
-  trackTension: z.enum(["proper", "loose", "tight"], {
-    message: "Track tension is required",
-  }),
-  trackShoeCondition: z.enum(["good", "worn", "damaged"], {
-    message: "Track shoe condition is required",
-  }),
-  sprocketCondition: z.enum(["good", "worn", "damaged"], {
-    message: "Sprocket condition is required",
-  }),
-  idlerCondition: z.enum(["good", "worn", "damaged"], {
-    message: "Idler condition is required",
-  }),
-  rollerCondition: z.enum(["good", "worn", "damaged"], {
-    message: "Roller condition is required",
-  }),
-  trackPadWear: z
-    .number()
-    .min(0)
-    .max(100, "Track pad wear must be between 0-100%"),
+  // Measure Cylinder Temperature
+  tempCylBoomRh: z.number().optional(),
+  tempCylBoomLh: z.number().optional(),
+  tempCylArmRh: z.number().optional(),
+  tempCylArmLh: z.number().optional(),
+  tempCylBucketRh: z.number().optional(),
+  tempCylBucketLh: z.number().optional(),
 
-  // Cabin & Electric
-  cabinCondition: z.enum(["clean", "dirty", "damaged"], {
-    message: "Cabin condition is required",
-  }),
-  panelFunction: z.enum(["all_working", "some_issues", "major_issues"], {
-    message: "Panel function is required",
-  }),
-  controlLeverFunction: z.enum(["smooth", "sticky", "damaged"], {
-    message: "Control lever function is required",
-  }),
-  lampFunction: z.enum(["all_working", "some_out", "major_issues"], {
-    message: "Lamp function is required",
-  }),
-  batteryCondition: z.enum(["good", "weak", "replace"], {
-    message: "Battery condition is required",
-  }),
-  safetyBelt: z.enum(["good", "worn", "missing"], {
-    message: "Safety belt condition is required",
-  }),
+  // Grease Condition
+  greaseBoomCylFoot: z.number().optional(),
+  greaseBoomFootPin: z.number().optional(),
+  greaseBoomCylRod: z.number().optional(),
+  greaseArmCylFoot: z.number().optional(),
+  greaseBoomArmCoupling: z.number().optional(),
+  greaseArmCylRod: z.number().optional(),
+  greaseBucketCylFoot: z.number().optional(),
+  greaseArmLinkCoupling: z.number().optional(),
+  greaseArmBucketCoupling: z.number().optional(),
+  greaseLinkCoupling: z.number().optional(),
+  greaseBucketCylRod: z.number().optional(),
+  greaseBucketLinkCoupling: z.number().optional(),
 
-  // Measurements
-  cylinderTempDelta: z.number().optional(),
-  hydraulicPressure: z.number().optional(),
+  // Inside Cabin Check
+  cabinMonitorPanel: resultEnum,
+  cabinSwitches: resultEnum,
+  cabinGauge: resultEnum,
+  cabinControlLever: resultEnum,
+  cabinRadioComm: resultEnum,
+  cabinFmRadio: resultEnum,
+  cabinWorkLamp: resultEnum,
+  cabinTravelAlarm: resultEnum,
+  cabinHorn: resultEnum,
+  cabinMirror: resultEnum,
+  cabinRotaryLamp: resultEnum,
+  cabinWiper: resultEnum,
+  cabinWindowWasher: resultEnum,
+  cabinAcFunction: resultEnum,
+  cabinFuseRelay: resultEnum,
+  cabinOperatorSeat: resultEnum,
 
-  // Top-up requirements
-  engineOilTopUp: z.boolean(),
-  hydraulicOilTopUp: z.boolean(),
-  coolantTopUp: z.boolean(),
-  greaseTopUp: z.boolean(),
+  // Safety Function
+  safetyFireExtinguisher: resultEnum,
+  safetyEmergencyStop: resultEnum,
+  safetyCabinRops: resultEnum,
+  safetyBelt: resultEnum,
+
+  // Finding Inspection (untuk tabel temuan)
+  findings: z
+    .array(
+      z.object({
+        description: z.string().min(1, "Description is required"),
+        status: z.enum(["open", "close"]),
+      })
+    )
+    .optional(),
 });
 
 // Pilihan kondisi standar untuk sebagian besar item

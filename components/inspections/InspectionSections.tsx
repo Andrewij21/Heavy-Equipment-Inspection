@@ -21,6 +21,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { Input } from "../ui/input";
 interface InspectionSectionProps {
   control: any; // dari react-hook-form
   title: string;
@@ -43,10 +44,13 @@ export function InspectionSection({
 }: InspectionSectionProps) {
   const checkboxFields = fields.filter((f) => f.type === "checkbox");
   const selectFields = fields.filter((f) => f.type === "select");
+  const resultFields = fields.filter((f) => f.type === "result");
+  const qtyFields = fields.filter((f) => f.type === "qty");
+  const tempFields = fields.filter((f) => f.type === "temp");
 
   return (
-    <Card>
-      <CardHeader>
+    <Card className={`${title === "" ? "gap-0" : ""}`}>
+      <CardHeader className="">
         <CardTitle>{title}</CardTitle>
         {description && <CardDescription>{description}</CardDescription>}
       </CardHeader>
@@ -62,6 +66,48 @@ export function InspectionSection({
                 <FormItem>
                   <FormLabel>{field.label}</FormLabel>
                   <ConditionSelect field={renderField} />
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          ))}
+          {resultFields.map((field) => (
+            <FormField
+              key={field.name}
+              control={control}
+              name={field.name}
+              render={({ field: renderField }) => (
+                <FormItem className="">
+                  <FormLabel>{field.label}</FormLabel>
+                  <ResultSelect field={renderField} />
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          ))}
+          {qtyFields.map((field) => (
+            <FormField
+              key={field.name}
+              control={control}
+              name={field.name}
+              render={({ field: renderField }) => (
+                <FormItem>
+                  <FormLabel>{field.label}</FormLabel>
+                  <QtyInput field={renderField} />
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          ))}
+          {tempFields.map((field) => (
+            <FormField
+              key={field.name}
+              control={control}
+              name={field.name}
+              render={({ field: renderField }) => (
+                <FormItem>
+                  <FormLabel>{field.label}</FormLabel>
+                  <TempInput field={renderField} />
                   <FormMessage />
                 </FormItem>
               )}
@@ -117,4 +163,40 @@ const ConditionSelect = ({
       <SelectItem value="na">N/A (Tidak Tersedia)</SelectItem>
     </SelectContent>
   </Select>
+);
+
+const ResultSelect = ({ field }: { field: any }) => (
+  <Select onValueChange={field.onChange} defaultValue={field.value}>
+    <FormControl>
+      <SelectTrigger className="w-full">
+        <SelectValue placeholder="Pilih Hasil" />
+      </SelectTrigger>
+    </FormControl>
+    <SelectContent>
+      <SelectItem value="ok">OK</SelectItem>
+      <SelectItem value="failure">Failure</SelectItem>
+    </SelectContent>
+  </Select>
+);
+
+const QtyInput = ({ field }: { field: any }) => (
+  <Input
+    type="number"
+    placeholder="Qty"
+    className="w-full"
+    {...field}
+    onChange={(e) => field.onChange(parseInt(e.target.value) || 0)}
+  />
+);
+
+const TempInput = ({ field }: { field: any }) => (
+  <div className="flex items-center gap-2">
+    <Input
+      type="number"
+      placeholder="°C"
+      className="flex-grow"
+      {...field}
+      onChange={(e) => field.onChange(parseFloat(e.target.value) || undefined)}
+    />
+  </div>
 );

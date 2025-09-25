@@ -2,6 +2,7 @@
 import { type TrackInspection } from "@/schemas/inspectionSchema"; // Pastikan path ini benar
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { BigDiggerInspectionForm } from "./track/BigDigger";
+import { SmallPCInspectionForm } from "./track/SmallPC";
 
 // 3. Komponen untuk input pengukuran temperatur silinder
 
@@ -23,11 +24,17 @@ export function TrackInspectionForm({
         <TabsTrigger value="big-digger" className="ml-12 sm:ml-0">
           Dump Truck
         </TabsTrigger>
-        <TabsTrigger value="heavy-big-digger">Heavy Dump Truck</TabsTrigger>
+        <TabsTrigger value="small-pc">Small PC</TabsTrigger>
         <TabsTrigger value="grader">Grader</TabsTrigger>
       </TabsList>
       <TabsContent value="big-digger" className="mt-6">
         <BigDiggerInspectionForm
+          onSubmit={onSubmit}
+          isSubmitting={isSubmitting}
+        />
+      </TabsContent>
+      <TabsContent value="small-pc" className="mt-6">
+        <SmallPCInspectionForm
           onSubmit={onSubmit}
           isSubmitting={isSubmitting}
         />

@@ -51,7 +51,7 @@ export const metadata: Metadata = {
     siteName: APP_NAME,
     images: [
       {
-        url: "/og-image.png", // Letakkan gambar ini di folder /public
+        url: "/logo.png", // Letakkan gambar ini di folder /public
         width: 1200,
         height: 630,
         alt: `Logo of ${APP_NAME}`,
@@ -66,14 +66,14 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: APP_NAME,
     description: APP_DESCRIPTION,
-    images: ["/og-image.png"], // Letakkan gambar ini di folder /public
+    images: ["/logo.png"], // Letakkan gambar ini di folder /public
     creator: "@handleTwitterAnda", // Ganti dengan handle Twitter Anda
   },
 
   // Untuk ikon di tab browser (favicon)
   icons: {
-    icon: "/favicon.ico",
-    shortcut: "/favicon-16x16.png",
+    icon: "/logo.png",
+    shortcut: "/logo.png",
     apple: "/apple-touch-icon.png",
   },
 };

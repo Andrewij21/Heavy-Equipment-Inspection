@@ -135,7 +135,7 @@ export default function ProfilePage() {
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex items-center space-x-4">
-                <Avatar className="h-24 w-24">
+                {/* <Avatar className="h-24 w-24">
                   <AvatarImage src={""} />
                   <AvatarFallback className="text-3xl">
                     {user?.username
@@ -143,7 +143,7 @@ export default function ProfilePage() {
                       .map((n) => n[0])
                       .join("")}
                   </AvatarFallback>
-                </Avatar>
+                </Avatar> */}
 
                 {/* Informasi Pengguna */}
                 <div className="flex-grow space-y-2">

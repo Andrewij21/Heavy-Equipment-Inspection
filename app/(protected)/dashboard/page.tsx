@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/AuthContext";
 import { Plus, FileText, Users, BarChart3 } from "lucide-react";
 import Link from "next/link";
+import ReportsPage from "../reports/page";
 
 export default function DashboardPage() {
   const { user } = useAuth();
@@ -59,12 +60,6 @@ export default function DashboardPage() {
                       Manage Users
                     </Button>
                   </Link>
-                  <Link href="/reports">
-                    <Button>
-                      <BarChart3 className="w-4 h-4 mr-2" />
-                      View Reports
-                    </Button>
-                  </Link>
                 </div>
               )}
             </div>
@@ -72,14 +67,18 @@ export default function DashboardPage() {
         </div>
 
         {/* Stats */}
-        <div className="mb-8">
+        <div className={`${user.role !== "admin" && "mb-8"}`}>
           <DashboardStats userRole={user.role} />
         </div>
 
         {/* Recent Activity */}
         <div className="grid gap-6 lg:grid-cols-3">
           <div className="lg:col-span-3">
-            <RecentInspections userRole={user.role} />
+            {user.role === "admin" ? (
+              <ReportsPage />
+            ) : (
+              <RecentInspections userRole={user.role} />
+            )}
           </div>
         </div>
       </main>

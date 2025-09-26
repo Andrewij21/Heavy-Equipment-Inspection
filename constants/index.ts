@@ -29,11 +29,6 @@ export const NAV_LINKS = {
           url: "/users",
           roles: ["admin"],
         },
-        {
-          title: "Reports",
-          url: "/reports",
-          roles: ["admin"],
-        },
       ],
     },
     {

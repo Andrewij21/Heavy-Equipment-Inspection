@@ -106,34 +106,34 @@ export function DashboardStats({ userRole }: DashboardStatsProps) {
         ];
 
       case "admin":
-        return [
-          {
-            title: "Total Inspections",
-            value: 1247,
-            description: "All time completed",
-            icon: <FileText className="h-4 w-4 text-muted-foreground" />,
-            trend: { value: 18, isPositive: true },
-          },
-          {
-            title: "Active Users",
-            value: 45,
-            description: "Mechanics and leaders",
-            icon: <CheckCircle className="h-4 w-4 text-muted-foreground" />,
-          },
-          {
-            title: "This Month",
-            value: 234,
-            description: "Inspections completed",
-            icon: <Clock className="h-4 w-4 text-muted-foreground" />,
-            trend: { value: 22, isPositive: true },
-          },
-          // {
-          //   title: "Equipment Issues",
-          //   value: 18,
-          //   description: "Requiring maintenance",
-          //   icon: <AlertTriangle className="h-4 w-4 text-muted-foreground" />,
-          // },
-        ];
+        return [];
+      //     {
+      //       title: "Total Inspections",
+      //       value: 1247,
+      //       description: "All time completed",
+      //       icon: <FileText className="h-4 w-4 text-muted-foreground" />,
+      //       trend: { value: 18, isPositive: true },
+      //     },
+      //     {
+      //       title: "Active Users",
+      //       value: 45,
+      //       description: "Mechanics and leaders",
+      //       icon: <CheckCircle className="h-4 w-4 text-muted-foreground" />,
+      //     },
+      //     {
+      //       title: "This Month",
+      //       value: 234,
+      //       description: "Inspections completed",
+      //       icon: <Clock className="h-4 w-4 text-muted-foreground" />,
+      //       trend: { value: 22, isPositive: true },
+      //     },
+      // {
+      //   title: "Equipment Issues",
+      //   value: 18,
+      //   description: "Requiring maintenance",
+      //   icon: <AlertTriangle className="h-4 w-4 text-muted-foreground" />,
+      // },
+      // ];
     }
   };
 

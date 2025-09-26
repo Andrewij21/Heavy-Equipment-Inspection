@@ -86,12 +86,6 @@ export default function Navigation() {
                   >
                     Users
                   </Link>
-                  <Link
-                    href="/reports"
-                    className="text-gray-900 hover:text-primary px-3 py-2 rounded-md text-sm font-medium"
-                  >
-                    Reports
-                  </Link>
                 </>
               )}
             </div>

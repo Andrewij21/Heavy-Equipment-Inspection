@@ -323,20 +323,7 @@ export default function ReportsPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <main className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-        <div className="mb-8">
-          <div className="flex justify-between items-center">
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900">
-                Reports & Analytics
-              </h1>
-              <p className="mt-1 text-sm text-gray-600">
-                View inspection statistics and export data for analysis
-              </p>
-            </div>
-          </div>
-        </div>
-
+      <main className="max-w-7xl mx-auto py-6">
         {/* Summary Stats */}
 
         {/* Charts */}
@@ -441,7 +428,7 @@ export default function ReportsPage() {
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">
-                  Active Mechanics
+                  Active Users
                 </CardTitle>
                 <Users className="h-4 w-4 text-muted-foreground" />
               </CardHeader>

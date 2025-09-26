@@ -82,6 +82,7 @@ export default function CreateUserPage() {
                 <Label htmlFor="name">Full Name *</Label>
                 <Input
                   id="name"
+                  placeholder="e.g., Budi Santoso"
                   value={formData.name}
                   onChange={(e) => handleInputChange("name", e.target.value)}
                   required
@@ -92,6 +93,7 @@ export default function CreateUserPage() {
                 <Input
                   id="email"
                   type="email"
+                  placeholder="e.g., budi.santoso@example.com"
                   value={formData.email}
                   onChange={(e) => handleInputChange("email", e.target.value)}
                   required
@@ -109,7 +111,7 @@ export default function CreateUserPage() {
                   <SelectContent>
                     <SelectItem value="mechanic">Mechanic</SelectItem>
                     <SelectItem value="leader">Leader</SelectItem>
-                    <SelectItem value="admin">Admin</SelectItem>
+                    <SelectItem value="support">Support</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -117,6 +119,7 @@ export default function CreateUserPage() {
                 <Label htmlFor="phone">Phone</Label>
                 <Input
                   id="phone"
+                  placeholder="e.g., 081234567890"
                   value={formData.phone}
                   onChange={(e) => handleInputChange("phone", e.target.value)}
                 />
@@ -125,32 +128,33 @@ export default function CreateUserPage() {
                 <Label htmlFor="employeeId">Employee ID</Label>
                 <Input
                   id="employeeId"
+                  placeholder="e.g., MECH-007"
                   value={formData.employeeId}
                   onChange={(e) =>
                     handleInputChange("employeeId", e.target.value)
                   }
                 />
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="department">Department</Label>
-                <Input
-                  id="department"
-                  value={formData.department}
-                  onChange={(e) =>
-                    handleInputChange("department", e.target.value)
-                  }
-                />
-              </div>
-              <div className="space-y-2 md:col-span-2">
-                <Label htmlFor="location">Location</Label>
-                <Input
-                  id="location"
-                  value={formData.location}
-                  onChange={(e) =>
-                    handleInputChange("location", e.target.value)
-                  }
-                />
-              </div>
+              {formData.role === "leader" && (
+                <div className="space-y-2">
+                  <Label htmlFor="department">Department *</Label>
+                  <Select
+                    value={formData.department} // Note: This should likely be formData.department
+                    onValueChange={(value) =>
+                      handleInputChange("department", value)
+                    }
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Select department" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="wheel">Wheel</SelectItem>
+                      <SelectItem value="track">Track</SelectItem>
+                      <SelectItem value="support">Support</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              )}
             </div>
 
             <div className="flex justify-end space-x-2 pt-4">

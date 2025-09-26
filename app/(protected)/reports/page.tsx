@@ -526,14 +526,6 @@ export default function ReportsPage() {
                   onChange={(e) => setDateTo(e.target.value)}
                   aria-label="To date"
                 />
-                <Button
-                  variant="default"
-                  onClick={handleInlineDownload}
-                  disabled={isExporting}
-                >
-                  <Download className="w-4 h-4 mr-2" />
-                  Download
-                </Button>
               </div>
             </div>
 
@@ -548,7 +540,7 @@ export default function ReportsPage() {
                     <th className="text-left p-3 font-medium">Status</th>
                     <th className="text-left p-3 font-medium">Location</th>
                     <th className="text-left p-3 font-medium">Date</th>
-                    <th className="text-left p-3 font-medium">Working Hours</th>
+                    <th className="text-left p-3 font-medium">Download</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -580,7 +572,14 @@ export default function ReportsPage() {
                         {formatDate(inspection.createdAt)}
                       </td>
                       <td className="p-3 text-sm">
-                        {inspection.workingHours}h
+                        <Button
+                          variant="default"
+                          onClick={handleInlineDownload}
+                          disabled={isExporting}
+                        >
+                          <Download className="w-4 h-4 mr-2" />
+                          Download
+                        </Button>
                       </td>
                     </tr>
                   ))}

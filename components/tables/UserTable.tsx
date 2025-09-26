@@ -298,16 +298,6 @@ export function UsersTable({
                 <TableHead>
                   <Button
                     variant="ghost"
-                    onClick={() => handleSort("username")}
-                    className="h-auto p-0 font-semibold"
-                  >
-                    Username
-                    {getSortIcon("username")}
-                  </Button>
-                </TableHead>
-                <TableHead>
-                  <Button
-                    variant="ghost"
                     onClick={() => handleSort("email")}
                     className="h-auto p-0 font-semibold"
                   >
@@ -352,9 +342,6 @@ export function UsersTable({
               {filteredAndSortedData.map((user) => (
                 <TableRow key={user.id} className="hover:bg-muted/50">
                   <TableCell className="font-medium">{user.fullName}</TableCell>
-                  <TableCell className="text-muted-foreground">
-                    {user.username}
-                  </TableCell>
                   <TableCell className="text-muted-foreground">
                     {user.email}
                   </TableCell>

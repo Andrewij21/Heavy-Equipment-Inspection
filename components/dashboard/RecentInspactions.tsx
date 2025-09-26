@@ -157,19 +157,18 @@ export function RecentInspections({ userRole }: RecentInspectionsProps) {
                   <Eye className="w-4 h-4 mr-1" />
                   View
                 </Button>
-                {userRole === "mechanic" &&
-                  inspection.status === "rejected" && (
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() =>
-                        router.push(`/inspections/${inspection.id}/edit`)
-                      }
-                    >
-                      <Edit className="w-4 h-4 mr-1" />
-                      Edit
-                    </Button>
-                  )}
+                {userRole === "admin" && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() =>
+                      router.push(`/inspections/${inspection.id}/edit`)
+                    }
+                  >
+                    <Edit className="w-4 h-4 mr-1" />
+                    Edit
+                  </Button>
+                )}
               </div>
             </div>
           ))}

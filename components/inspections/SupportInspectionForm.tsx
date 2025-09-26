@@ -1,28 +1,9 @@
 "use client";
 
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  supportInspectionSchema,
-  type SupportInspection,
-} from "@/schemas/inspectionSchema";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+import React, { useState } from "react"; // Import useState
+import { type SupportInspection } from "@/schemas/inspectionSchema"; // Pastikan path ini benar
+
+// Import components for the dropdown
 import {
   Select,
   SelectContent,
@@ -30,8 +11,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
-import { Badge } from "@/components/ui/badge";
+import { Label } from "@/components/ui/label";
+
+// Import your individual form components
+import MobileTruckInspectionForm from "./support/MobileTruck";
+import CraneTruckInspectionForm from "./support/CraneTruck";
+import TowerLampInspectionForm from "./support/TowerLamp";
+import GensetInspectionForm from "./support/Genset";
+import WeldingMechineInspectionForm from "./support/WeldingMechine";
+import CompressorInspectionForm from "./support/Compressor";
+import MultiFlowInspectionForm from "./support/MultiFlow";
+import DeiciInspectionForm from "./support/Deici";
 
 interface SupportInspectionFormProps {
   onSubmit: (data: SupportInspection) => void;
@@ -39,624 +29,121 @@ interface SupportInspectionFormProps {
   isSubmitting?: boolean;
 }
 
+// Define the types for our dropdown options for better type safety
+type SupportFormType =
+  | "mobile-truck"
+  | "crane-truck"
+  | "tower-lamp"
+  | "genset"
+  | "welding-mechine"
+  | "compressor"
+  | "multi-flow"
+  | "deici";
+
 export function SupportInspectionForm({
   onSubmit,
   initialData,
   isSubmitting = false,
 }: SupportInspectionFormProps) {
-  const form = useForm<SupportInspection>({
-    resolver: zodResolver(supportInspectionSchema),
-    defaultValues: {
-      equipmentType: "support",
-      equipmentId: "",
-      modelUnit: "",
-      location: "",
-      operatorName: "",
-      mechanicName: "",
-      inspectionDate: new Date().toISOString().split("T")[0],
-      inspectionTime: new Date().toTimeString().slice(0, 5),
-      workingHours: 0,
-      loadCapacity: 0,
-      engineOilLeakage: false,
-      coolantLeakage: false,
-      hydraulicLeakage: false,
-      engineOilTopUp: false,
-      hydraulicOilTopUp: false,
-      coolantTopUp: false,
-      greaseTopUp: false,
-      notes: "",
-      ...initialData,
-    },
-  });
+  // State to manage which form is currently visible
+  const [activeForm, setActiveForm] = useState<SupportFormType>("mobile-truck");
+
+  // A helper function to render the correct form based on the state
+  const renderActiveForm = () => {
+    switch (activeForm) {
+      case "mobile-truck":
+        return (
+          <MobileTruckInspectionForm
+            onSubmit={onSubmit}
+            isSubmitting={isSubmitting}
+          />
+        );
+      case "crane-truck":
+        return (
+          <CraneTruckInspectionForm
+            onSubmit={onSubmit}
+            isSubmitting={isSubmitting}
+          />
+        );
+      case "tower-lamp":
+        return (
+          <TowerLampInspectionForm
+            onSubmit={onSubmit}
+            isSubmitting={isSubmitting}
+          />
+        );
+      case "genset":
+        return (
+          <GensetInspectionForm
+            onSubmit={onSubmit}
+            isSubmitting={isSubmitting}
+          />
+        );
+      case "welding-mechine":
+        return (
+          <WeldingMechineInspectionForm
+            onSubmit={onSubmit}
+            isSubmitting={isSubmitting}
+          />
+        );
+      case "compressor":
+        return (
+          <CompressorInspectionForm
+            onSubmit={onSubmit}
+            isSubmitting={isSubmitting}
+          />
+        );
+      case "multi-flow":
+        return (
+          <MultiFlowInspectionForm
+            onSubmit={onSubmit}
+            isSubmitting={isSubmitting}
+          />
+        );
+      case "deici":
+        return (
+          <DeiciInspectionForm
+            onSubmit={onSubmit}
+            isSubmitting={isSubmitting}
+          />
+        );
+      default:
+        return (
+          <MobileTruckInspectionForm
+            onSubmit={onSubmit}
+            isSubmitting={isSubmitting}
+          />
+        );
+    }
+  };
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              Basic Information
-              <Badge variant="outline">Support Equipment</Badge>
-            </CardTitle>
-            <CardDescription>
-              General equipment and inspection details
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              <FormField
-                control={form.control}
-                name="equipmentId"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>CN Unit</FormLabel>
-                    <FormControl>
-                      <Input placeholder="e.g., CRN-001" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+    <div className="w-full space-y-6">
+      {/* Dropdown for Form Selection */}
+      <div className="space-y-2 max-w-sm">
+        <Label htmlFor="form-selector">Select Equipment Type</Label>
+        <Select
+          value={activeForm}
+          onValueChange={(value: SupportFormType) => setActiveForm(value)}
+        >
+          <SelectTrigger id="form-selector">
+            <SelectValue placeholder="Select a form..." />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="mobile-truck">Mobile Truck</SelectItem>
+            <SelectItem value="crane-truck">Crane Truck</SelectItem>
+            <SelectItem value="tower-lamp">Tower Lamp</SelectItem>
+            <SelectItem value="genset">Genset</SelectItem>
+            <SelectItem value="welding-mechine">Welding Machine</SelectItem>
+            <SelectItem value="compressor">Compressor</SelectItem>
+            <SelectItem value="multi-flow">Multi Flow</SelectItem>
+            <SelectItem value="deici">Deici</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
 
-              <FormField
-                control={form.control}
-                name="modelUnit"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Model Unit</FormLabel>
-                    <FormControl>
-                      <Input placeholder="e.g., KATO NK-500E" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="location"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Location</FormLabel>
-                    <FormControl>
-                      <Input placeholder="e.g., Site C, Zone 3" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="operatorName"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Operator Name</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Equipment operator name" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="mechanicName"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Mechanic Name</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Inspecting mechanic name"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="inspectionDate"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Date</FormLabel>
-                    <FormControl>
-                      <Input type="date" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="inspectionTime"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Time</FormLabel>
-                    <FormControl>
-                      <Input type="time" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="workingHours"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Working Hours (HM)</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="number"
-                        placeholder="0"
-                        {...field}
-                        onChange={(e) =>
-                          field.onChange(Number.parseFloat(e.target.value) || 0)
-                        }
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Support Equipment Inspection */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Support Equipment Inspection</CardTitle>
-            <CardDescription>
-              Detailed assessment of support equipment components
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              <FormField
-                control={form.control}
-                name="structuralIntegrity"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Structural Integrity</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select condition" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="excellent">Excellent</SelectItem>
-                        <SelectItem value="good">Good</SelectItem>
-                        <SelectItem value="fair">Fair</SelectItem>
-                        <SelectItem value="poor">Poor</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="frameCondition"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Frame Condition</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select condition" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="good">Good</SelectItem>
-                        <SelectItem value="cracked">Cracked</SelectItem>
-                        <SelectItem value="damaged">Damaged</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="weldingCondition"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Welding Condition</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select condition" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="excellent">Excellent</SelectItem>
-                        <SelectItem value="good">Good</SelectItem>
-                        <SelectItem value="fair">Fair</SelectItem>
-                        <SelectItem value="poor">Poor</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="boltTightness"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Bolt Tightness</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select condition" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="proper">Proper</SelectItem>
-                        <SelectItem value="loose">Loose</SelectItem>
-                        <SelectItem value="missing">Missing</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="loadCapacity"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Load Capacity (tons)</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="number"
-                        min="0"
-                        step="0.1"
-                        placeholder="0.0"
-                        {...field}
-                        onChange={(e) =>
-                          field.onChange(Number.parseFloat(e.target.value) || 0)
-                        }
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="stabilityCheck"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Stability Check</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select stability" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="stable">Stable</SelectItem>
-                        <SelectItem value="unstable">Unstable</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Crane Components (If Applicable) */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Crane Components (If Applicable)</CardTitle>
-            <CardDescription>
-              Crane-specific component inspection
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              <FormField
-                control={form.control}
-                name="wireRopeCondition"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Wire Rope Condition</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select condition" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="good">Good</SelectItem>
-                        <SelectItem value="frayed">Frayed</SelectItem>
-                        <SelectItem value="damaged">Damaged</SelectItem>
-                        <SelectItem value="not_applicable">
-                          Not Applicable
-                        </SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="hookCondition"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Hook Condition</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select condition" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="good">Good</SelectItem>
-                        <SelectItem value="worn">Worn</SelectItem>
-                        <SelectItem value="damaged">Damaged</SelectItem>
-                        <SelectItem value="not_applicable">
-                          Not Applicable
-                        </SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="blockCondition"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Block Condition</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select condition" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="good">Good</SelectItem>
-                        <SelectItem value="worn">Worn</SelectItem>
-                        <SelectItem value="damaged">Damaged</SelectItem>
-                        <SelectItem value="not_applicable">
-                          Not Applicable
-                        </SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="outriggerCondition"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Outrigger Condition</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select condition" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="good">Good</SelectItem>
-                        <SelectItem value="damaged">Damaged</SelectItem>
-                        <SelectItem value="not_applicable">
-                          Not Applicable
-                        </SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Safety Features & Emergency Equipment</CardTitle>
-            <CardDescription>
-              Safety device and emergency equipment inspection
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              <FormField
-                control={form.control}
-                name="safetyDevices"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Safety Devices</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select condition" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="functional">Functional</SelectItem>
-                        <SelectItem value="damaged">Damaged</SelectItem>
-                        <SelectItem value="missing">Missing</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="emergencyStop"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Emergency Stop Function</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select function" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="working">Working</SelectItem>
-                        <SelectItem value="not_working">Not Working</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="fireExtinguisher"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Fire Extinguisher</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select status" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="present">Present</SelectItem>
-                        <SelectItem value="expired">Expired</SelectItem>
-                        <SelectItem value="missing">Missing</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="safetyBelt"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Safety Belt</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select condition" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="good">Good</SelectItem>
-                        <SelectItem value="worn">Worn</SelectItem>
-                        <SelectItem value="missing">Missing</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Additional Notes */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Additional Notes</CardTitle>
-            <CardDescription>
-              Any additional observations or comments
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <FormField
-              control={form.control}
-              name="notes"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Notes</FormLabel>
-                  <FormControl>
-                    <Textarea
-                      placeholder="Enter any additional observations, issues, or recommendations..."
-                      className="min-h-[100px]"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </CardContent>
-        </Card>
-
-        <div className="flex justify-end space-x-4">
-          <Button type="button" variant="outline">
-            Save as Draft
-          </Button>
-          <Button type="submit" disabled={isSubmitting}>
-            {isSubmitting ? "Submitting..." : "Submit Inspection"}
-          </Button>
-        </div>
-      </form>
-    </Form>
+      {/* Render the active form below the dropdown */}
+      <div className="mt-6">{renderActiveForm()}</div>
+    </div>
   );
 }

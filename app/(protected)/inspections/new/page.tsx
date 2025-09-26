@@ -112,13 +112,13 @@ export default function NewInspectionPage() {
               <h1 className="text-3xl font-bold text-gray-900">
                 New Inspection
               </h1>
-              <p className="mt-1 text-sm text-gray-600">
+              {/* <p className="mt-1 text-sm text-gray-600">
                 {selectedType
                   ? `Complete the ${
                       equipmentTypes.find((t) => t.type === selectedType)?.title
                     } inspection form`
                   : "Select the type of equipment you want to inspect"}
-              </p>
+              </p> */}
             </div>
             {selectedType && (
               <Badge variant="outline" className="text-sm">
@@ -155,11 +155,7 @@ export default function NewInspectionPage() {
           </div>
         ) : (
           <div>
-            <div className="mb-4">
-              <Button variant="outline" onClick={() => setSelectedType(null)}>
-                Change Equipment Type
-              </Button>
-            </div>
+            <div className="mb-4"></div>
             {renderForm()}
           </div>
         )}

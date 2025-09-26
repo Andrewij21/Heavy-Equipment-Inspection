@@ -11,6 +11,7 @@ interface PendingInspection {
   equipmentId: string;
   equipmentType: "track" | "wheel" | "support";
   mechanicName: string;
+  leaderName: string;
   status: "pending" | "approved" | "rejected";
   createdAt: string;
   location: string;
@@ -28,6 +29,7 @@ export default function VerificationPage() {
       equipmentId: "EXC-001",
       equipmentType: "track",
       mechanicName: "John Mechanic",
+      leaderName: "John leader",
       status: "pending",
       createdAt: "2024-01-15T10:30:00Z",
       location: "Site A, Zone 1",
@@ -39,6 +41,7 @@ export default function VerificationPage() {
       equipmentId: "WHL-002",
       equipmentType: "wheel",
       mechanicName: "Jane Smith",
+      leaderName: "John leader",
       status: "pending",
       createdAt: "2024-01-15T09:15:00Z",
       location: "Site B, Zone 2",
@@ -50,6 +53,8 @@ export default function VerificationPage() {
       equipmentId: "SUP-003",
       equipmentType: "support",
       mechanicName: "Bob Wilson",
+      leaderName: "John leader",
+
       status: "approved",
       createdAt: "2024-01-14T16:45:00Z",
       location: "Site C, Zone 3",
@@ -61,6 +66,7 @@ export default function VerificationPage() {
       equipmentId: "EXC-004",
       equipmentType: "track",
       mechanicName: "Alice Johnson",
+      leaderName: "John leader",
       status: "rejected",
       createdAt: "2024-01-14T14:20:00Z",
       location: "Site A, Zone 2",
@@ -72,6 +78,8 @@ export default function VerificationPage() {
       equipmentId: "WHL-005",
       equipmentType: "wheel",
       mechanicName: "Mike Davis",
+      leaderName: "John leader",
+
       status: "pending",
       createdAt: "2024-01-13T11:00:00Z",
       location: "Site D, Zone 1",
@@ -83,6 +91,8 @@ export default function VerificationPage() {
       equipmentId: "SUP-006",
       equipmentType: "support",
       mechanicName: "Sarah Brown",
+      leaderName: "John leader",
+
       status: "approved",
       createdAt: "2024-01-12T15:30:00Z",
       location: "Site B, Zone 3",

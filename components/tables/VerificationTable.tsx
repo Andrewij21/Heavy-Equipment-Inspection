@@ -47,6 +47,7 @@ interface PendingInspection {
   equipmentId: string;
   equipmentType: "track" | "wheel" | "support";
   mechanicName: string;
+  leaderName: string;
   status: "pending" | "approved" | "rejected";
   createdAt: string;
   location: string;
@@ -308,6 +309,16 @@ export function VerificationTable({
                 <TableHead>
                   <Button
                     variant="ghost"
+                    onClick={() => handleSort("leaderName")}
+                    className="h-auto p-0 font-semibold"
+                  >
+                    Leader
+                    {getSortIcon("leaderName")}
+                  </Button>
+                </TableHead>
+                <TableHead>
+                  <Button
+                    variant="ghost"
                     onClick={() => handleSort("status")}
                     className="h-auto p-0 font-semibold"
                   >
@@ -340,6 +351,7 @@ export function VerificationTable({
                     </Badge>
                   </TableCell>
                   <TableCell>{inspection.mechanicName}</TableCell>
+                  <TableCell>{inspection.leaderName}</TableCell>
                   <TableCell>
                     <Badge className={getStatusColor(inspection.status)}>
                       {getStatusIcon(inspection.status)}

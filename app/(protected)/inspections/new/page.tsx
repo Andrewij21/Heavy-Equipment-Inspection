@@ -15,14 +15,31 @@ import { WheelInspectionForm } from "@/components/inspections/WheelInspectionFor
 import { SupportInspectionForm } from "@/components/inspections/SupportInspectionForm";
 import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, FileText, Settings, Wrench } from "lucide-react";
-import type { InspectionFormData } from "@/schemas/inspectionSchema";
+import type {
+  InspectionFormData,
+  TrackInspection,
+  WheelInspection,
+  SupportInspection,
+} from "@/schemas/inspectionSchema";
+
+// NEW IMPORT: Import the track mutation hook
+import { useCreateTrackInspection } from "@/queries/track";
+// Note: Assuming you have a separate utility to show toasts/notifications
 
 type EquipmentType = "track" | "wheel" | "support";
 
 export default function NewInspectionPage() {
   const [selectedType, setSelectedType] = useState<EquipmentType | null>(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
+
+  // Initialize mutation hooks
+  const trackMutation = useCreateTrackInspection();
+  // const wheelMutation = useCreateWheelInspection(); // Placeholder
+  // const supportMutation = useCreateSupportInspection(); // Placeholder
+
+  // Determine the overall submitting state
+  const isSubmitting = trackMutation.isPending;
+  // || wheelMutation.isPending || supportMutation.isPending;
 
   const equipmentTypes = [
     {
@@ -49,20 +66,28 @@ export default function NewInspectionPage() {
   ];
 
   const handleSubmit = async (data: InspectionFormData) => {
-    setIsSubmitting(true);
+    // Note: The isSubmitting state is now managed by the react-query hook (trackMutation.isPending)
+
     try {
-      // Mock API call - replace with actual API endpoint
-      console.log("Submitting inspection:", data);
+      if (data.equipmentType === "track") {
+        // Use mutateAsync to await the API call
+        await trackMutation.mutateAsync(data as TrackInspection);
 
-      // Simulate API delay
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      // Redirect to inspections list
-      // router.push("/inspections");
+        // Success notification and redirection
+        console.log("Track inspection submitted successfully.");
+        // showSuccessToast("Track inspection created successfully!"); // Placeholder for toast
+        router.push("/inspections");
+      } else if (data.equipmentType === "wheel") {
+        // await wheelMutation.mutateAsync(data as WheelInspection);
+        // router.push("/inspections");
+      } else if (data.equipmentType === "support") {
+        // await supportMutation.mutateAsync(data as SupportInspection);
+        // router.push("/inspections");
+      }
     } catch (error) {
+      // Error handling from the API response
       console.error("Failed to submit inspection:", error);
-    } finally {
-      setIsSubmitting(false);
+      // showErrorToast("Submission failed: " + error.message); // Placeholder for toast
     }
   };
 
@@ -112,13 +137,6 @@ export default function NewInspectionPage() {
               <h1 className="text-3xl font-bold text-gray-900">
                 New Inspection
               </h1>
-              {/* <p className="mt-1 text-sm text-gray-600">
-                {selectedType
-                  ? `Complete the ${
-                      equipmentTypes.find((t) => t.type === selectedType)?.title
-                    } inspection form`
-                  : "Select the type of equipment you want to inspect"}
-              </p> */}
             </div>
             {selectedType && (
               <Badge variant="outline" className="text-sm">

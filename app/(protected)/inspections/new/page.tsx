@@ -58,7 +58,7 @@ export default function NewInspectionPage() {
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
       // Redirect to inspections list
-      router.push("/inspections");
+      // router.push("/inspections");
     } catch (error) {
       console.error("Failed to submit inspection:", error);
     } finally {

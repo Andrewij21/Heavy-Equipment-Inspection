@@ -1,26 +1,44 @@
 import { z } from "zod";
-
 // Common fields for all inspection types
 const baseInspectionSchema = z.object({
-  equipmentId: z.string().min(1, "Equipment ID is required"),
+  equipmentId: z.string().min(1, "Unit No is required"),
   modelUnit: z.string().min(1, "Model unit is required"),
   location: z.string().min(1, "Location is required"),
   operatorName: z.string().min(1, "Operator name is required"),
   inspectionDate: z.string().min(1, "Inspection date is required"),
   inspectionTime: z.string().min(1, "Inspection time is required"),
+  // Keep workingHours required with a min value
   workingHours: z.number().min(0, "Working hours must be positive"),
   notes: z.string().optional(),
   mechanicName: z.string().min(1, "Mechanic name is required"),
   groupLeaderName: z.string().optional(),
 
-  // --- ADD THESE NEW FIELDS ---
-  smr: z.number().optional(), // SMR is likely a number
-  timeDown: z.string().optional(),
-  timeOut: z.string().optional(),
-  shift: z.enum(["day", "night"]).optional(), // Example options for Shift
+  // --- NEW FIELDS MADE REQUIRED ---
+  // SMR must be a number, making it required will force a value greater than -1
+  smr: z
+    .number({
+      error: "SMR must be a number",
+    })
+    .min(0, "SMR must be a positive number"),
+  timeDown: z.string().min(1, "Time Down is required"),
+  timeOut: z.string().min(1, "Time Out is required"),
+  // Shift is an enum, making it required by not using .optional()
+  shift: z.enum(["day", "night"], {
+    message: "Shift is required",
+  }),
 });
 
+// The result enum for inspection results (naturally optional)
 const resultEnum = z.enum(["ok", "failure"]).optional();
+
+// The quantity field for top-up is a number (naturally optional)
+const quantityField = z.number().optional();
+
+// The temperature field is a number (naturally optional)
+const tempField = z.number().optional();
+
+// A generic optional number field for grease/qty/temp
+const optionalNumber = z.number().optional();
 
 export const trackInspectionSchema = baseInspectionSchema.extend({
   equipmentType: z.literal("track"),
@@ -42,10 +60,12 @@ export const trackInspectionSchema = baseInspectionSchema.extend({
   lowerDrainWaterSediment: resultEnum,
   lowerHydraulicOilLevel: resultEnum,
 
-  // Upper Structure Area Check
+  // Upper Structure Area Check (Simplified to show the pattern)
   upperEngineOilLevel: resultEnum,
   upperEngineVisual: resultEnum,
   upperCoolantLevel: resultEnum,
+  // Note: Check if the name in SmallPC/BigDigger (upperRadiator) is the same as schema (upperRadiatorEtc)
+  upperRadiator: resultEnum.optional().or(resultEnum), // Handles both upperRadiator and upperRadiatorEtc
   upperRadiatorEtc: resultEnum,
   upperTurboInlet: resultEnum,
   upperAirCleaner: resultEnum,
@@ -60,26 +80,26 @@ export const trackInspectionSchema = baseInspectionSchema.extend({
   upperCoverHandRail: resultEnum,
 
   // Measure Cylinder Temperature
-  tempCylBoomRh: z.number().optional(),
-  tempCylBoomLh: z.number().optional(),
-  tempCylArmRh: z.number().optional(),
-  tempCylArmLh: z.number().optional(),
-  tempCylBucketRh: z.number().optional(),
-  tempCylBucketLh: z.number().optional(),
+  tempCylBoomRh: tempField,
+  tempCylBoomLh: tempField,
+  tempCylArmRh: tempField,
+  tempCylArmLh: tempField,
+  tempCylBucketRh: tempField,
+  tempCylBucketLh: tempField,
 
-  // Grease Condition
-  greaseBoomCylFoot: z.number().optional(),
-  greaseBoomFootPin: z.number().optional(),
-  greaseBoomCylRod: z.number().optional(),
-  greaseArmCylFoot: z.number().optional(),
-  greaseBoomArmCoupling: z.number().optional(),
-  greaseArmCylRod: z.number().optional(),
-  greaseBucketCylFoot: z.number().optional(),
-  greaseArmLinkCoupling: z.number().optional(),
-  greaseArmBucketCoupling: z.number().optional(),
-  greaseLinkCoupling: z.number().optional(),
-  greaseBucketCylRod: z.number().optional(),
-  greaseBucketLinkCoupling: z.number().optional(),
+  // Grease Condition (Using optionalNumber for consistency with SmallPC.tsx which uses type "grease")
+  greaseBoomCylFoot: resultEnum,
+  greaseBoomFootPin: resultEnum,
+  greaseBoomCylRod: resultEnum,
+  greaseArmCylFoot: resultEnum,
+  greaseBoomArmCoupling: resultEnum,
+  greaseArmCylRod: resultEnum,
+  greaseBucketCylFoot: resultEnum,
+  greaseArmLinkCoupling: resultEnum,
+  greaseArmBucketCoupling: resultEnum,
+  greaseLinkCoupling: resultEnum,
+  greaseBucketCylRod: resultEnum,
+  greaseBucketLinkCoupling: resultEnum,
 
   // Inside Cabin Check
   cabinMonitorPanel: resultEnum,
@@ -105,7 +125,73 @@ export const trackInspectionSchema = baseInspectionSchema.extend({
   safetyCabinRops: resultEnum,
   safetyBelt: resultEnum,
 
-  // Finding Inspection (untuk tabel temuan)
+  // Top-Up Lubricant & Coolant (SmallPC.tsx uses this naming, BigDigger/Bulldozer use different naming. We'll use the SmallPC names for simplicity and add the others as optional too.)
+  topUpCoolant: quantityField,
+  topUpEngine: quantityField,
+  topUpHydraulic: quantityField,
+  topUpSwingMachinery: quantityField,
+  topUpFinalDrive: quantityField,
+
+  // Top-Up Lubricant (BigDigger/Bulldozer-specific fields - need to include them to avoid Zod error)
+  topUpCoolantQty: quantityField,
+  topUpEngineQty: quantityField,
+  topUpHydraulicQty: quantityField,
+  topUpSwingMachineryQty: quantityField,
+  topUpFinalDriveQty: quantityField,
+
+  // Bulldozer-specific fields (must be optional)
+  engineOilLevelLeakage: resultEnum,
+  engineCoolantLevelLeakage: resultEnum,
+  engineFuelSystemLeakage: resultEnum,
+  engineBelts: resultEnum,
+  engineIntakeClamps: resultEnum,
+  engineExhaustLeakage: resultEnum,
+  engineOperationalSound: resultEnum,
+
+  powertrainTransmissionOil: resultEnum,
+  powertrainTorqueConverterOil: resultEnum,
+  powertrainDifferentialOil: resultEnum,
+  powertrainFinalDriveOil: resultEnum,
+  powertrainBrakeOperation: resultEnum,
+  powertrainPropellerShaft: resultEnum,
+
+  hydraulicOilLevel: resultEnum,
+  hydraulicSystemLeakage: resultEnum,
+  hydraulicPumpLineLeakage: resultEnum,
+  hydraulicHoseCondition: resultEnum,
+  hydraulicCylinderLiftBlade: resultEnum,
+  hydraulicCylinderTiltBlade: resultEnum,
+  hydraulicCylinderLiftRipper: resultEnum,
+  hydraulicCylinderTiltRipper: resultEnum,
+
+  structureAutolube: resultEnum,
+  structureEqualizerBarSeal: resultEnum,
+  structurePivotShaftLeakage: resultEnum,
+  structureFrameCracks: resultEnum,
+  structureTrackLinkBushing: resultEnum,
+  structureUndercarriageBolt: resultEnum,
+  structureTrackTension: resultEnum,
+  structureRipperFrame: resultEnum,
+  structureBogglePivot: resultEnum,
+  structureMasterLinkBolt: resultEnum,
+  structureIdlerMountingBolt: resultEnum,
+  structureEqualizerBarBearing: resultEnum,
+  structureBladeMountingPin: resultEnum,
+  structureCuttingEdge: resultEnum,
+  structureEndBit: resultEnum,
+  structureCarrieRoller: resultEnum,
+  structureRipperPoint: resultEnum,
+
+  electricalBatteryMounting: resultEnum,
+  electricalBatteryElectrolyte: resultEnum,
+  electricalTerminalCleaning: resultEnum,
+  electricalConnectorCleaning: resultEnum,
+  electricalLamps: resultEnum,
+  electricalIsolationSwitch: resultEnum,
+  electricalGaugePanel: resultEnum,
+  electricalBackupAlarm: resultEnum,
+
+  // Finding Inspection (for finding table - already optional)
   findings: z
     .array(
       z.object({

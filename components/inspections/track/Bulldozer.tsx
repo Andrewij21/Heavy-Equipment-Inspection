@@ -327,16 +327,23 @@ export function BullDozerInspectionForm({
     resolver: zodResolver(trackInspectionSchema),
     defaultValues: {
       equipmentType: "track",
+      // Add 'Bulldozer' to match the new required schema field 'equipmentGeneralType'
+      equipmentGeneralType: "Bulldozer",
       equipmentId: "",
       modelUnit: "",
       location: "",
-      operatorName: "",
-      mechanicName: "",
+      operatorName: "john",
+      mechanicName: "john", // Added default value
       inspectionDate: new Date().toISOString().split("T")[0],
       inspectionTime: new Date().toTimeString().slice(0, 5),
       workingHours: 0,
       notes: "",
       findings: [{ description: "", status: "open" }],
+      // Add default values for new required fields
+      smr: 0,
+      timeDown: new Date().toTimeString().slice(0, 5),
+      timeOut: new Date().toTimeString().slice(0, 5),
+      shift: undefined,
       ...initialData,
     },
   });

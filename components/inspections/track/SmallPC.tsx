@@ -379,16 +379,23 @@ export function SmallPCInspectionForm({
     resolver: zodResolver(trackInspectionSchema),
     defaultValues: {
       equipmentType: "track",
+      // Add 'Small PC' to match the new required schema field 'equipmentGeneralType'
+      equipmentGeneralType: "Small PC",
       equipmentId: "",
       modelUnit: "",
       location: "",
-      operatorName: "",
-      mechanicName: "",
+      operatorName: "john",
+      mechanicName: "john", // Added default value
       inspectionDate: new Date().toISOString().split("T")[0],
       inspectionTime: new Date().toTimeString().slice(0, 5),
       workingHours: 0,
       notes: "",
       findings: [{ description: "", status: "open" }],
+      // Add default values for new required fields
+      smr: 0,
+      timeDown: new Date().toTimeString().slice(0, 5), // Default to current time or empty string
+      timeOut: new Date().toTimeString().slice(0, 5), // Default to current time or empty string
+      shift: undefined, // Must be undefined/null to show Zod error if not selected
       ...initialData,
     },
   });

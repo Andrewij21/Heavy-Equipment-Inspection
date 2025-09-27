@@ -348,13 +348,7 @@ export const trackFormSections = [
 
 const equipmentModels = ["PC 1250", "PC2000", "395", "6015"];
 
-// const equipmentModels = {
-//   "Big Digger": ["PC 1250", "PC2000", "395", "6015"],
-//   "Small PC": ["PC500", "PC400", "PC300"],
-//   Bulldozer: ["D85", "D155", "D375"],
-// };
 type EquipmentType = keyof typeof equipmentModels;
-// 3. Komponen untuk input pengukuran temperatur silinder
 
 interface TrackInspectionFormProps {
   onSubmit: (data: TrackInspection) => void;
@@ -372,16 +366,23 @@ export function BigDiggerInspectionForm({
     resolver: zodResolver(trackInspectionSchema),
     defaultValues: {
       equipmentType: "track",
+      // Add 'Big Digger' to match the new required schema field 'equipmentGeneralType'
+      equipmentGeneralType: "Big Digger",
       equipmentId: "",
       modelUnit: "",
       location: "",
-      operatorName: "",
-      mechanicName: "",
+      operatorName: "john",
+      mechanicName: "john", // Added default value
       inspectionDate: new Date().toISOString().split("T")[0],
       inspectionTime: new Date().toTimeString().slice(0, 5),
       workingHours: 0,
       notes: "",
       findings: [{ description: "", status: "open" }],
+      // Add default values for new required fields
+      smr: 0,
+      timeDown: new Date().toTimeString().slice(0, 5),
+      timeOut: new Date().toTimeString().slice(0, 5),
+      shift: undefined,
       ...initialData,
     },
   });
@@ -392,7 +393,10 @@ export function BigDiggerInspectionForm({
   });
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+      <form
+        onSubmit={form.handleSubmit(onSubmit, (ERR) => console.log(ERR))}
+        className="space-y-6"
+      >
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">

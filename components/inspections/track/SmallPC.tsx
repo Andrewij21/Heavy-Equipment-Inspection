@@ -380,7 +380,7 @@ export function SmallPCInspectionForm({
     defaultValues: {
       equipmentType: "track",
       // Add 'Small PC' to match the new required schema field 'equipmentGeneralType'
-      equipmentGeneralType: "Small PC",
+      equipmentGeneralType: "SmallPC",
       equipmentId: "",
       modelUnit: "",
       location: "",

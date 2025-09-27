@@ -26,6 +26,10 @@ const baseInspectionSchema = z.object({
   shift: z.enum(["day", "night"], {
     message: "Shift is required",
   }),
+
+  status: z.enum(["PENDING", "APPROVED", "REJECTED"]).optional(),
+  approverId: z.string().optional(),
+  approvalDate: z.string().optional(), // Or z.date().optional()
 });
 
 // The result enum for inspection results (naturally optional)
@@ -44,7 +48,7 @@ export const trackInspectionSchema = baseInspectionSchema.extend({
   equipmentType: z.literal("track"),
 
   // Field baru untuk pemilihan tipe model
-  equipmentGeneralType: z.enum(["Big Digger", "Small PC", "Bulldozer"], {
+  equipmentGeneralType: z.enum(["BigDigger", "SmallPC", "Bulldozer"], {
     message: "Equipment type is required",
   }),
 

@@ -367,7 +367,7 @@ export function BigDiggerInspectionForm({
     defaultValues: {
       equipmentType: "track",
       // Add 'Big Digger' to match the new required schema field 'equipmentGeneralType'
-      equipmentGeneralType: "Big Digger",
+      equipmentGeneralType: "BigDigger",
       equipmentId: "",
       modelUnit: "",
       location: "",

@@ -6,6 +6,8 @@ import type {
   InspectionFormData, // Keep InspectionFormData for generic type safety
 } from "@/schemas/inspectionSchema";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { inspect } from "util";
+import { inspectionKeys } from "./inspection";
 
 // --- TYPES ---
 // Define the structure for the payload needed to update the status
@@ -99,6 +101,7 @@ export const useUpdateTrackStatus = () => {
     onSuccess: (data, variables) => {
       // 1. Invalidate the list query
       queryClient.invalidateQueries({ queryKey: trackKeys.lists() });
+      queryClient.invalidateQueries({ queryKey: inspectionKeys.lists() });
       // 2. Optimistically update the single detail view
       queryClient.setQueryData(
         trackKeys.detail(variables.id),

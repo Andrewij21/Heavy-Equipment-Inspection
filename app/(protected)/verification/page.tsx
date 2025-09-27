@@ -1,115 +1,115 @@
+// src/app/verification/page.tsx
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Clock, CheckCircle, XCircle } from "lucide-react";
+import { Clock, CheckCircle, XCircle, Loader2 } from "lucide-react";
 import { VerificationTable } from "@/components/tables/VerificationTable";
+// NEW IMPORT: Import the general inspection hook
+import { useGetGeneralInspections } from "@/queries/inspection";
 
-interface PendingInspection {
+// Define the shape of the data that comes from the API (Inspection model + approver)
+interface InspectionListItem {
   id: string;
   equipmentId: string;
   equipmentType: "track" | "wheel" | "support";
   mechanicName: string;
-  leaderName: string;
-  status: "pending" | "approved" | "rejected";
+  approver?: { username: string; id: string };
+  status: "PENDING" | "APPROVED" | "REJECTED";
   createdAt: string;
   location: string;
-  priority: "low" | "medium" | "high";
-  issues: number;
+}
+
+// Interface for the data format required by the VerificationTable
+interface TableData extends InspectionListItem {
+  leaderName: string;
+  priority: "low" | "medium" | "high"; // Placeholder required by table
+  issues: number; // Placeholder required by table
+  status: "PENDING" | "APPROVED" | "REJECTED"; // Table uses lowercase
 }
 
 export default function VerificationPage() {
-  const [activeTab, setActiveTab] = useState("pending");
+  // Use Prisma status values (uppercase) for the API filter and tab state
+  const [activeTab, setActiveTab] = useState<
+    "PENDING" | "APPROVED" | "REJECTED" | "ALL"
+  >("PENDING");
 
-  // Mock data - replace with real data from API
-  const mockInspections: PendingInspection[] = [
-    {
-      id: "1",
-      equipmentId: "EXC-001",
-      equipmentType: "track",
-      mechanicName: "John Mechanic",
-      leaderName: "John leader",
-      status: "pending",
-      createdAt: "2024-01-15T10:30:00Z",
-      location: "Site A, Zone 1",
-      priority: "high",
-      issues: 3,
-    },
-    {
-      id: "2",
-      equipmentId: "WHL-002",
-      equipmentType: "wheel",
-      mechanicName: "Jane Smith",
-      leaderName: "John leader",
-      status: "pending",
-      createdAt: "2024-01-15T09:15:00Z",
-      location: "Site B, Zone 2",
-      priority: "medium",
-      issues: 1,
-    },
-    {
-      id: "3",
-      equipmentId: "SUP-003",
-      equipmentType: "support",
-      mechanicName: "Bob Wilson",
-      leaderName: "John leader",
+  // Define base filters/pagination parameters
+  const [filters, setFilters] = useState({
+    page: 1,
+    limit: 50,
+    q: "",
+  });
 
-      status: "approved",
-      createdAt: "2024-01-14T16:45:00Z",
-      location: "Site C, Zone 3",
-      priority: "low",
-      issues: 0,
-    },
-    {
-      id: "4",
-      equipmentId: "EXC-004",
-      equipmentType: "track",
-      mechanicName: "Alice Johnson",
-      leaderName: "John leader",
-      status: "rejected",
-      createdAt: "2024-01-14T14:20:00Z",
-      location: "Site A, Zone 2",
-      priority: "medium",
-      issues: 5,
-    },
-    {
-      id: "5",
-      equipmentId: "WHL-005",
-      equipmentType: "wheel",
-      mechanicName: "Mike Davis",
-      leaderName: "John leader",
+  // Fetch the data based on current status filter
+  const apiFilters = {
+    ...filters,
+    // Pass the status filter to the API unless the tab is 'ALL'
+    status: activeTab !== "ALL" ? activeTab : undefined,
+  };
 
-      status: "pending",
-      createdAt: "2024-01-13T11:00:00Z",
-      location: "Site D, Zone 1",
-      priority: "low",
-      issues: 0,
-    },
-    {
-      id: "6",
-      equipmentId: "SUP-006",
-      equipmentType: "support",
-      mechanicName: "Sarah Brown",
-      leaderName: "John leader",
+  const { data, isLoading, isError } = useGetGeneralInspections(apiFilters);
 
-      status: "approved",
-      createdAt: "2024-01-12T15:30:00Z",
-      location: "Site B, Zone 3",
-      priority: "high",
-      issues: 2,
-    },
-  ];
+  // Map API data to the table's required structure and calculate counts
+  const { tableData, counts } = useMemo(() => {
+    const rawData = data?.data || [];
+    const mappedData: TableData[] = [];
+    let pendingCount = 0;
+    let approvedCount = 0;
+    let rejectedCount = 0;
 
-  const pendingCount = mockInspections.filter(
-    (i) => i.status === "pending"
-  ).length;
-  const approvedCount = mockInspections.filter(
-    (i) => i.status === "approved"
-  ).length;
-  const rejectedCount = mockInspections.filter(
-    (i) => i.status === "rejected"
-  ).length;
+    rawData.forEach((item: any) => {
+      const status = item.status as "PENDING" | "APPROVED" | "REJECTED";
+
+      // Calculate counts
+      if (status === "PENDING") pendingCount++;
+      else if (status === "APPROVED") approvedCount++;
+      else if (status === "REJECTED") rejectedCount++;
+
+      // Map to TableData format
+      mappedData.push({
+        id: item.id,
+        equipmentId: item.equipmentId,
+        equipmentType: item.equipmentType.toLowerCase(),
+        mechanicName: item.mechanicName,
+        leaderName: item.approver?.username || "N/A",
+        status: status.toLowerCase() as "PENDING" | "APPROVED" | "REJECTED", // Convert for table
+        createdAt: item.createdAt,
+        location: item.location,
+        // Mocked fields the table expects
+        priority: "medium",
+        issues: 0,
+      });
+    });
+
+    return {
+      tableData: mappedData,
+      counts: { pendingCount, approvedCount, rejectedCount },
+    };
+  }, [data]);
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-[50vh]">
+        <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
+        <p className="ml-3 text-lg text-gray-600">
+          Loading verification data...
+        </p>
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className="text-red-600 text-center mt-10">
+        Error loading inspections. Please check the network connection.
+      </div>
+    );
+  }
+
+  const totalCount =
+    counts.pendingCount + counts.approvedCount + counts.rejectedCount;
 
   return (
     <div className="min-h-screen bg-background">
@@ -133,7 +133,7 @@ export default function VerificationPage() {
               <Clock className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{pendingCount}</div>
+              <div className="text-2xl font-bold">{counts.pendingCount}</div>
               <p className="text-xs text-muted-foreground">
                 Awaiting verification
               </p>
@@ -141,13 +141,11 @@ export default function VerificationPage() {
           </Card>
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">
-                Approved Today
-              </CardTitle>
+              <CardTitle className="text-sm font-medium">Approved</CardTitle>
               <CheckCircle className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{approvedCount}</div>
+              <div className="text-2xl font-bold">{counts.approvedCount}</div>
               <p className="text-xs text-muted-foreground">
                 Successfully verified
               </p>
@@ -159,7 +157,7 @@ export default function VerificationPage() {
               <XCircle className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{rejectedCount}</div>
+              <div className="text-2xl font-bold">{counts.rejectedCount}</div>
               <p className="text-xs text-muted-foreground">
                 Requiring revision
               </p>
@@ -167,34 +165,32 @@ export default function VerificationPage() {
           </Card>
         </div>
 
-        <Tabs value={activeTab} onValueChange={setActiveTab}>
+        <Tabs
+          value={activeTab}
+          onValueChange={(value) =>
+            setActiveTab(value as "PENDING" | "APPROVED" | "REJECTED" | "ALL")
+          }
+        >
           <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="pending">Pending ({pendingCount})</TabsTrigger>
-            <TabsTrigger value="approved">
-              Approved ({approvedCount})
+            <TabsTrigger value="PENDING">
+              Pending ({counts.pendingCount})
             </TabsTrigger>
-            <TabsTrigger value="rejected">
-              Rejected ({rejectedCount})
+            <TabsTrigger value="APPROVED">
+              Approved ({counts.approvedCount})
             </TabsTrigger>
-            <TabsTrigger value="all">
-              All ({mockInspections.length})
+            <TabsTrigger value="REJECTED">
+              Rejected ({counts.rejectedCount})
             </TabsTrigger>
+            <TabsTrigger value="ALL">All ({totalCount})</TabsTrigger>
           </TabsList>
 
-          <TabsContent value="pending" className="mt-6">
-            <VerificationTable data={mockInspections} statusFilter="pending" />
-          </TabsContent>
-
-          <TabsContent value="approved" className="mt-6">
-            <VerificationTable data={mockInspections} statusFilter="approved" />
-          </TabsContent>
-
-          <TabsContent value="rejected" className="mt-6">
-            <VerificationTable data={mockInspections} statusFilter="rejected" />
-          </TabsContent>
-
-          <TabsContent value="all" className="mt-6">
-            <VerificationTable data={mockInspections} statusFilter="all" />
+          <TabsContent value={activeTab} className="mt-6">
+            <VerificationTable
+              // Pass the data received from the API endpoint
+              data={tableData}
+              // Pass the active tab status (lowercase) for internal filtering/display
+              statusFilter={activeTab.toLowerCase()}
+            />
           </TabsContent>
         </Tabs>
       </main>

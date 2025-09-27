@@ -39,8 +39,11 @@ import {
   ArrowUpDown,
   ArrowUp,
   ArrowDown,
+  Loader2,
 } from "lucide-react";
 import Link from "next/link";
+// CRITICAL: Use the specific track mutation hook directly
+import { useUpdateTrackStatus } from "@/queries/track"; // Assuming path is now lib/api/track
 
 interface PendingInspection {
   id: string;
@@ -48,7 +51,13 @@ interface PendingInspection {
   equipmentType: "track" | "wheel" | "support";
   mechanicName: string;
   leaderName: string;
-  status: "pending" | "approved" | "rejected";
+  status:
+    | "PENDING"
+    | "APPROVED"
+    | "REJECTED"
+    | "pending"
+    | "approved"
+    | "rejected";
   createdAt: string;
   location: string;
   priority: "low" | "medium" | "high";
@@ -73,26 +82,39 @@ export function VerificationTable({
   const [sortField, setSortField] = useState<SortField>("createdAt");
   const [sortDirection, setSortDirection] = useState<SortDirection>("desc");
 
+  // NEW: Initialize the specific track mutation hook
+  const updateStatusMutation = useUpdateTrackStatus();
+
+  // Helper functions (normalizeStatus, getStatusIcon, getStatusColor, etc. remain the same)
+  const normalizeStatus = (
+    status: string
+  ): "PENDING" | "APPROVED" | "REJECTED" => {
+    const upper = status.toUpperCase();
+    if (upper === "PENDING" || upper === "APPROVED" || upper === "REJECTED") {
+      return upper as "PENDING" | "APPROVED" | "REJECTED";
+    }
+    return "PENDING";
+  };
+
   const getStatusIcon = (status: string) => {
-    switch (status) {
-      case "approved":
+    switch (normalizeStatus(status)) {
+      case "APPROVED":
         return <CheckCircle className="w-4 h-4 text-green-600" />;
-      case "rejected":
+      case "REJECTED":
         return <XCircle className="w-4 h-4 text-red-600" />;
-      case "pending":
-        return <Clock className="w-4 h-4 text-yellow-600" />;
+      case "PENDING":
       default:
-        return <Clock className="w-4 h-4 text-gray-600" />;
+        return <Clock className="w-4 h-4 text-yellow-600" />;
     }
   };
 
   const getStatusColor = (status: string) => {
-    switch (status) {
-      case "approved":
+    switch (normalizeStatus(status)) {
+      case "APPROVED":
         return "bg-green-100 text-green-800 hover:bg-green-200";
-      case "rejected":
+      case "REJECTED":
         return "bg-red-100 text-red-800 hover:bg-red-200";
-      case "pending":
+      case "PENDING":
         return "bg-yellow-100 text-yellow-800 hover:bg-yellow-200";
       default:
         return "bg-gray-100 text-gray-800 hover:bg-gray-200";
@@ -155,10 +177,12 @@ export function VerificationTable({
   };
 
   const filteredAndSortedData = useMemo(() => {
+    // ... (Filtering and sorting logic remains the same) ...
     const filtered = data.filter((inspection) => {
       // Status filter
       const matchesStatus =
-        statusFilter === "all" || inspection.status === statusFilter;
+        statusFilter === "all" ||
+        normalizeStatus(inspection.status) === normalizeStatus(statusFilter);
 
       // Search filter
       const matchesSearch =
@@ -228,6 +252,41 @@ export function VerificationTable({
     setSearchTerm("");
     setEquipmentTypeFilter("all");
     setPriorityFilter("all");
+  };
+
+  // UPDATED: Handle Approval/Rejection Action with conditional API call
+  const handleStatusAction = (
+    id: string,
+    status: "APPROVED" | "REJECTED",
+    equipmentType: "track" | "wheel" | "support" // Explicitly use type
+  ) => {
+    // CONDITIONALLY CALL THE CORRECT API BASED ON TYPE
+    if (equipmentType === "track") {
+      updateStatusMutation.mutate(
+        {
+          id: id,
+          statusData: { status },
+        },
+        {
+          onSuccess: () => {
+            console.log(
+              `Track Inspection ${id} successfully updated to ${status}`
+            );
+            // react-query invalidation handled by hook
+          },
+          onError: (error) => {
+            console.error(`Failed to update track status for ${id}:`, error);
+            // Show error notification
+          },
+        }
+      );
+    } else {
+      // Placeholder for wheel and support: log a warning
+      console.warn(
+        `Status update for ${equipmentType} (ID: ${id}) is not yet implemented. Action ignored.`
+      );
+      // You could show an alert/toast to the user here.
+    }
   };
 
   return (
@@ -340,60 +399,119 @@ export function VerificationTable({
               </TableRow>
             </TableHeader>
             <TableBody>
-              {filteredAndSortedData.map((inspection) => (
-                <TableRow key={inspection.id} className="hover:bg-muted/50">
-                  <TableCell className="font-medium">
-                    {inspection.equipmentId}
-                  </TableCell>
-                  <TableCell>
-                    <Badge variant="outline">
-                      {getEquipmentTypeLabel(inspection.equipmentType)}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>{inspection.mechanicName}</TableCell>
-                  <TableCell>{inspection.leaderName}</TableCell>
-                  <TableCell>
-                    <Badge className={getStatusColor(inspection.status)}>
-                      {getStatusIcon(inspection.status)}
-                      <span className="ml-1">
-                        {inspection.status.charAt(0).toUpperCase() +
-                          inspection.status.slice(1)}
-                      </span>
-                    </Badge>
-                  </TableCell>
-                  <TableCell className="text-sm text-muted-foreground">
-                    {formatDate(inspection.createdAt)}
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" className="h-8 w-8 p-0">
-                          <span className="sr-only">Open menu</span>
-                          <MoreHorizontal className="h-4 w-4" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuItem asChild>
-                          <Link href={`/verification/${inspection.id}`}>
-                            <Eye className="w-4 h-4 mr-2" />
-                            Review Details
-                          </Link>
-                        </DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem>
-                          <CheckCircle className="w-4 h-4 mr-2" />
-                          Approve
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>
-                          <XCircle className="w-4 h-4 mr-2" />
-                          Reject
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </TableCell>
-                </TableRow>
-              ))}
+              {filteredAndSortedData.map((inspection) => {
+                const isPending =
+                  normalizeStatus(inspection.status) === "PENDING";
+                // Check if this specific row is the one currently being mutated
+                const isMutating =
+                  updateStatusMutation.isPending &&
+                  updateStatusMutation.variables?.id === inspection.id;
+
+                // Determine if approval buttons should be enabled (only for Track)
+                const isTrack = inspection.equipmentType === "track";
+                const canFinalize = isPending && isTrack;
+
+                return (
+                  <TableRow key={inspection.id} className="hover:bg-muted/50">
+                    <TableCell className="font-medium">
+                      {inspection.equipmentId}
+                    </TableCell>
+                    <TableCell>
+                      <Badge variant="outline">
+                        {getEquipmentTypeLabel(inspection.equipmentType)}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>{inspection.mechanicName}</TableCell>
+                    <TableCell>{inspection.leaderName}</TableCell>
+                    <TableCell>
+                      <Badge className={getStatusColor(inspection.status)}>
+                        {isMutating ? (
+                          <Loader2 className="w-4 h-4 animate-spin" />
+                        ) : (
+                          getStatusIcon(inspection.status)
+                        )}
+                        <span className="ml-1">
+                          {isMutating
+                            ? "Updating..."
+                            : inspection.status.charAt(0).toUpperCase() +
+                              inspection.status.slice(1)}
+                        </span>
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="text-sm text-muted-foreground">
+                      {formatDate(inspection.createdAt)}
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button
+                            variant="ghost"
+                            className="h-8 w-8 p-0"
+                            disabled={isMutating}
+                          >
+                            <span className="sr-only">Open menu</span>
+                            <MoreHorizontal className="h-4 w-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                          <DropdownMenuItem asChild>
+                            {/* Link should navigate to the specific review page */}
+                            <Link href={`/verification/${inspection.id}`}>
+                              <Eye className="w-4 h-4 mr-2" />
+                              Review Details
+                            </Link>
+                          </DropdownMenuItem>
+
+                          <DropdownMenuSeparator />
+
+                          {canFinalize ? (
+                            <>
+                              <DropdownMenuItem
+                                onClick={() =>
+                                  handleStatusAction(
+                                    inspection.id,
+                                    "APPROVED",
+                                    inspection.equipmentType
+                                  )
+                                }
+                                disabled={isMutating}
+                              >
+                                <CheckCircle className="w-4 h-4 mr-2 text-green-600" />
+                                Approve
+                              </DropdownMenuItem>
+                              <DropdownMenuItem
+                                onClick={() =>
+                                  handleStatusAction(
+                                    inspection.id,
+                                    "REJECTED",
+                                    inspection.equipmentType
+                                  )
+                                }
+                                disabled={isMutating}
+                              >
+                                <XCircle className="w-4 h-4 mr-2 text-red-600" />
+                                Reject
+                              </DropdownMenuItem>
+                            </>
+                          ) : isPending && !isTrack ? (
+                            <DropdownMenuItem disabled>
+                              <Clock className="w-4 h-4 mr-2" />
+                              Status API Missing (
+                              {getEquipmentTypeLabel(inspection.equipmentType)})
+                            </DropdownMenuItem>
+                          ) : (
+                            <DropdownMenuItem disabled>
+                              <Clock className="w-4 h-4 mr-2" />
+                              Already Finalized
+                            </DropdownMenuItem>
+                          )}
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
             </TableBody>
           </Table>
           {filteredAndSortedData.length === 0 && (

@@ -1,6 +1,7 @@
+// src/app/ReportsPage.tsx
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo, useEffect } from "react";
 import {
   Card,
   CardContent,
@@ -39,156 +40,157 @@ import {
   Download,
   BarChart3,
   Search,
+  Loader2,
+  FileText,
 } from "lucide-react";
 import {
   type ExportFilters,
   type ExportInspection,
-  generateCSVContent,
-  downloadCSV,
+  generateCSVContent, // Keep for CSV format
+  downloadCSV, // Keep for CSV format
   generateReportSummary,
 } from "@/lib/exportUtils";
 import { toast } from "sonner";
+// API Imports
+import { useGetGeneralInspections } from "@/queries/inspection";
+import { downloadInspectionReport } from "@/queries/report"; // Assuming this utility is imported/defined
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+
+// Mock Data structures (as defined previously)
+interface FilterableInspection extends ExportInspection {
+  equipmentType: "track" | "wheel" | "support";
+  status: "approved" | "rejected" | "pending";
+  approver?: { username: string; id: string };
+}
+const mapApiToFilterStatus = (status: string) =>
+  status.toLowerCase() as "approved" | "rejected" | "pending";
+
 export default function ReportsPage() {
   const [isExporting, setIsExporting] = useState(false);
 
+  // States for API filtering (Data Source)
+  const [apiFilters, setApiFilters] = useState({
+    status: "ALL",
+    dateFrom: "",
+    dateTo: "",
+  });
+
+  // States for client-side filtering (Table View)
   const [searchTerm, setSearchTerm] = useState("");
   const [typeFilter, setTypeFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
   const [dateFilter, setDateFilter] = useState("all");
-  const [dateFrom, setDateFrom] = useState<string>("");
-  const [dateTo, setDateTo] = useState<string>("");
 
-  // Mock data - replace with real data from API
-  const mockInspections: ExportInspection[] = [
-    {
-      id: "1",
-      equipmentId: "EXC-001",
-      equipmentType: "track",
-      mechanicName: "John Mechanic",
-      status: "approved",
-      createdAt: "2024-01-15T10:30:00Z",
-      location: "Site A, Zone 1",
-      operatorName: "Mike Operator",
-      workingHours: 8.5,
-      verifiedBy: "Jane Leader",
-      verifiedAt: "2024-01-15T14:30:00Z",
-      notes: "Equipment in good condition",
-      trackCondition: "good",
-      trackTension: "proper",
-      sprocketWear: "light",
-      trackPadWear: 25,
-      hydraulicLeaks: false,
-      greaseLevels: "adequate",
-    },
-    {
-      id: "2",
-      equipmentId: "WHL-002",
-      equipmentType: "wheel",
-      mechanicName: "Jane Smith",
-      status: "approved",
-      createdAt: "2024-01-14T09:15:00Z",
-      location: "Site B, Zone 2",
-      operatorName: "Tom Driver",
-      workingHours: 7.0,
-      verifiedBy: "Jane Leader",
-      verifiedAt: "2024-01-14T16:15:00Z",
-      tireCondition: "excellent",
-      tirePressure: 35,
-      treadDepth: 8.5,
-      wheelAlignment: "proper",
-      brakeCondition: "good",
-      oilLevels: "adequate",
-    },
-    {
-      id: "3",
-      equipmentId: "SUP-003",
-      equipmentType: "support",
-      mechanicName: "Bob Wilson",
-      status: "rejected",
-      createdAt: "2024-01-13T16:45:00Z",
-      location: "Site C, Zone 3",
-      operatorName: "Sam Worker",
-      workingHours: 6.5,
-      verifiedBy: "Jane Leader",
-      verifiedAt: "2024-01-14T10:45:00Z",
-      notes: "Structural issues found",
-      structuralIntegrity: "poor",
-      weldingCondition: "fair",
-      boltTightness: "loose",
-      loadCapacity: 5.0,
-      stabilityCheck: "unstable",
-      hydraulicSystems: true,
-    },
-    {
-      id: "4",
-      equipmentId: "TRK-004",
-      equipmentType: "track",
-      mechanicName: "Alice Johnson",
-      status: "pending",
-      createdAt: "2024-01-16T08:00:00Z",
-      location: "Site D, Zone 1",
-      operatorName: "Chris Operator",
-      workingHours: 9.0,
-      notes: "Routine maintenance check",
-      trackCondition: "fair",
-      trackTension: "needs_adjustment",
-      sprocketWear: "moderate",
-      trackPadWear: 45,
-      hydraulicLeaks: true,
-      greaseLevels: "low",
-    },
-  ];
+  // Synchronize state variables for easy access in inputs and filters
+  const dateFrom = apiFilters.dateFrom;
+  const dateTo = apiFilters.dateTo;
 
-  const filteredInspections = mockInspections.filter((inspection) => {
-    const matchesSearch =
-      inspection.equipmentId.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      inspection.mechanicName
-        .toLowerCase()
-        .includes(searchTerm.toLowerCase()) ||
-      inspection.location.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesType =
-      typeFilter === "all" || inspection.equipmentType === typeFilter;
-    const matchesStatus =
-      statusFilter === "all" || inspection.status === statusFilter;
-
-    const created = new Date(inspection.createdAt);
-    let matchesQuickDate = true;
-    if (dateFilter !== "all") {
-      const now = new Date();
-      switch (dateFilter) {
-        case "today":
-          matchesQuickDate = created.toDateString() === now.toDateString();
-          break;
-        case "week":
-          matchesQuickDate =
-            created >= new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-          break;
-        case "month":
-          matchesQuickDate =
-            created >= new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
-          break;
-      }
-    }
-
-    let matchesRange = true;
-    if (dateFrom) matchesRange = matchesRange && created >= new Date(dateFrom);
-    if (dateTo) {
-      // include entire end day
-      const end = new Date(dateTo);
-      end.setHours(23, 59, 59, 999);
-      matchesRange = matchesRange && created <= end;
-    }
-
-    return (
-      matchesSearch &&
-      matchesType &&
-      matchesStatus &&
-      matchesQuickDate &&
-      matchesRange
-    );
+  // Fetch data using the hook
+  const { data, isLoading, isError } = useGetGeneralInspections({
+    status: apiFilters.status === "ALL" ? undefined : apiFilters.status,
+    dateFrom: apiFilters.dateFrom,
+    dateTo: apiFilters.dateTo,
   });
 
-  const summary = generateReportSummary(mockInspections);
+  // Map and normalize the API data once (useMemo remains the same)
+  const allInspections: FilterableInspection[] = useMemo(() => {
+    if (!data?.data) return [];
+
+    return data.data.map((item: any) => ({
+      id: item.id,
+      equipmentId: item.equipmentId,
+      equipmentType: item.equipmentType.toLowerCase(),
+      mechanicName: item.mechanicName,
+      status: mapApiToFilterStatus(item.status),
+      createdAt: item.createdAt,
+      location: item.location,
+      verifiedBy: item.approver?.username || "N/A",
+      verifiedAt: item.approvalDate,
+      trackCondition: item.trackCondition || "N/A",
+      trackTension: item.trackTension || "N/A",
+      sprocketWear: item.sprocketWear || "N/A",
+      trackPadWear: item.trackPadWear || 0,
+      hydraulicLeaks: item.hydraulicLeaks || false,
+      greaseLevels: item.greaseLevels || "N/A",
+      notes: item.notes || "",
+      tireCondition: item.tireCondition || "N/A",
+      structuralIntegrity: item.structuralIntegrity || "N/A",
+    })) as FilterableInspection[];
+  }, [data]);
+
+  // Client-Side Filtered Data (for the visible table - useMemo remains the same)
+  const filteredInspections = useMemo(() => {
+    const filtered = allInspections.filter((inspection) => {
+      const matchesSearch =
+        inspection.equipmentId
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase()) ||
+        inspection.mechanicName
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase()) ||
+        inspection.location.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesType =
+        typeFilter === "all" || inspection.equipmentType === typeFilter;
+      const matchesStatus =
+        statusFilter === "all" || inspection.status === statusFilter;
+
+      const created = new Date(inspection.createdAt);
+      let matchesQuickDate = true;
+
+      // Implement quick date logic based on dateFilter state
+      if (dateFilter !== "all") {
+        const now = new Date();
+        switch (dateFilter) {
+          case "today":
+            matchesQuickDate = created.toDateString() === now.toDateString();
+            break;
+          case "week":
+            matchesQuickDate =
+              created >= new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+            break;
+          case "month":
+            matchesQuickDate =
+              created >= new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+            break;
+        }
+      }
+
+      let matchesRange = true;
+      if (dateFrom)
+        matchesRange = matchesRange && created >= new Date(dateFrom);
+      if (dateTo) {
+        const end = new Date(dateTo);
+        end.setHours(23, 59, 59, 999);
+        matchesRange = matchesRange && created <= end;
+      }
+
+      return (
+        matchesSearch &&
+        matchesType &&
+        matchesStatus &&
+        matchesQuickDate &&
+        matchesRange
+      );
+    });
+    return filtered;
+  }, [
+    allInspections,
+    searchTerm,
+    typeFilter,
+    statusFilter,
+    dateFilter,
+    dateFrom,
+    dateTo,
+  ]);
+
+  const summary = generateReportSummary(allInspections);
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -212,158 +214,104 @@ export default function ReportsPage() {
       minute: "2-digit",
     });
   };
+
+  // NEW: CORE Export Handler updated to call backend API for PDF/Excel
   const handleExport = async (
-    filters: ExportFilters,
-    format: "csv" | "excel"
+    inspectionsToExport: FilterableInspection[],
+    format: "csv" | "pdf" | "excel"
   ) => {
     setIsExporting(true);
-    const toastId = toast.loading("Exporting data...");
+    const toastId = toast.loading(
+      `Preparing export as ${format.toUpperCase()}...`
+    );
     try {
-      // Apply filters to mock data
-      let filteredInspections = mockInspections;
-
-      if (filters.dateFrom) {
-        filteredInspections = filteredInspections.filter(
-          (i) => new Date(i.createdAt) >= new Date(filters.dateFrom!)
-        );
-      }
-      if (filters.dateTo) {
-        filteredInspections = filteredInspections.filter(
-          (i) => new Date(i.createdAt) <= new Date(filters.dateTo!)
-        );
-      }
-      if (filters.equipmentType) {
-        filteredInspections = filteredInspections.filter(
-          (i) => i.equipmentType === filters.equipmentType
-        );
-      }
-      if (filters.status) {
-        filteredInspections = filteredInspections.filter(
-          (i) => i.status === filters.status
-        );
-      }
-      if (filters.mechanic) {
-        filteredInspections = filteredInspections.filter((i) =>
-          i.mechanicName.toLowerCase().includes(filters.mechanic!.toLowerCase())
-        );
-      }
-      if (filters.location) {
-        filteredInspections = filteredInspections.filter((i) =>
-          i.location.toLowerCase().includes(filters.location!.toLowerCase())
-        );
+      if (inspectionsToExport.length === 0) {
+        toast.warning("No data to export.", { id: toastId });
+        return;
       }
 
-      // Generate export content
-      const csvContent = generateCSVContent(filteredInspections);
-      const timestamp = new Date().toISOString().split("T")[0];
-      const filename = `equipment-inspections-${timestamp}.${format}`;
+      if (format === "csv") {
+        // CSV: Use client-side generation (faster)
+        const csvContent = generateCSVContent(inspectionsToExport);
+        const timestamp = new Date().toISOString().split("T")[0];
+        const filename = `inspection-report-${timestamp}.csv`;
+        downloadCSV(csvContent, filename);
+      } else {
+        // --- API CALL FOR PDF/EXCEL/FORM GENERATION ---
 
-      // Download file
-      downloadCSV(csvContent, filename);
+        const inspectionIds = inspectionsToExport.map((i) => i.id);
+
+        const { blob, filename } = await downloadInspectionReport({
+          inspectionIds: inspectionIds,
+          format: format,
+        });
+
+        // Handle file download initiation in the browser
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = filename; // Use the filename returned from the API
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        window.URL.revokeObjectURL(url);
+      }
 
       toast.success("Export Successful", {
         id: toastId,
-        description: `${filteredInspections.length} inspections exported to ${filename}`,
+        description: `${inspectionsToExport.length} inspections exported.`,
       });
     } catch (error) {
       console.error("Export error:", error);
       toast.error("Export Failed", {
         id: toastId,
-        description: "There was an error exporting the data. Please try again.",
+        description: "Export failed. Check console for API details.",
       });
     } finally {
       setIsExporting(false);
     }
   };
 
-  const handleInlineDownload = () => {
-    setIsExporting(true);
-    try {
-      const csv = generateCSVContent(filteredInspections);
-      const filenameBase = "equipment-inspections";
-      const stamp =
-        dateFrom || dateTo
-          ? `${dateFrom || "start"}_to_${dateTo || "end"}`
-          : new Date().toISOString().split("T")[0];
-      const filename = `${filenameBase}-${stamp}.csv`;
-      downloadCSV(csv, filename);
-      toast.info("Download started", {
-        description: `${filteredInspections.length} rows using current filters`,
-      });
-    } catch (e) {
-      console.error("Export error:", e);
-      toast.error("Export Failed", {
-        description: "There was an error exporting the data. Please try again.",
-      });
-    } finally {
-      setIsExporting(false);
-    }
+  const handleInlineDownload = (inspection: FilterableInspection) => {
+    // Single inspection download as PDF/Form
+    // Note: The backend requires only one ID for PDF form generation
+    handleExport([inspection], "pdf");
   };
 
-  // Chart data
-  const equipmentTypeData = Object.entries(summary.byEquipmentType).map(
-    ([type, count]) => ({
-      name: type.charAt(0).toUpperCase() + type.slice(1),
-      value: count,
-    })
-  );
+  const handleDialogExport = (
+    filters: ExportFilters,
+    format: "csv" | "excel" | "pdf"
+  ) => {
+    // For bulk export from the dialog, use the currently filtered data
+    handleExport(filteredInspections, format);
+  };
 
+  // If loading, show spinner
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-[80vh]">
+        <Loader2 className="h-10 w-10 animate-spin text-blue-600" />
+      </div>
+    );
+  }
+
+  // Chart data setup
   const statusData = [
     { name: "Approved", value: summary.approved, color: "#10b981" },
     { name: "Rejected", value: summary.rejected, color: "#ef4444" },
     { name: "Pending", value: summary.pending, color: "#f59e0b" },
   ];
 
-  const mechanicData = Object.entries(summary.byMechanic).map(
-    ([mechanic, count]) => ({
-      name: mechanic.split(" ")[0], // First name only for chart
-      inspections: count,
-    })
-  );
-
   return (
     <div className="min-h-screen bg-gray-50">
       <main className="max-w-7xl mx-auto py-6">
-        {/* Summary Stats */}
+        <div className="text-right mb-6">
+          {/* Render the ExportDialog here */}
+          {/* <ExportDialog onExport={handleDialogExport} isExporting={isExporting} /> */}
+        </div>
 
-        {/* Charts */}
+        {/* Charts and Summary Cards */}
         <div className="grid gap-6 lg:grid-cols-2 mb-8">
-          {/* Equipment Type Distribution */}
-          {/* <Card>
-            <CardHeader>
-              <CardTitle>Equipment Type Distribution</CardTitle>
-              <CardDescription>
-                Breakdown of inspections by equipment type
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <ResponsiveContainer width="100%" height={300}>
-                <PieChart>
-                  <Pie
-                    data={equipmentTypeData}
-                    cx="50%"
-                    cy="50%"
-                    labelLine={false}
-                    label={({ name, percent }) =>
-                      `${name} ${((percent as number) * 100).toFixed(0)}%`
-                    }
-                    outerRadius={80}
-                    fill="#8884d8"
-                    dataKey="value"
-                  >
-                    {equipmentTypeData.map((entry, index) => (
-                      <Cell
-                        key={`cell-${index}`}
-                        fill={["#0088FE", "#00C49F", "#FFBB28"][index % 3]}
-                      />
-                    ))}
-                  </Pie>
-                  <Tooltip />
-                </PieChart>
-              </ResponsiveContainer>
-            </CardContent>
-          </Card> */}
-
           {/* Status Distribution */}
           <Card>
             <CardHeader>
@@ -396,6 +344,8 @@ export default function ReportsPage() {
               </ResponsiveContainer>
             </CardContent>
           </Card>
+
+          {/* Summary Cards */}
           <div className="grid gap-4 lg:grid-cols-2">
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -406,7 +356,9 @@ export default function ReportsPage() {
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{summary.total}</div>
-                <p className="text-xs text-muted-foreground">All time</p>
+                <p className="text-xs text-muted-foreground">
+                  Total records found
+                </p>
               </CardContent>
             </Card>
             <Card>
@@ -437,29 +389,28 @@ export default function ReportsPage() {
                   {Object.keys(summary.byMechanic).length}
                 </div>
                 <p className="text-xs text-muted-foreground">
-                  Contributing to inspections
+                  Mechanics contributing
                 </p>
               </CardContent>
             </Card>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">
-                  This Month
+                  Pending Count
                 </CardTitle>
                 <Calendar className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">{summary.total}</div>
+                <div className="text-2xl font-bold">{summary.pending}</div>
                 <p className="text-xs text-muted-foreground">
-                  Inspections completed
+                  Awaiting leader review
                 </p>
               </CardContent>
             </Card>
           </div>
         </div>
 
-        {/* Mechanic Performance */}
-
+        {/* Inspection Data Table */}
         <Card className="mb-8">
           <CardHeader>
             <CardTitle>Inspection Data</CardTitle>
@@ -515,7 +466,12 @@ export default function ReportsPage() {
               <Input
                 type="date"
                 value={dateFrom}
-                onChange={(e) => setDateFrom(e.target.value)}
+                onChange={(e) =>
+                  setApiFilters((prev) => ({
+                    ...prev,
+                    dateFrom: e.target.value,
+                  }))
+                }
                 aria-label="From date"
                 className="w-fit"
               />
@@ -523,7 +479,12 @@ export default function ReportsPage() {
                 <Input
                   type="date"
                   value={dateTo}
-                  onChange={(e) => setDateTo(e.target.value)}
+                  onChange={(e) =>
+                    setApiFilters((prev) => ({
+                      ...prev,
+                      dateTo: e.target.value,
+                    }))
+                  }
                   aria-label="To date"
                 />
               </div>
@@ -572,14 +533,34 @@ export default function ReportsPage() {
                         {formatDate(inspection.createdAt)}
                       </td>
                       <td className="p-3 text-sm">
-                        <Button
-                          variant="default"
-                          onClick={handleInlineDownload}
-                          disabled={isExporting}
-                        >
-                          <Download className="w-4 h-4 mr-2" />
-                          Download
-                        </Button>
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="default" disabled={isExporting}>
+                              <Download className="w-4 h-4 mr-2" />
+                              Download
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            <DropdownMenuLabel>Select Format</DropdownMenuLabel>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem
+                              onClick={() => handleExport([inspection], "pdf")}
+                              disabled={isExporting}
+                            >
+                              <FileText className="w-4 h-4 mr-2" />
+                              Inspection Form (PDF)
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                              onClick={() =>
+                                handleExport([inspection], "excel")
+                              }
+                              disabled={isExporting}
+                            >
+                              <FileSpreadsheet className="w-4 h-4 mr-2" />
+                              Raw Data (Excel)
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
                       </td>
                     </tr>
                   ))}
@@ -595,13 +576,11 @@ export default function ReportsPage() {
             </div>
 
             <div className="mt-4 text-sm text-muted-foreground">
-              Showing {filteredInspections.length} of {mockInspections.length}{" "}
+              Showing {filteredInspections.length} of {allInspections.length}{" "}
               inspections
             </div>
           </CardContent>
         </Card>
-
-        {/* Export Options */}
       </main>
     </div>
   );

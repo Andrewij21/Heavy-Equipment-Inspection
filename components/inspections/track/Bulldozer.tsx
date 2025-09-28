@@ -307,6 +307,41 @@ export const trackFormSections = [
       },
     ],
   },
+  {
+    title: "Add Oil",
+    fields: [
+      {
+        name: "topUpCoolant",
+        label: "Coolant (AF-NACDM)",
+        subLabel: "",
+        type: "qty",
+      },
+      {
+        name: "topUpEngine",
+        label: "Engine (15W-40)",
+        subLabel: "",
+        type: "qty",
+      },
+      {
+        name: "topUpHydraulic",
+        label: "Hydraulic (TURALIK 46)",
+        subLabel: "",
+        type: "qty",
+      },
+      {
+        name: "topUpSwingMachinery",
+        label: "Swing Machinary (HD 30)",
+        subLabel: "",
+        type: "qty",
+      },
+      {
+        name: "topUpFinalDrive",
+        label: "Final Drive (HD 30)",
+        subLabel: "",
+        type: "qty",
+      },
+    ],
+  },
 ];
 // Letakkan ini di atas komponen form Anda
 

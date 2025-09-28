@@ -67,7 +67,6 @@ export default function NewInspectionPage() {
 
   const handleSubmit = async (data: InspectionFormData) => {
     // Note: The isSubmitting state is now managed by the react-query hook (trackMutation.isPending)
-
     try {
       if (data.equipmentType === "track") {
         // Use mutateAsync to await the API call

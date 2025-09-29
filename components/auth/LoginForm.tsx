@@ -27,6 +27,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { toast } from "sonner";
+import Image from "next/image";
 
 export default function LoginForm() {
   // 1. Initialize the form using useForm, this now holds all form state
@@ -59,13 +60,28 @@ export default function LoginForm() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
       <Card className="w-full max-w-md">
-        <CardHeader className="text-center">
-          <CardTitle className="text-2xl font-bold">
-            Heavy Equipment Inspection
-          </CardTitle>
-          <CardDescription>
-            Sign in to access the inspection system
-          </CardDescription>
+        <CardHeader className="flex flex-col items-center pb-4 pt-6">
+          <div className="flex items-end space-x-3 mb-3">
+            {/* LOGO IMAGE (Pastikan file berada di /public/logo.png) */}
+            <Image
+              src="/logo.png"
+              alt="ANTARJAYA Logo"
+              width={48}
+              height={48}
+              className="rounded-lg"
+            />
+            {/* <h2 className="text-xl font-extrabold text-gray-800 tracking-tight">
+              ANTARJAYA MAHAJDA MAKMUR
+            </h2> */}
+            <div>
+              <CardTitle className="text-2xl pt-2">
+                Heavy Equipment Inspection
+              </CardTitle>
+              <CardDescription>
+                Enter your credentials to access the dashboard.
+              </CardDescription>
+            </div>
+          </div>
         </CardHeader>
         <CardContent>
           {/* 2. Wrap the form in the <Form> component */}

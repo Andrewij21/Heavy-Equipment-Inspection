@@ -324,7 +324,7 @@ export default function ReportsPage() {
         </div>
 
         {/* Charts and Summary Cards */}
-        <div className="grid gap-6 lg:grid-cols-2 mb-8">
+        <div className="grid gap-6 lg:grid-cols-2 mb-8 max-w-screen">
           {/* Status Distribution */}
           <Card>
             <CardHeader>
@@ -359,7 +359,7 @@ export default function ReportsPage() {
           </Card>
 
           {/* Summary Cards */}
-          <div className="grid gap-4 lg:grid-cols-2">
+          <div className="grid gap-4 lg:grid-cols-2 max-w-screen">
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">
@@ -424,7 +424,7 @@ export default function ReportsPage() {
         </div>
 
         {/* Inspection Data Table */}
-        <Card className="mb-8">
+        <Card className="mb-8 max-w-screen">
           <CardHeader>
             <CardTitle>Inspection Data</CardTitle>
             <CardDescription>
@@ -433,7 +433,7 @@ export default function ReportsPage() {
           </CardHeader>
           <CardContent>
             {/* Filters */}
-            <div className="flex items-center justify-between gap-4 mb-6">
+            <div className="flex items-center sm:justify-between gap-4 mb-6 flex-wrap">
               <div className="relative flex-1">
                 <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                 <Input

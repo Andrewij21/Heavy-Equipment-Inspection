@@ -47,11 +47,19 @@ export default function Navigation() {
         <div className="flex justify-between h-16">
           <div className="flex items-center">
             {/* START: BRANDING - Mengganti 'Equipment Inspector' dengan nama perusahaan */}
-            <Link href="/dashboard" className="flex items-center space-x-1">
-              {/* Ikon Placeholder (Ganti dengan tag <img> untuk logo asli) */}
-              <div className=" h-28  rounded-full flex items-center justify-center p-1">
-                <Image src="/logo.png" alt="Logo" width={32} height={32} />
-              </div>
+            <Link
+              href="/dashboard"
+              // Tambahkan h-full untuk centering vertikal stabil di dalam h-16
+              className="flex items-center space-x-3 h-full"
+            >
+              {/* Image diletakkan langsung, tanpa div yang bermasalah */}
+              <Image
+                src="/logo.png"
+                alt="ANTARJAYA MAHAJDA MAKMUR Logo"
+                width={32}
+                height={32}
+                className="rounded-full flex-shrink-0"
+              />
               <span className="font-bold text-lg text-gray-900 whitespace-nowrap">
                 ANTARJAYA MAHAJDA MAKMUR
               </span>

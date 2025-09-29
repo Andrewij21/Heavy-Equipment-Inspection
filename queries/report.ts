@@ -62,9 +62,19 @@ export const downloadInspectionReport = async (payload: ExportApiPayload) => {
     const matches = /filename\*?=['"]?([^"']*)/i.exec(contentDisposition);
     if (matches && matches[1]) {
       // Decode filename and clean up quotes/encoding markers
-      filename = decodeURIComponent(
+      let rawFilename = decodeURIComponent(
         matches[1].replace(/['"]/g, "").replace("UTF-8''", "")
       );
+
+      // CRITICAL FIX: Ensure the extension is forced to .xlsx if the format was excel
+      if (
+        payload.format === "excel" &&
+        !rawFilename.toLowerCase().endsWith(".xlsx")
+      ) {
+        filename = rawFilename.replace(/\.xls(x)?$/, "") + ".xlsx";
+      } else {
+        filename = rawFilename;
+      }
     }
   }
 

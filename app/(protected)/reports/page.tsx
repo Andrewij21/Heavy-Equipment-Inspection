@@ -241,16 +241,29 @@ export default function ReportsPage() {
 
         const inspectionIds = inspectionsToExport.map((i) => i.id);
 
-        const { blob, filename } = await downloadInspectionReport({
+        // 1. Get blob and filename from the API function (which already reads headers)
+        const { blob, filename: apiFilename } = await downloadInspectionReport({
           inspectionIds: inspectionIds,
           format: format,
         });
 
-        // Handle file download initiation in the browser
+        // 2. CRITICAL FRONTEND EXTENSION FIX
+        let finalFilename = apiFilename;
+        if (format === "excel") {
+          // Ensure the filename ends with .xlsx to satisfy the browser/OS,
+          // overriding any incorrect intermediate extension like '.excel' or '.xls'
+          const baseName = finalFilename.replace(
+            /\.(xlsx|xls|excel|bin)?$/i,
+            ""
+          );
+          finalFilename = `${baseName}.xlsx`;
+        }
+
+        // 3. Handle file download initiation in the browser
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement("a");
         a.href = url;
-        a.download = filename; // Use the filename returned from the API
+        a.download = finalFilename; // Use the corrected filename
         document.body.appendChild(a);
         a.click();
         a.remove();

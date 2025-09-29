@@ -9,11 +9,12 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { LogOut, User, Settings, FileText } from "lucide-react";
+import { LogOut, User, Settings, FileText, Download } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useLogout } from "@/queries/auth";
 import { useAuth } from "@/context/AuthContext";
+import Image from "next/image";
 
 export default function Navigation() {
   const { mutate: logout } = useLogout();
@@ -45,12 +46,17 @@ export default function Navigation() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex items-center">
-            <Link href="/dashboard" className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                <FileText className="w-5 h-5 text-primary-foreground" />
+            {/* START: BRANDING - Mengganti 'Equipment Inspector' dengan nama perusahaan */}
+            <Link href="/dashboard" className="flex items-center space-x-1">
+              {/* Ikon Placeholder (Ganti dengan tag <img> untuk logo asli) */}
+              <div className=" h-28  rounded-full flex items-center justify-center p-1">
+                <Image src={"/logo.png"} alt="Logo" width={32} height={32} />
               </div>
-              <span className="font-bold text-lg">Equipment Inspector</span>
+              <span className="font-bold text-lg text-gray-900 whitespace-nowrap">
+                ANTARJAYA MAHAJDA MAKMUR
+              </span>
             </Link>
+            {/* END: BRANDING */}
 
             <div className="hidden md:flex ml-10 space-x-8">
               <Link
@@ -60,6 +66,17 @@ export default function Navigation() {
                 Dashboard
               </Link>
 
+              {/* New Inspection (Mechanic Only) */}
+              {user.role === "mechanic" && (
+                <Link
+                  href="/new-inspection"
+                  className="text-gray-900 hover:text-primary px-3 py-2 rounded-md text-sm font-medium bg-yellow-50 hover:bg-yellow-100"
+                >
+                  <FileText className="w-4 h-4 mr-1 inline" /> New Inspection
+                </Link>
+              )}
+
+              {/* My Inspections (Mechanic Only) */}
               {user.role === "mechanic" && (
                 <Link
                   href="/inspections"
@@ -69,6 +86,7 @@ export default function Navigation() {
                 </Link>
               )}
 
+              {/* Verification (Leader & Admin) */}
               {(user.role === "leader" || user.role === "admin") && (
                 <Link
                   href="/verification"
@@ -78,6 +96,7 @@ export default function Navigation() {
                 </Link>
               )}
 
+              {/* Users (Admin Only) */}
               {user.role === "admin" && (
                 <>
                   <Link

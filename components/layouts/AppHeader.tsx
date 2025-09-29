@@ -50,7 +50,7 @@ export default function Navigation() {
             <Link href="/dashboard" className="flex items-center space-x-1">
               {/* Ikon Placeholder (Ganti dengan tag <img> untuk logo asli) */}
               <div className=" h-28  rounded-full flex items-center justify-center p-1">
-                <Image src={"/logo.png"} alt="Logo" width={32} height={32} />
+                <Image src="/logo.png" alt="Logo" width={32} height={32} />
               </div>
               <span className="font-bold text-lg text-gray-900 whitespace-nowrap">
                 ANTARJAYA MAHAJDA MAKMUR

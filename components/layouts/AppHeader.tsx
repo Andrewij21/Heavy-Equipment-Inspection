@@ -74,16 +74,6 @@ export default function Navigation() {
                 Dashboard
               </Link>
 
-              {/* New Inspection (Mechanic Only) */}
-              {user.role === "mechanic" && (
-                <Link
-                  href="/new-inspection"
-                  className="text-gray-900 hover:text-primary px-3 py-2 rounded-md text-sm font-medium bg-yellow-50 hover:bg-yellow-100"
-                >
-                  <FileText className="w-4 h-4 mr-1 inline" /> New Inspection
-                </Link>
-              )}
-
               {/* My Inspections (Mechanic Only) */}
               {user.role === "mechanic" && (
                 <Link

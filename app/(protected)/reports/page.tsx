@@ -46,14 +46,14 @@ import {
 import {
   type ExportFilters,
   type ExportInspection,
-  generateCSVContent, // Keep for CSV format
-  downloadCSV, // Keep for CSV format
+  generateCSVContent, // Tetap untuk format CSV
+  downloadCSV, // Tetap untuk format CSV
   generateReportSummary,
 } from "@/lib/exportUtils";
 import { toast } from "sonner";
 // API Imports
 import { useGetGeneralInspections } from "@/queries/inspection";
-import { downloadInspectionReport } from "@/queries/report"; // Assuming this utility is imported/defined
+import { downloadInspectionReport } from "@/queries/report"; // Asumsi utility ini diimpor/didefinisikan
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -63,7 +63,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-// Mock Data structures (as defined previously)
+// Struktur Data Mock (seperti yang didefinisikan sebelumnya)
 interface FilterableInspection extends ExportInspection {
   equipmentType: "track" | "wheel" | "support";
   status: "approved" | "rejected" | "pending";
@@ -75,31 +75,31 @@ const mapApiToFilterStatus = (status: string) =>
 export default function ReportsPage() {
   const [isExporting, setIsExporting] = useState(false);
 
-  // States for API filtering (Data Source)
+  // States untuk filtering API (Sumber Data)
   const [apiFilters, setApiFilters] = useState({
     status: "ALL",
     dateFrom: "",
     dateTo: "",
   });
 
-  // States for client-side filtering (Table View)
+  // States untuk filtering sisi klien (Tampilan Tabel)
   const [searchTerm, setSearchTerm] = useState("");
   const [typeFilter, setTypeFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
   const [dateFilter, setDateFilter] = useState("all");
 
-  // Synchronize state variables for easy access in inputs and filters
+  // Sinkronkan variabel state untuk akses mudah di input dan filter
   const dateFrom = apiFilters.dateFrom;
   const dateTo = apiFilters.dateTo;
 
-  // Fetch data using the hook
+  // Ambil data menggunakan hook
   const { data, isLoading, isError } = useGetGeneralInspections({
     status: apiFilters.status === "ALL" ? undefined : apiFilters.status,
     dateFrom: apiFilters.dateFrom,
     dateTo: apiFilters.dateTo,
   });
 
-  // Map and normalize the API data once (useMemo remains the same)
+  // Petakan dan normalisasi data API sekali (useMemo tetap sama)
   const allInspections: FilterableInspection[] = useMemo(() => {
     if (!data?.data) return [];
 
@@ -125,7 +125,7 @@ export default function ReportsPage() {
     })) as FilterableInspection[];
   }, [data]);
 
-  // Client-Side Filtered Data (for the visible table - useMemo remains the same)
+  // Data yang Difilter Sisi Klien (untuk tabel yang terlihat)
   const filteredInspections = useMemo(() => {
     const filtered = allInspections.filter((inspection) => {
       const matchesSearch =
@@ -144,7 +144,7 @@ export default function ReportsPage() {
       const created = new Date(inspection.createdAt);
       let matchesQuickDate = true;
 
-      // Implement quick date logic based on dateFilter state
+      // Implementasi logika tanggal cepat berdasarkan state dateFilter
       if (dateFilter !== "all") {
         const now = new Date();
         switch (dateFilter) {
@@ -206,7 +206,8 @@ export default function ReportsPage() {
   };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("en-US", {
+    // Format tanggal ke format Indonesia
+    return new Date(dateString).toLocaleDateString("id-ID", {
       year: "numeric",
       month: "short",
       day: "numeric",
@@ -215,43 +216,43 @@ export default function ReportsPage() {
     });
   };
 
-  // NEW: CORE Export Handler updated to call backend API for PDF/Excel
+  // BARU: Handler Ekspor INTI diperbarui untuk memanggil API backend untuk PDF/Excel
   const handleExport = async (
     inspectionsToExport: FilterableInspection[],
     format: "csv" | "pdf" | "excel"
   ) => {
     setIsExporting(true);
     const toastId = toast.loading(
-      `Preparing export as ${format.toUpperCase()}...`
+      `Mempersiapkan ekspor sebagai ${format.toUpperCase()}...`
     );
     try {
       if (inspectionsToExport.length === 0) {
-        toast.warning("No data to export.", { id: toastId });
+        toast.warning("Tidak ada data untuk diekspor.", { id: toastId });
         return;
       }
 
       if (format === "csv") {
-        // CSV: Use client-side generation (faster)
+        // CSV: Gunakan pembuatan sisi klien (lebih cepat)
         const csvContent = generateCSVContent(inspectionsToExport);
         const timestamp = new Date().toISOString().split("T")[0];
-        const filename = `inspection-report-${timestamp}.csv`;
+        const filename = `laporan-inspeksi-${timestamp}.csv`;
         downloadCSV(csvContent, filename);
       } else {
-        // --- API CALL FOR PDF/EXCEL/FORM GENERATION ---
+        // --- PANGGILAN API UNTUK PEMBUATAN PDF/EXCEL/FORMULIR ---
 
         const inspectionIds = inspectionsToExport.map((i) => i.id);
 
-        // 1. Get blob and filename from the API function (which already reads headers)
+        // 1. Dapatkan blob dan nama file dari fungsi API (yang sudah membaca header)
         const { blob, filename: apiFilename } = await downloadInspectionReport({
           inspectionIds: inspectionIds,
           format: format,
         });
 
-        // 2. CRITICAL FRONTEND EXTENSION FIX
+        // 2. PERBAIKAN PENTING EKSTENSI FRONTEND
         let finalFilename = apiFilename;
         if (format === "excel") {
-          // Ensure the filename ends with .xlsx to satisfy the browser/OS,
-          // overriding any incorrect intermediate extension like '.excel' or '.xls'
+          // Pastikan nama file diakhiri dengan .xlsx untuk memenuhi browser/OS,
+          // menimpa ekstensi perantara yang salah seperti '.excel' atau '.xls'
           const baseName = finalFilename.replace(
             /\.(xlsx|xls|excel|bin)?$/i,
             ""
@@ -259,26 +260,26 @@ export default function ReportsPage() {
           finalFilename = `${baseName}.xlsx`;
         }
 
-        // 3. Handle file download initiation in the browser
+        // 3. Tangani inisiasi unduhan file di browser
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement("a");
         a.href = url;
-        a.download = finalFilename; // Use the corrected filename
+        a.download = finalFilename; // Gunakan nama file yang dikoreksi
         document.body.appendChild(a);
         a.click();
         a.remove();
         window.URL.revokeObjectURL(url);
       }
 
-      toast.success("Export Successful", {
+      toast.success("Ekspor Berhasil", {
         id: toastId,
-        description: `${inspectionsToExport.length} inspections exported.`,
+        description: `${inspectionsToExport.length} inspeksi diekspor.`,
       });
     } catch (error) {
-      console.error("Export error:", error);
-      toast.error("Export Failed", {
+      console.error("Kesalahan ekspor:", error);
+      toast.error("Ekspor Gagal", {
         id: toastId,
-        description: "Export failed. Check console for API details.",
+        description: "Ekspor gagal. Periksa konsol untuk detail API.",
       });
     } finally {
       setIsExporting(false);
@@ -286,8 +287,8 @@ export default function ReportsPage() {
   };
 
   const handleInlineDownload = (inspection: FilterableInspection) => {
-    // Single inspection download as PDF/Form
-    // Note: The backend requires only one ID for PDF form generation
+    // Unduh satu inspeksi sebagai PDF/Formulir
+    // Catatan: Backend hanya membutuhkan satu ID untuk pembuatan formulir PDF
     handleExport([inspection], "pdf");
   };
 
@@ -295,11 +296,11 @@ export default function ReportsPage() {
     filters: ExportFilters,
     format: "csv" | "excel" | "pdf"
   ) => {
-    // For bulk export from the dialog, use the currently filtered data
+    // Untuk ekspor massal dari dialog, gunakan data yang sedang difilter
     handleExport(filteredInspections, format);
   };
 
-  // If loading, show spinner
+  // Jika memuat, tampilkan spinner
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-[80vh]">
@@ -308,29 +309,29 @@ export default function ReportsPage() {
     );
   }
 
-  // Chart data setup
+  // Pengaturan data grafik
   const statusData = [
-    { name: "Approved", value: summary.approved, color: "#10b981" },
-    { name: "Rejected", value: summary.rejected, color: "#ef4444" },
-    { name: "Pending", value: summary.pending, color: "#f59e0b" },
+    { name: "Disetujui", value: summary.approved, color: "#10b981" },
+    { name: "Ditolak", value: summary.rejected, color: "#ef4444" },
+    { name: "Menunggu", value: summary.pending, color: "#f59e0b" },
   ];
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <main className="max-w-7xl mx-auto py-6">
-        <div className="text-right mb-6">
-          {/* Render the ExportDialog here */}
-          {/* <ExportDialog onExport={handleDialogExport} isExporting={isExporting} /> */}
-        </div>
+      <main className="max-w-7xl mx-auto pb-6">
+        {/* Judul Halaman - Tambahkan di sini jika diperlukan, tapi mengasumsikan komponen utama */}
+        <h1 className="text-3xl font-bold text-gray-900 mb-6">
+          Laporan & Analitik Inspeksi
+        </h1>
 
-        {/* Charts and Summary Cards */}
+        {/* Grafik dan Kartu Ringkasan */}
         <div className="grid gap-6 lg:grid-cols-2 mb-8 max-w-screen">
-          {/* Status Distribution */}
+          {/* Distribusi Status */}
           <Card>
             <CardHeader>
-              <CardTitle>Inspection Status</CardTitle>
+              <CardTitle>Status Inspeksi</CardTitle>
               <CardDescription>
-                Current status of all inspections
+                Status saat ini dari semua inspeksi
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -358,26 +359,26 @@ export default function ReportsPage() {
             </CardContent>
           </Card>
 
-          {/* Summary Cards */}
+          {/* Kartu Ringkasan */}
           <div className="grid gap-4 lg:grid-cols-2 max-w-screen">
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">
-                  Total Inspections
+                  Total Inspeksi
                 </CardTitle>
                 <FileSpreadsheet className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{summary.total}</div>
                 <p className="text-xs text-muted-foreground">
-                  Total records found
+                  Total catatan ditemukan
                 </p>
               </CardContent>
             </Card>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">
-                  Approval Rate
+                  Tingkat Persetujuan
                 </CardTitle>
                 <TrendingUp className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
@@ -386,14 +387,14 @@ export default function ReportsPage() {
                   {summary.approvalRate}%
                 </div>
                 <p className="text-xs text-muted-foreground">
-                  {summary.approved} of {summary.total} approved
+                  {summary.approved} dari {summary.total} disetujui
                 </p>
               </CardContent>
             </Card>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">
-                  Active Users
+                  Pengguna Aktif
                 </CardTitle>
                 <Users className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
@@ -402,78 +403,78 @@ export default function ReportsPage() {
                   {Object.keys(summary.byMechanic).length}
                 </div>
                 <p className="text-xs text-muted-foreground">
-                  Mechanics contributing
+                  Mekanik yang berkontribusi
                 </p>
               </CardContent>
             </Card>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">
-                  Pending Count
+                  Jumlah Menunggu
                 </CardTitle>
                 <Calendar className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{summary.pending}</div>
                 <p className="text-xs text-muted-foreground">
-                  Awaiting leader review
+                  Menunggu tinjauan leader
                 </p>
               </CardContent>
             </Card>
           </div>
         </div>
 
-        {/* Inspection Data Table */}
+        {/* Tabel Data Inspeksi */}
         <Card className="mb-8 max-w-screen">
           <CardHeader>
-            <CardTitle>Inspection Data</CardTitle>
+            <CardTitle>Data Inspeksi</CardTitle>
             <CardDescription>
-              Detailed view of all inspections with filtering capabilities
+              Tampilan detail semua inspeksi dengan kemampuan filter
             </CardDescription>
           </CardHeader>
           <CardContent>
-            {/* Filters */}
+            {/* Filter */}
             <div className="flex items-center sm:justify-between gap-4 mb-6 flex-wrap">
-              <div className="relative flex-1">
+              <div className="relative w-full sm:w-fit">
                 <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                 <Input
-                  placeholder="Search inspections..."
+                  placeholder="Cari inspeksi..."
                   className="pl-10"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
               </div>
               <Select value={typeFilter} onValueChange={setTypeFilter}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Equipment Type" />
+                <SelectTrigger className="w-full sm:w-fit">
+                  <SelectValue placeholder="Tipe Peralatan" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">All Types</SelectItem>
+                  <SelectItem value="all">Semua Tipe</SelectItem>
                   <SelectItem value="track">Track</SelectItem>
-                  <SelectItem value="wheel">Wheel</SelectItem>
-                  <SelectItem value="support">Support</SelectItem>
+                  <SelectItem value="wheel">Roda</SelectItem>
+                  <SelectItem value="support">Pendukung</SelectItem>
                 </SelectContent>
               </Select>
               <Select value={statusFilter} onValueChange={setStatusFilter}>
-                <SelectTrigger>
+                <SelectTrigger className="w-full sm:w-fit">
                   <SelectValue placeholder="Status" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">All Status</SelectItem>
-                  <SelectItem value="approved">Approved</SelectItem>
-                  <SelectItem value="rejected">Rejected</SelectItem>
-                  <SelectItem value="pending">Pending</SelectItem>
+                  <SelectItem value="all">Semua Status</SelectItem>
+                  <SelectItem value="approved">Disetujui</SelectItem>
+                  <SelectItem value="rejected">Ditolak</SelectItem>
+                  <SelectItem value="pending">Menunggu</SelectItem>
                 </SelectContent>
               </Select>
               <Select value={dateFilter} onValueChange={setDateFilter}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Quick Date" />
+                <SelectTrigger className="w-full sm:w-fit">
+                  <SelectValue placeholder="Filter Cepat Tanggal" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">All Time</SelectItem>
-                  <SelectItem value="today">Today</SelectItem>
-                  <SelectItem value="week">Last 7 Days</SelectItem>
-                  <SelectItem value="month">Last 30 Days</SelectItem>
+                  <SelectItem value="all">Sepanjang Waktu</SelectItem>
+                  <SelectItem value="today">Hari Ini</SelectItem>
+                  <SelectItem value="week">7 Hari Terakhir</SelectItem>
+                  <SelectItem value="month">30 Hari Terakhir</SelectItem>
                 </SelectContent>
               </Select>
               <Input
@@ -485,8 +486,8 @@ export default function ReportsPage() {
                     dateFrom: e.target.value,
                   }))
                 }
-                aria-label="From date"
-                className="w-fit"
+                aria-label="Dari tanggal"
+                className="w-full sm:w-fit"
               />
               <div className="flex items-center gap-2">
                 <Input
@@ -498,23 +499,24 @@ export default function ReportsPage() {
                       dateTo: e.target.value,
                     }))
                   }
-                  aria-label="To date"
+                  className="w-full sm:w-fit"
+                  aria-label="Sampai tanggal"
                 />
               </div>
             </div>
 
-            {/* Table */}
+            {/* Tabel */}
             <div className="overflow-x-auto">
               <table className="w-full border-collapse">
                 <thead>
                   <tr className="border-b">
-                    <th className="text-left p-3 font-medium">Equipment ID</th>
-                    <th className="text-left p-3 font-medium">Type</th>
-                    <th className="text-left p-3 font-medium">Mechanic</th>
+                    <th className="text-left p-3 font-medium">ID Peralatan</th>
+                    <th className="text-left p-3 font-medium">Tipe</th>
+                    <th className="text-left p-3 font-medium">Mekanik</th>
                     <th className="text-left p-3 font-medium">Status</th>
-                    <th className="text-left p-3 font-medium">Location</th>
-                    <th className="text-left p-3 font-medium">Date</th>
-                    <th className="text-left p-3 font-medium">Download</th>
+                    <th className="text-left p-3 font-medium">Lokasi</th>
+                    <th className="text-left p-3 font-medium">Tanggal</th>
+                    <th className="text-left p-3 font-medium">Unduh</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -528,6 +530,7 @@ export default function ReportsPage() {
                       </td>
                       <td className="p-3">
                         <Badge variant="outline">
+                          {/* Kapitalisasi huruf pertama */}
                           {inspection.equipmentType.charAt(0).toUpperCase() +
                             inspection.equipmentType.slice(1)}
                         </Badge>
@@ -535,6 +538,7 @@ export default function ReportsPage() {
                       <td className="p-3">{inspection.mechanicName}</td>
                       <td className="p-3">
                         <Badge className={getStatusColor(inspection.status)}>
+                          {/* Kapitalisasi huruf pertama */}
                           {inspection.status.charAt(0).toUpperCase() +
                             inspection.status.slice(1)}
                         </Badge>
@@ -550,18 +554,18 @@ export default function ReportsPage() {
                           <DropdownMenuTrigger asChild>
                             <Button variant="default" disabled={isExporting}>
                               <Download className="w-4 h-4 mr-2" />
-                              Download
+                              Unduh
                             </Button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end">
-                            <DropdownMenuLabel>Select Format</DropdownMenuLabel>
+                            <DropdownMenuLabel>Pilih Format</DropdownMenuLabel>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem
                               onClick={() => handleExport([inspection], "pdf")}
                               disabled={isExporting}
                             >
                               <FileText className="w-4 h-4 mr-2" />
-                              Inspection Form (PDF)
+                              Formulir Inspeksi (PDF)
                             </DropdownMenuItem>
                             <DropdownMenuItem
                               onClick={() =>
@@ -570,7 +574,7 @@ export default function ReportsPage() {
                               disabled={isExporting}
                             >
                               <FileSpreadsheet className="w-4 h-4 mr-2" />
-                              Raw Data (Excel)
+                              Data Mentah (Excel)
                             </DropdownMenuItem>
                           </DropdownMenuContent>
                         </DropdownMenu>
@@ -583,14 +587,16 @@ export default function ReportsPage() {
               {filteredInspections.length === 0 && (
                 <div className="text-center py-8 text-muted-foreground">
                   <FileSpreadsheet className="w-12 h-12 mx-auto mb-4 opacity-50" />
-                  <p>No inspections match your current filters.</p>
+                  <p>
+                    Tidak ada inspeksi yang cocok dengan filter Anda saat ini.
+                  </p>
                 </div>
               )}
             </div>
 
             <div className="mt-4 text-sm text-muted-foreground">
-              Showing {filteredInspections.length} of {allInspections.length}{" "}
-              inspections
+              Menampilkan {filteredInspections.length} dari{" "}
+              {allInspections.length} inspeksi
             </div>
           </CardContent>
         </Card>

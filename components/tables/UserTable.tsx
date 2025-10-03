@@ -98,7 +98,8 @@ export function UsersTable({
   };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("en-US", {
+    // Format tanggal ke format Indonesia
+    return new Date(dateString).toLocaleDateString("id-ID", {
       year: "numeric",
       month: "short",
       day: "numeric",
@@ -106,7 +107,8 @@ export function UsersTable({
   };
 
   const formatDateTime = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("en-US", {
+    // Format tanggal dan waktu ke format Indonesia
+    return new Date(dateString).toLocaleDateString("id-ID", {
       month: "short",
       day: "numeric",
       hour: "2-digit",
@@ -136,34 +138,34 @@ export function UsersTable({
 
   const filteredAndSortedData = useMemo(() => {
     const filtered = data.filter((user) => {
-      // Search filter
+      // Filter Pencarian
       const matchesSearch =
         user.fullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
         user.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
         user.email.toLowerCase().includes(searchTerm.toLowerCase());
 
-      // Role filter
+      // Filter Peran (Role)
       const matchesRole = roleFilter === "all" || user.role === roleFilter;
 
-      // Status filter
+      // Filter Status
       const matchesStatus =
         statusFilter === "all" || user.status === statusFilter;
 
       return matchesSearch && matchesRole && matchesStatus;
     });
 
-    // Sort data
+    // Urutkan data
     filtered.sort((a, b) => {
       let aValue = a[sortField] as any;
       let bValue = b[sortField] as any;
 
-      // Handle date sorting
+      // Penanganan pengurutan tanggal
       if (sortField === "createdAt" || sortField === "lastLogin") {
         aValue = new Date(aValue as string).getTime();
         bValue = new Date(bValue as string).getTime();
       }
 
-      // Handle string sorting
+      // Penanganan pengurutan string
       if (typeof aValue === "string" && typeof bValue === "string") {
         aValue = aValue.toLowerCase();
         bValue = bValue.toLowerCase();
@@ -187,99 +189,99 @@ export function UsersTable({
     setStatusFilter("all");
   };
 
-  // Stats calculations
+  // Perhitungan Statistik
   const totalUsers = data.length;
   const activeUsers = data.filter((u) => u.status === "active").length;
   const filteredCount = filteredAndSortedData.length;
 
   return (
     <div className="space-y-4">
-      {/* Stats */}
+      {/* Statistik */}
       <div className="grid gap-4 md:grid-cols-3">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 gap-2">
-            <CardTitle className="text-sm font-medium">Total Users</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Total Pengguna
+            </CardTitle>
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{totalUsers}</div>
-            <p className="text-xs text-muted-foreground">
-              Registered in system
-            </p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 gap-2">
-            <CardTitle className="text-sm font-medium">Active Users</CardTitle>
-            <UserCheck className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{activeUsers}</div>
-            <p className="text-xs text-muted-foreground">Currently active</p>
+            <p className="text-xs text-muted-foreground">Terdaftar di sistem</p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 gap-2">
             <CardTitle className="text-sm font-medium">
-              Filtered Results
+              Pengguna Aktif
             </CardTitle>
+            <UserCheck className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{activeUsers}</div>
+            <p className="text-xs text-muted-foreground">Saat ini aktif</p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 gap-2">
+            <CardTitle className="text-sm font-medium">Hasil Filter</CardTitle>
             <UserX className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{filteredCount}</div>
             <p className="text-xs text-muted-foreground">
-              Matching current filters
+              Sesuai dengan filter saat ini
             </p>
           </CardContent>
         </Card>
       </div>
 
-      {/* Filters */}
+      {/* Filter */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg">Filters</CardTitle>
+          <CardTitle className="text-lg">Filter</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="flex items-center gap-4 flex-wrap">
             <div className="relative flex-1 min-w-[200px]">
               <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
               <Input
-                placeholder="Search users..."
+                placeholder="Cari pengguna..."
                 className="pl-10"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
             <Select value={roleFilter} onValueChange={setRoleFilter}>
-              <SelectTrigger className="w-[140px]">
-                <SelectValue placeholder="Role" />
+              <SelectTrigger className="w-full sm:w-[140px]">
+                <SelectValue placeholder="Peran" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Roles</SelectItem>
+                <SelectItem value="all">Semua Peran</SelectItem>
                 <SelectItem value="admin">Admin</SelectItem>
                 <SelectItem value="leader">Leader</SelectItem>
-                <SelectItem value="mechanic">Mechanic</SelectItem>
+                <SelectItem value="mechanic">Mekanik</SelectItem>
               </SelectContent>
             </Select>
             <Select value={statusFilter} onValueChange={setStatusFilter}>
-              <SelectTrigger className="w-[140px]">
+              <SelectTrigger className="w-full sm:w-[140px]">
                 <SelectValue placeholder="Status" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Status</SelectItem>
-                <SelectItem value="active">Active</SelectItem>
-                <SelectItem value="inactive">Inactive</SelectItem>
+                <SelectItem value="all">Semua Status</SelectItem>
+                <SelectItem value="active">Aktif</SelectItem>
+                <SelectItem value="inactive">Nonaktif</SelectItem>
               </SelectContent>
             </Select>
             <Button variant="outline" onClick={clearFilters}>
               <Filter className="w-4 h-4 mr-2" />
-              Clear Filters
+              Bersihkan Filter
             </Button>
           </div>
         </CardContent>
       </Card>
 
-      {/* Table */}
+      {/* Tabel */}
       <Card>
         <CardContent className="p-0">
           <Table>
@@ -291,7 +293,7 @@ export function UsersTable({
                     onClick={() => handleSort("fullName")}
                     className="h-auto p-0 font-semibold"
                   >
-                    Name
+                    Nama
                     {getSortIcon("fullName")}
                   </Button>
                 </TableHead>
@@ -311,7 +313,7 @@ export function UsersTable({
                     onClick={() => handleSort("role")}
                     className="h-auto p-0 font-semibold"
                   >
-                    Role
+                    Peran
                     {getSortIcon("role")}
                   </Button>
                 </TableHead>
@@ -331,11 +333,11 @@ export function UsersTable({
                     onClick={() => handleSort("createdAt")}
                     className="h-auto p-0 font-semibold"
                   >
-                    Joined
+                    Bergabung
                     {getSortIcon("createdAt")}
                   </Button>
                 </TableHead>
-                <TableHead className="text-right">Actions</TableHead>
+                <TableHead className="text-right">Aksi</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -347,11 +349,13 @@ export function UsersTable({
                   </TableCell>
                   <TableCell>
                     <Badge className={getRoleColor(user.role)}>
+                      {/* Kapitalisasi huruf pertama */}
                       {user.role.charAt(0).toUpperCase() + user.role.slice(1)}
                     </Badge>
                   </TableCell>
                   <TableCell>
                     <Badge className={getStatusColor(user.status)}>
+                      {/* Kapitalisasi huruf pertama */}
                       {user.status.charAt(0).toUpperCase() +
                         user.status.slice(1)}
                     </Badge>
@@ -363,15 +367,15 @@ export function UsersTable({
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <Button variant="ghost" className="h-8 w-8 p-0">
-                          <span className="sr-only">Open menu</span>
+                          <span className="sr-only">Buka menu</span>
                           <MoreHorizontal className="h-4 w-4" />
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
-                        <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                        <DropdownMenuLabel>Aksi</DropdownMenuLabel>
                         <DropdownMenuItem onClick={() => onEditUser(user.id)}>
                           <Edit className="w-4 h-4 mr-2" />
-                          Edit User
+                          Edit Pengguna
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem
@@ -379,7 +383,7 @@ export function UsersTable({
                           className="text-destructive"
                         >
                           <Trash2 className="w-4 h-4 mr-2" />
-                          Delete User
+                          Hapus Pengguna
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
@@ -391,10 +395,12 @@ export function UsersTable({
           {filteredAndSortedData.length === 0 && (
             <div className="text-center py-12">
               <Users className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
-              <h3 className="text-lg font-medium">No users found</h3>
+              <h3 className="text-lg font-medium">
+                Tidak ada pengguna ditemukan
+              </h3>
               <p className="text-sm text-muted-foreground">
-                No users match your current search criteria. Try adjusting your
-                filters.
+                Tidak ada pengguna yang cocok dengan kriteria pencarian Anda
+                saat ini. Coba sesuaikan filter Anda.
               </p>
             </div>
           )}

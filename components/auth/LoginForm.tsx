@@ -75,7 +75,7 @@ export default function LoginForm() {
             </h2> */}
             <div>
               <CardTitle className="text-2xl pt-2">
-                Heavy Equipment Inspection
+                Daily Inspection Monitoring (DIM)
               </CardTitle>
               <CardDescription>
                 Enter your credentials to access the dashboard.

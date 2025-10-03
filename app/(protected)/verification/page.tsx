@@ -9,7 +9,7 @@ import { VerificationTable } from "@/components/tables/VerificationTable";
 // NEW IMPORT: Import the general inspection hook
 import { useGetGeneralInspections } from "@/queries/inspection";
 
-// Define the shape of the data that comes from the API (Inspection model + approver)
+// Definisikan bentuk data yang berasal dari API (model Inspeksi + approver)
 interface InspectionListItem {
   id: string;
   equipmentId: string;
@@ -21,37 +21,37 @@ interface InspectionListItem {
   location: string;
 }
 
-// Interface for the data format required by the VerificationTable
+// Interface untuk format data yang dibutuhkan oleh VerificationTable
 interface TableData extends InspectionListItem {
   leaderName: string;
-  priority: "low" | "medium" | "high"; // Placeholder required by table
-  issues: number; // Placeholder required by table
-  status: "PENDING" | "APPROVED" | "REJECTED"; // Table uses lowercase
+  priority: "low" | "medium" | "high"; // Placeholder yang dibutuhkan oleh tabel
+  issues: number; // Placeholder yang dibutuhkan oleh tabel
+  status: "PENDING" | "APPROVED" | "REJECTED"; // Tabel menggunakan huruf kecil
 }
 
 export default function VerificationPage() {
-  // Use Prisma status values (uppercase) for the API filter and tab state
+  // Gunakan nilai status Prisma (huruf besar) untuk filter API dan state tab
   const [activeTab, setActiveTab] = useState<
     "PENDING" | "APPROVED" | "REJECTED" | "ALL"
   >("PENDING");
 
-  // Define base filters/pagination parameters
+  // Definisikan parameter filter/paginasi dasar
   const [filters, setFilters] = useState({
     page: 1,
     limit: 50,
     q: "",
   });
 
-  // Fetch the data based on current status filter
+  // Ambil data berdasarkan filter status saat ini
   const apiFilters = {
     ...filters,
-    // Pass the status filter to the API unless the tab is 'ALL'
+    // Teruskan filter status ke API kecuali jika tab adalah 'ALL'
     status: activeTab !== "ALL" ? activeTab : undefined,
   };
 
   const { data, isLoading, isError } = useGetGeneralInspections(apiFilters);
 
-  // Map API data to the table's required structure and calculate counts
+  // Petakan data API ke struktur yang dibutuhkan tabel dan hitung jumlahnya
   const { tableData, counts } = useMemo(() => {
     const rawData = data?.data || [];
     const mappedData: TableData[] = [];
@@ -62,22 +62,22 @@ export default function VerificationPage() {
     rawData.forEach((item: any) => {
       const status = item.status as "PENDING" | "APPROVED" | "REJECTED";
 
-      // Calculate counts
+      // Hitung jumlah
       if (status === "PENDING") pendingCount++;
       else if (status === "APPROVED") approvedCount++;
       else if (status === "REJECTED") rejectedCount++;
 
-      // Map to TableData format
+      // Petakan ke format TableData
       mappedData.push({
         id: item.id,
         equipmentId: item.equipmentId,
         equipmentType: item.equipmentType.toLowerCase(),
         mechanicName: item.mechanicName,
         leaderName: item.approver?.username || "N/A",
-        status: status.toLowerCase() as "PENDING" | "APPROVED" | "REJECTED", // Convert for table
+        status: status.toLowerCase() as "PENDING" | "APPROVED" | "REJECTED", // Konversi untuk tabel
         createdAt: item.createdAt,
         location: item.location,
-        // Mocked fields the table expects
+        // Bidang mock yang diharapkan tabel
         priority: "medium",
         issues: 0,
       });
@@ -93,9 +93,7 @@ export default function VerificationPage() {
     return (
       <div className="flex justify-center items-center h-[50vh]">
         <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
-        <p className="ml-3 text-lg text-gray-600">
-          Loading verification data...
-        </p>
+        <p className="ml-3 text-lg text-gray-600">Memuat data verifikasi...</p>
       </div>
     );
   }
@@ -103,7 +101,7 @@ export default function VerificationPage() {
   if (isError) {
     return (
       <div className="text-red-600 text-center mt-10">
-        Error loading inspections. Please check the network connection.
+        Kesalahan memuat inspeksi. Harap periksa koneksi jaringan.
       </div>
     );
   }
@@ -116,51 +114,50 @@ export default function VerificationPage() {
       <main className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-foreground">
-            Inspection Verification
+            Verifikasi Inspeksi
           </h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            Review and verify equipment inspections submitted by mechanics
+            Tinjau dan verifikasi inspeksi peralatan yang diserahkan oleh
+            mekanik
           </p>
         </div>
 
-        {/* Stats Cards */}
+        {/* Kartu Statistik */}
         <div className="grid gap-4 md:grid-cols-3 mb-6">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">
-                Pending Review
+                Menunggu Tinjauan
               </CardTitle>
               <Clock className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{counts.pendingCount}</div>
               <p className="text-xs text-muted-foreground">
-                Awaiting verification
+                Menunggu verifikasi
               </p>
             </CardContent>
           </Card>
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Approved</CardTitle>
+              <CardTitle className="text-sm font-medium">Disetujui</CardTitle>
               <CheckCircle className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{counts.approvedCount}</div>
               <p className="text-xs text-muted-foreground">
-                Successfully verified
+                Berhasil diverifikasi
               </p>
             </CardContent>
           </Card>
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Rejected</CardTitle>
+              <CardTitle className="text-sm font-medium">Ditolak</CardTitle>
               <XCircle className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{counts.rejectedCount}</div>
-              <p className="text-xs text-muted-foreground">
-                Requiring revision
-              </p>
+              <p className="text-xs text-muted-foreground">Memerlukan revisi</p>
             </CardContent>
           </Card>
         </div>
@@ -173,22 +170,22 @@ export default function VerificationPage() {
         >
           <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="PENDING">
-              Pending ({counts.pendingCount})
+              Menunggu ({counts.pendingCount})
             </TabsTrigger>
             <TabsTrigger value="APPROVED">
-              Approved ({counts.approvedCount})
+              Disetujui ({counts.approvedCount})
             </TabsTrigger>
             <TabsTrigger value="REJECTED">
-              Rejected ({counts.rejectedCount})
+              Ditolak ({counts.rejectedCount})
             </TabsTrigger>
-            <TabsTrigger value="ALL">All ({totalCount})</TabsTrigger>
+            <TabsTrigger value="ALL">Semua ({totalCount})</TabsTrigger>
           </TabsList>
 
           <TabsContent value={activeTab} className="mt-6">
             <VerificationTable
-              // Pass the data received from the API endpoint
+              // Teruskan data yang diterima dari endpoint API
               data={tableData}
-              // Pass the active tab status (lowercase) for internal filtering/display
+              // Teruskan status filter aktif (huruf kecil) untuk filtering/tampilan internal
               statusFilter={activeTab.toLowerCase()}
             />
           </TabsContent>

@@ -43,7 +43,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 // CRITICAL: Use the specific track mutation hook directly
-import { useUpdateTrackStatus } from "@/queries/track"; // Assuming path is now lib/api/track
+import { useUpdateTrackStatus } from "@/queries/track"; // Asumsi path query
 
 interface PendingInspection {
   id: string;
@@ -82,10 +82,10 @@ export function VerificationTable({
   const [sortField, setSortField] = useState<SortField>("createdAt");
   const [sortDirection, setSortDirection] = useState<SortDirection>("desc");
 
-  // NEW: Initialize the specific track mutation hook
+  // BARU: Inisialisasi hook mutasi track spesifik
   const updateStatusMutation = useUpdateTrackStatus();
 
-  // Helper functions (normalizeStatus, getStatusIcon, getStatusColor, etc. remain the same)
+  // Fungsi helper (normalizeStatus, getStatusIcon, getStatusColor, dll. tetap sama)
   const normalizeStatus = (
     status: string
   ): "PENDING" | "APPROVED" | "REJECTED" => {
@@ -139,16 +139,17 @@ export function VerificationTable({
       case "track":
         return "Track";
       case "wheel":
-        return "Wheel";
+        return "Roda";
       case "support":
-        return "Support";
+        return "Pendukung";
       default:
         return type;
     }
   };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("en-US", {
+    // Format tanggal ke format Indonesia
+    return new Date(dateString).toLocaleDateString("id-ID", {
       month: "short",
       day: "numeric",
       hour: "2-digit",
@@ -177,14 +178,14 @@ export function VerificationTable({
   };
 
   const filteredAndSortedData = useMemo(() => {
-    // ... (Filtering and sorting logic remains the same) ...
+    // ... (Logika Filtering dan Sorting tetap sama) ...
     const filtered = data.filter((inspection) => {
-      // Status filter
+      // Filter Status
       const matchesStatus =
         statusFilter === "all" ||
         normalizeStatus(inspection.status) === normalizeStatus(statusFilter);
 
-      // Search filter
+      // Filter Pencarian
       const matchesSearch =
         inspection.equipmentId
           .toLowerCase()
@@ -194,12 +195,12 @@ export function VerificationTable({
           .includes(searchTerm.toLowerCase()) ||
         inspection.location.toLowerCase().includes(searchTerm.toLowerCase());
 
-      // Equipment type filter
+      // Filter Tipe Peralatan
       const matchesEquipmentType =
         equipmentTypeFilter === "all" ||
         inspection.equipmentType === equipmentTypeFilter;
 
-      // Priority filter
+      // Filter Prioritas
       const matchesPriority =
         priorityFilter === "all" || inspection.priority === priorityFilter;
 
@@ -211,18 +212,18 @@ export function VerificationTable({
       );
     });
 
-    // Sort data
+    // Urutkan data
     filtered.sort((a, b) => {
       let aValue = a[sortField];
       let bValue = b[sortField];
 
-      // Handle date sorting
+      // Penanganan pengurutan tanggal
       if (sortField === "createdAt") {
         aValue = new Date(aValue as string).getTime();
         bValue = new Date(bValue as string).getTime();
       }
 
-      // Handle string sorting
+      // Penanganan pengurutan string
       if (typeof aValue === "string" && typeof bValue === "string") {
         aValue = aValue.toLowerCase();
         bValue = bValue.toLowerCase();
@@ -254,13 +255,13 @@ export function VerificationTable({
     setPriorityFilter("all");
   };
 
-  // UPDATED: Handle Approval/Rejection Action with conditional API call
+  // DIPERBARUI: Tangani Aksi Persetujuan/Penolakan dengan panggilan API kondisional
   const handleStatusAction = (
     id: string,
     status: "APPROVED" | "REJECTED",
-    equipmentType: "track" | "wheel" | "support" // Explicitly use type
+    equipmentType: "track" | "wheel" | "support" // Gunakan tipe secara eksplisit
   ) => {
-    // CONDITIONALLY CALL THE CORRECT API BASED ON TYPE
+    // PANGGIL API YANG TEPAT SECARA KONDISIONAL BERDASARKAN TIPE
     if (equipmentType === "track") {
       updateStatusMutation.mutate(
         {
@@ -270,38 +271,38 @@ export function VerificationTable({
         {
           onSuccess: () => {
             console.log(
-              `Track Inspection ${id} successfully updated to ${status}`
+              `Inspeksi Track ${id} berhasil diperbarui menjadi ${status}`
             );
-            // react-query invalidation handled by hook
+            // Invalisadi react-query ditangani oleh hook
           },
           onError: (error) => {
-            console.error(`Failed to update track status for ${id}:`, error);
-            // Show error notification
+            console.error(`Gagal memperbarui status track untuk ${id}:`, error);
+            // Tampilkan notifikasi error
           },
         }
       );
     } else {
-      // Placeholder for wheel and support: log a warning
+      // Placeholder untuk wheel dan support: log peringatan
       console.warn(
-        `Status update for ${equipmentType} (ID: ${id}) is not yet implemented. Action ignored.`
+        `Pembaruan status untuk ${equipmentType} (ID: ${id}) belum diimplementasikan. Aksi diabaikan.`
       );
-      // You could show an alert/toast to the user here.
+      // Anda dapat menampilkan peringatan/toast kepada pengguna di sini.
     }
   };
 
   return (
     <div className="space-y-4">
-      {/* Filters */}
+      {/* Filter */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg">Filters</CardTitle>
+          <CardTitle className="text-lg">Filter</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="flex items-center gap-4 flex-wrap">
             <div className="relative flex-1 min-w-[200px]">
               <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
               <Input
-                placeholder="Search equipment ID, mechanic, location..."
+                placeholder="Cari ID peralatan, mekanik, lokasi..."
                 className="pl-10"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -311,25 +312,25 @@ export function VerificationTable({
               value={equipmentTypeFilter}
               onValueChange={setEquipmentTypeFilter}
             >
-              <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Equipment Type" />
+              <SelectTrigger className="w-full sm:w-[180px]">
+                <SelectValue placeholder="Tipe Peralatan" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Types</SelectItem>
-                <SelectItem value="track">Track Equipment</SelectItem>
-                <SelectItem value="wheel">Wheel Equipment</SelectItem>
-                <SelectItem value="support">Support Equipment</SelectItem>
+                <SelectItem value="all">Semua Tipe</SelectItem>
+                <SelectItem value="track">Peralatan Track</SelectItem>
+                <SelectItem value="wheel">Peralatan Roda</SelectItem>
+                <SelectItem value="support">Peralatan Pendukung</SelectItem>
               </SelectContent>
             </Select>
             <Button variant="outline" onClick={clearFilters}>
               <Filter className="w-4 h-4 mr-2" />
-              Clear Filters
+              Bersihkan Filter
             </Button>
           </div>
         </CardContent>
       </Card>
 
-      {/* Table */}
+      {/* Tabel */}
       <Card>
         <CardContent className="p-0">
           <Table>
@@ -341,7 +342,7 @@ export function VerificationTable({
                     onClick={() => handleSort("equipmentId")}
                     className="h-auto p-0 font-semibold"
                   >
-                    Equipment ID
+                    ID Peralatan
                     {getSortIcon("equipmentId")}
                   </Button>
                 </TableHead>
@@ -351,7 +352,7 @@ export function VerificationTable({
                     onClick={() => handleSort("equipmentType")}
                     className="h-auto p-0 font-semibold"
                   >
-                    Type
+                    Tipe
                     {getSortIcon("equipmentType")}
                   </Button>
                 </TableHead>
@@ -361,7 +362,7 @@ export function VerificationTable({
                     onClick={() => handleSort("mechanicName")}
                     className="h-auto p-0 font-semibold"
                   >
-                    Mechanic
+                    Mekanik
                     {getSortIcon("mechanicName")}
                   </Button>
                 </TableHead>
@@ -391,23 +392,23 @@ export function VerificationTable({
                     onClick={() => handleSort("createdAt")}
                     className="h-auto p-0 font-semibold"
                   >
-                    Created
+                    Dibuat
                     {getSortIcon("createdAt")}
                   </Button>
                 </TableHead>
-                <TableHead className="text-right">Actions</TableHead>
+                <TableHead className="text-right">Aksi</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {filteredAndSortedData.map((inspection) => {
                 const isPending =
                   normalizeStatus(inspection.status) === "PENDING";
-                // Check if this specific row is the one currently being mutated
+                // Periksa apakah baris spesifik ini sedang dimutasi
                 const isMutating =
                   updateStatusMutation.isPending &&
                   updateStatusMutation.variables?.id === inspection.id;
 
-                // Determine if approval buttons should be enabled (only for Track)
+                // Tentukan apakah tombol persetujuan harus diaktifkan (hanya untuk Track)
                 const isTrack = inspection.equipmentType === "track";
                 const canFinalize = isPending && isTrack;
 
@@ -432,8 +433,9 @@ export function VerificationTable({
                         )}
                         <span className="ml-1">
                           {isMutating
-                            ? "Updating..."
-                            : inspection.status.charAt(0).toUpperCase() +
+                            ? "Memperbarui..."
+                            : // Konversi status ke huruf besar di awal
+                              inspection.status.charAt(0).toUpperCase() +
                               inspection.status.slice(1)}
                         </span>
                       </Badge>
@@ -449,17 +451,17 @@ export function VerificationTable({
                             className="h-8 w-8 p-0"
                             disabled={isMutating}
                           >
-                            <span className="sr-only">Open menu</span>
+                            <span className="sr-only">Buka menu</span>
                             <MoreHorizontal className="h-4 w-4" />
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                          <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                          <DropdownMenuLabel>Aksi</DropdownMenuLabel>
                           <DropdownMenuItem asChild>
-                            {/* Link should navigate to the specific review page */}
+                            {/* Link harus mengarah ke halaman tinjauan spesifik */}
                             <Link href={`/verification/${inspection.id}`}>
                               <Eye className="w-4 h-4 mr-2" />
-                              Review Details
+                              Tinjau Detail
                             </Link>
                           </DropdownMenuItem>
 
@@ -478,7 +480,7 @@ export function VerificationTable({
                                 disabled={isMutating}
                               >
                                 <CheckCircle className="w-4 h-4 mr-2 text-green-600" />
-                                Approve
+                                Setujui
                               </DropdownMenuItem>
                               <DropdownMenuItem
                                 onClick={() =>
@@ -491,19 +493,19 @@ export function VerificationTable({
                                 disabled={isMutating}
                               >
                                 <XCircle className="w-4 h-4 mr-2 text-red-600" />
-                                Reject
+                                Tolak
                               </DropdownMenuItem>
                             </>
                           ) : isPending && !isTrack ? (
                             <DropdownMenuItem disabled>
                               <Clock className="w-4 h-4 mr-2" />
-                              Status API Missing (
+                              Status API Hilang (
                               {getEquipmentTypeLabel(inspection.equipmentType)})
                             </DropdownMenuItem>
                           ) : (
                             <DropdownMenuItem disabled>
                               <Clock className="w-4 h-4 mr-2" />
-                              Already Finalized
+                              Sudah Diselesaikan
                             </DropdownMenuItem>
                           )}
                         </DropdownMenuContent>
@@ -517,10 +519,12 @@ export function VerificationTable({
           {filteredAndSortedData.length === 0 && (
             <div className="text-center py-12">
               <Clock className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
-              <h3 className="text-lg font-medium">No inspections found</h3>
+              <h3 className="text-lg font-medium">
+                Tidak ada inspeksi ditemukan
+              </h3>
               <p className="text-sm text-muted-foreground">
-                No inspections match your current filters. Try adjusting your
-                search criteria.
+                Tidak ada inspeksi yang cocok dengan filter Anda saat ini. Coba
+                sesuaikan kriteria pencarian Anda.
               </p>
             </div>
           )}

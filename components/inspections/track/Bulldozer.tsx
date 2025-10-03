@@ -48,41 +48,41 @@ import { InspectionSection } from "../InspectionSections";
 
 export const trackFormSections = [
   {
-    title: "Engine",
+    title: "Mesin (Engine)",
     fields: [
       {
         name: "engineOilLevelLeakage",
-        label: "Check Level & Kebocoran Oil Engine",
+        label: "Periksa Level & Kebocoran Oli Mesin",
         type: "result",
       },
       {
         name: "engineCoolantLevelLeakage",
-        label: "Check Level Coolant Radiator & Kebocoran Cooling System",
+        label: "Periksa Level Coolant Radiator & Kebocoran Cooling System",
         type: "result",
       },
       {
         name: "engineFuelSystemLeakage",
-        label: "Check Kebocoran Pada Fuel System",
+        label: "Periksa Kebocoran Pada Sistem Bahan Bakar",
         type: "result",
       },
       {
         name: "engineBelts",
-        label: "Check Condition Belt Alternator, AC & Fan Belt",
+        label: "Periksa Kondisi Belt Alternator, AC & Fan Belt",
         type: "result",
       },
       {
         name: "engineIntakeClamps",
-        label: "Check All Clamp dan Hose Intake System (Clamp Kendor)",
+        label: "Periksa Semua Clamp dan Hose Intake System (Clamp Kendor)",
         type: "result",
       },
       {
         name: "engineExhaustLeakage",
-        label: "Check Kebocoran pada Exhaust Manifold dan Mufler",
+        label: "Periksa Kebocoran pada Exhaust Manifold dan Mufler",
         type: "result",
       },
       {
         name: "engineOperationalSound",
-        label: "Check Operasional Engine dari Kelainan Bunyi dan Low Power",
+        label: "Periksa Operasional Mesin dari Kelainan Bunyi dan Daya Rendah",
         type: "result",
       },
     ],
@@ -92,252 +92,247 @@ export const trackFormSections = [
     fields: [
       {
         name: "powertrainTransmissionOil",
-        label: "Check Level dan Kebocoran Oil Transmisi",
+        label: "Periksa Level dan Kebocoran Oli Transmisi",
         type: "result",
       },
       {
         name: "powertrainTorqueConverterOil",
-        label: "Check Level dan Kebocoran Oil Torque Converter",
+        label: "Periksa Level dan Kebocoran Oli Torque Converter",
         type: "result",
       },
       {
         name: "powertrainDifferentialOil",
-        label: "Check Level dan Kebocoran Oil Differensial",
+        label: "Periksa Level dan Kebocoran Oli Differensial",
         type: "result",
       },
       {
         name: "powertrainFinalDriveOil",
-        label: "Check Level dan Kebocoran Final Drive",
+        label: "Periksa Level dan Kebocoran Final Drive",
         type: "result",
       },
       {
         name: "powertrainBrakeOperation",
-        label: "Check Pengoperasian dan Brake Pressure",
+        label: "Periksa Pengoperasian dan Tekanan Rem (Brake Pressure)",
         type: "result",
       },
       {
         name: "powertrainPropellerShaft",
-        label: "Check Propeller Shaft Utama dan Tambahan",
+        label: "Periksa Propeller Shaft Utama dan Tambahan",
         type: "result",
       },
     ],
   },
   {
-    title: "Hydraulic System",
+    title: "Sistem Hidraulik",
     fields: [
       {
         name: "hydraulicOilLevel",
-        label: "Check Level Oil Hydraulic",
+        label: "Periksa Level Oli Hidraulik",
         type: "result",
       },
       {
         name: "hydraulicSystemLeakage",
-        label: "Check Kebocoran Hydraulic System dan Control Valve",
+        label: "Periksa Kebocoran Sistem Hidraulik dan Control Valve",
         type: "result",
       },
       {
         name: "hydraulicPumpLineLeakage",
-        label: "Check Kebocoran All Hydraulic Pump Line",
+        label: "Periksa Kebocoran Semua Saluran Pompa Hidraulik",
         type: "result",
       },
       {
         name: "hydraulicHoseCondition",
-        label: "Check All Condition Hose & Rubbing bila Ada yang Bergesekan",
+        label: "Periksa Semua Kondisi Hose & Gesekan bila Ada yang Bergesekan",
         type: "result",
       },
       {
         name: "hydraulicCylinderLiftBlade",
         label:
-          "Check Condition Cylinder Lift Blade dari Kebocoran, Kerusakan, Keausan Pin & Bearing",
+          "Periksa Kondisi Silinder Pengangkat Blade dari Kebocoran, Kerusakan, Keausan Pin & Bearing",
         type: "result",
       },
       {
         name: "hydraulicCylinderTiltBlade",
         label:
-          "Check Condition Cylinder Tilt Blade dari Kebocoran, Kerusakan, Keausan Pin & Bearing",
+          "Periksa Kondisi Silinder Pemiring Blade dari Kebocoran, Kerusakan, Keausan Pin & Bearing",
         type: "result",
       },
       {
         name: "hydraulicCylinderLiftRipper",
         label:
-          "Check Condition Cylinder Lift Ripper dari Kebocoran, Kerusakan, Keausan Pin & Bearing",
+          "Periksa Kondisi Silinder Pengangkat Ripper dari Kebocoran, Kerusakan, Keausan Pin & Bearing",
         type: "result",
       },
       {
         name: "hydraulicCylinderTiltRipper",
         label:
-          "Check Condition Cylinder Tilt Ripper dari Kebocoran, Kerusakan, Keausan Pin & Bearing",
+          "Periksa Kondisi Silinder Pemiring Ripper dari Kebocoran, Kerusakan, Keausan Pin & Bearing",
         type: "result",
       },
     ],
   },
   {
-    title: "Structure/Frame/Autolube",
+    title: "Struktur/Rangka/Autolube",
     fields: [
       {
         name: "structureAutolube",
-        label: "Check All Condition Point Grease pada Autolube System",
+        label: "Periksa Semua Kondisi Titik Grease pada Sistem Autolube",
         type: "result",
       },
       {
         name: "structureEqualizerBarSeal",
-        label: "Check Seal Equalizer Bar",
+        label: "Periksa Seal Equalizer Bar",
         type: "result",
       },
       {
         name: "structurePivotShaftLeakage",
-        label: "Check Kebocoran Oli Pivot Shaft",
+        label: "Periksa Kebocoran Oli Pivot Shaft",
         type: "result",
       },
       {
         name: "structureFrameCracks",
-        label: "Check All Bagian Frame dari Keretakan",
+        label: "Periksa Semua Bagian Rangka dari Keretakan",
         type: "result",
       },
       {
         name: "structureTrackLinkBushing",
-        label: "Check Bushing Track Link",
+        label: "Periksa Bushing Track Link",
         type: "result",
       },
       {
         name: "structureUndercarriageBolt",
-        label: "Check Bolt Undercarriage",
+        label: "Periksa Baut Undercarriage",
         type: "result",
       },
       {
         name: "structureTrackTension",
-        label: "Check Kekencangan Track",
+        label: "Periksa Kekencangan Track",
         type: "result",
       },
       {
         name: "structureRipperFrame",
-        label: "Check Frame dan Tempat Dudukan Ripper",
+        label: "Periksa Rangka dan Tempat Dudukan Ripper",
         type: "result",
       },
       {
         name: "structureBogglePivot",
-        label: "Check Boggle Pivot Pin dan Pads dari Kerusakan",
+        label: "Periksa Boggle Pivot Pin dan Pads dari Kerusakan",
         type: "result",
       },
       {
         name: "structureMasterLinkBolt",
-        label: "Check Periksa Bolt Master Link",
+        label: "Periksa Baut Master Link",
         type: "result",
       },
       {
         name: "structureIdlerMountingBolt",
-        label: "Check Bolt Dudukan Idler",
+        label: "Periksa Baut Dudukan Idler",
         type: "result",
       },
       {
         name: "structureEqualizerBarBearing",
-        label: "Check Equalizer Bar Bearing",
+        label: "Periksa Bearing Equalizer Bar",
         type: "result",
       },
       {
         name: "structureBladeMountingPin",
-        label: "Check Blade Mounting Pin dan Retainer",
+        label: "Periksa Pin Pemasangan Blade dan Retainer",
         type: "result",
       },
       {
         name: "structureCuttingEdge",
-        label: "Check Condition Cutting Edge",
+        label: "Periksa Kondisi Cutting Edge",
         type: "result",
       },
       {
         name: "structureEndBit",
-        label: "Check Condition End Bit",
+        label: "Periksa Kondisi End Bit",
         type: "result",
       },
       {
         name: "structureCarrieRoller",
-        label: "Check Carrie Roller",
+        label: "Periksa Carrie Roller",
         type: "result",
       },
       {
         name: "structureRipperPoint",
-        label: "Check Condition Point Ripper",
+        label: "Periksa Kondisi Point Ripper",
         type: "result",
       },
     ],
   },
   {
-    title: "Electrical System",
+    title: "Sistem Kelistrikan",
     fields: [
       {
         name: "electricalBatteryMounting",
-        label: "Check Mountung Battery",
+        label: "Periksa Pemasangan Baterai (Battery Mounting)",
         type: "result",
       },
       {
         name: "electricalBatteryElectrolyte",
-        label: "Check Level Air Elektrolit Battery",
+        label: "Periksa Level Air Elektrolit Baterai",
         type: "result",
       },
       {
         name: "electricalTerminalCleaning",
-        label: "Check & Cleaning Terminal Battery dengan Corrosion Remover",
+        label: "Periksa & Bersihkan Terminal Baterai dengan Corrosion Remover",
         type: "result",
       },
       {
         name: "electricalConnectorCleaning",
         label:
-          "Check & Cleaning Cable Connector Battery dengan Corrosion Remover",
+          "Periksa & Bersihkan Konektor Kabel Baterai dengan Corrosion Remover",
         type: "result",
       },
       {
         name: "electricalLamps",
-        label: "Check All Lamp Penerangan Berfungsi dengan Baik",
+        label: "Periksa Semua Lampu Penerangan Berfungsi dengan Baik",
         type: "result",
       },
       {
         name: "electricalIsolationSwitch",
-        label: "Check Isolation Switch & Emergancy Stop",
+        label: "Periksa Isolation Switch & Emergancy Stop",
         type: "result",
       },
       {
         name: "electricalGaugePanel",
-        label: "Check All Gauge dan Control Panel Indicator",
+        label: "Periksa Semua Gauge dan Indikator Control Panel",
         type: "result",
       },
       {
         name: "electricalBackupAlarm",
-        label: "Check Back Up Alarm",
+        label: "Periksa Alarm Mundur (Back Up Alarm)",
         type: "result",
       },
     ],
   },
   {
-    title: "Add Oil",
+    title: "Penambahan Oli",
     fields: [
       {
         name: "topUpCoolant",
         label: "Coolant (AF-NACDM)",
-        subLabel: "",
         type: "qty",
       },
       {
         name: "topUpEngine",
-        label: "Engine (15W-40)",
-        subLabel: "",
+        label: "Mesin (15W-40)",
         type: "qty",
       },
       {
         name: "topUpHydraulic",
-        label: "Hydraulic (TURALIK 46)",
-        subLabel: "",
+        label: "Hidraulik (TURALIK 46)",
         type: "qty",
       },
       {
         name: "topUpSwingMachinery",
-        label: "Swing Machinary (HD 30)",
-        subLabel: "",
+        label: "Mekanisme Putar (Swing Machinary) (HD 30)",
         type: "qty",
       },
       {
         name: "topUpFinalDrive",
         label: "Final Drive (HD 30)",
-        subLabel: "",
         type: "qty",
       },
     ],
@@ -393,11 +388,11 @@ export function BullDozerInspectionForm({
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              Header Information
-              <Badge variant="outline">Track Equipment</Badge>
+              Informasi Header
+              <Badge variant="outline">Peralatan Track</Badge>
             </CardTitle>
             <CardDescription>
-              General equipment and inspection details
+              Detail umum peralatan dan pemeriksaan
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -409,7 +404,7 @@ export function BullDozerInspectionForm({
                 name="inspectionDate"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Date</FormLabel>
+                    <FormLabel>Tanggal</FormLabel>
                     <FormControl>
                       <Input type="date" {...field} />
                     </FormControl>
@@ -422,9 +417,9 @@ export function BullDozerInspectionForm({
                 name="equipmentId"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Unit No</FormLabel>
+                    <FormLabel>Nomor Unit</FormLabel>
                     <FormControl>
-                      <Input placeholder="e.g., EXC-001" {...field} />
+                      <Input placeholder="contoh: EXC-001" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -435,7 +430,7 @@ export function BullDozerInspectionForm({
                 name="smr" // Pastikan ini ditambahkan ke defaultValues
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>SMR (Service Meter Reading)</FormLabel>
+                    <FormLabel>SMR (Pembacaan Meter Servis)</FormLabel>
                     <FormControl>
                       <Input
                         type="number"
@@ -455,9 +450,9 @@ export function BullDozerInspectionForm({
                 name="location"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Location</FormLabel>
+                    <FormLabel>Lokasi</FormLabel>
                     <FormControl>
-                      <Input placeholder="e.g., Site A" {...field} />
+                      <Input placeholder="contoh: Site A" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -471,7 +466,7 @@ export function BullDozerInspectionForm({
                 name="timeDown" // Pastikan ini ditambahkan ke defaultValues
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Time Down</FormLabel>
+                    <FormLabel>Waktu Turun (Time Down)</FormLabel>
                     <FormControl>
                       <Input type="time" {...field} />
                     </FormControl>
@@ -484,7 +479,7 @@ export function BullDozerInspectionForm({
                 name="timeOut" // Pastikan ini ditambahkan ke defaultValues
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Time Out</FormLabel>
+                    <FormLabel>Waktu Keluar (Time Out)</FormLabel>
                     <FormControl>
                       <Input type="time" {...field} />
                     </FormControl>
@@ -504,12 +499,12 @@ export function BullDozerInspectionForm({
                     >
                       <FormControl className="w-full">
                         <SelectTrigger>
-                          <SelectValue placeholder="Select Shift" />
+                          <SelectValue placeholder="Pilih Shift" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="day">Day</SelectItem>
-                        <SelectItem value="night">Night</SelectItem>
+                        <SelectItem value="day">Siang</SelectItem>
+                        <SelectItem value="night">Malam</SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -529,7 +524,7 @@ export function BullDozerInspectionForm({
                     >
                       <FormControl className="w-full">
                         <SelectTrigger>
-                          <SelectValue placeholder="Select Model" />
+                          <SelectValue placeholder="Pilih Model" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>

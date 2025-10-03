@@ -49,29 +49,29 @@ export function DashboardStats({ userRole }: DashboardStatsProps) {
       case "mechanic":
         return [
           {
-            title: "Total Inspections",
+            title: "Total Inspeksi",
             value: 24,
-            description: "Completed this month",
+            description: "Selesai bulan ini",
             icon: <FileText className="h-4 w-4 text-muted-foreground" />,
             trend: { value: 12, isPositive: true },
           },
           {
-            title: "Pending Review",
+            title: "Menunggu Tinjauan",
             value: 3,
-            description: "Awaiting leader approval",
+            description: "Menunggu persetujuan leader",
             icon: <Clock className="h-4 w-4 text-muted-foreground" />,
           },
           {
-            title: "Approved",
+            title: "Disetujui",
             value: 21,
-            description: "Successfully verified",
+            description: "Berhasil diverifikasi",
             icon: <CheckCircle className="h-4 w-4 text-muted-foreground" />,
             trend: { value: 8, isPositive: true },
           },
           {
-            title: "Rejected",
+            title: "Ditolak",
             value: 5,
-            description: "Equipment requiring attention",
+            description: "Alat memerlukan perhatian",
             icon: <AlertTriangle className="h-4 w-4 text-muted-foreground" />,
           },
         ];
@@ -79,28 +79,28 @@ export function DashboardStats({ userRole }: DashboardStatsProps) {
       case "leader":
         return [
           {
-            title: "Pending Reviews",
+            title: "Tinjauan Tertunda",
             value: 12,
-            description: "Inspections awaiting verification",
+            description: "Inspeksi menunggu verifikasi",
             icon: <Clock className="h-4 w-4 text-muted-foreground" />,
           },
           {
-            title: "Reviewed Today",
+            title: "Ditinjau Hari Ini",
             value: 8,
-            description: "Inspections processed",
+            description: "Inspeksi telah diproses",
             icon: <CheckCircle className="h-4 w-4 text-muted-foreground" />,
           },
           // {
-          //   title: "Team Inspections",
+          //   title: "Inspeksi Tim",
           //   value: 156,
-          //   description: "Total this month",
+          //   description: "Total bulan ini",
           //   icon: <FileText className="h-4 w-4 text-muted-foreground" />,
           //   trend: { value: 15, isPositive: true },
           // },
           // {
-          //   title: "Critical Issues",
+          //   title: "Masalah Kritis",
           //   value: 3,
-          //   description: "Requiring immediate attention",
+          //   description: "Memerlukan perhatian segera",
           //   icon: <AlertTriangle className="h-4 w-4 text-muted-foreground" />,
           // },
         ];

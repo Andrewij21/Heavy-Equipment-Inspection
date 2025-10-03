@@ -22,7 +22,7 @@ export function TrackInspectionForm({
     <Tabs defaultValue="big-digger" className="w-full">
       {/* <TabsList className="grid w-full grid-cols-3"> */}
       <TabsList className="w-full flex overflow-x-auto">
-        <TabsTrigger value="big-digger" className="ml-12 sm:ml-0">
+        <TabsTrigger value="big-digger" className="sm:ml-0">
           Big Digger
         </TabsTrigger>
         <TabsTrigger value="small-pc">Small PC</TabsTrigger>

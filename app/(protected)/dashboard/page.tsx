@@ -4,7 +4,7 @@ import { DashboardStats } from "@/components/dashboard/DashboardStats";
 import { RecentInspections } from "@/components/dashboard/RecentInspactions";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/AuthContext";
-import { Plus, FileText, Users, BarChart3 } from "lucide-react";
+import { Plus, FileText, Users } from "lucide-react";
 import Link from "next/link";
 import ReportsPage from "../reports/page";
 
@@ -21,15 +21,15 @@ export default function DashboardPage() {
           <div className="flex flex-col gap-4 sm:gap-0 sm:flex-row justify-center sm:justify-between items-end sm:items-center">
             <div>
               <h1 className="text-3xl font-bold text-gray-900">
-                Welcome back, {user.username}!
+                Selamat datang kembali, {user.username}!
               </h1>
               <p className="mt-1 text-sm text-gray-600">
                 {user.role === "mechanic" &&
-                  "Ready to perform your next equipment inspection?"}
+                  "Siap untuk melakukan inspeksi peralatan berikutnya?"}
                 {user.role === "leader" &&
-                  "Review pending inspections and manage your team."}
+                  "Tinjau inspeksi yang tertunda dan kelola tim Anda."}
                 {user.role === "admin" &&
-                  "Monitor system activity and manage users."}
+                  "Pantau aktivitas sistem dan kelola pengguna."}
               </p>
             </div>
 
@@ -38,7 +38,7 @@ export default function DashboardPage() {
                 <Link href="/inspections/new">
                   <Button>
                     <Plus className="w-4 h-4 mr-2" />
-                    New Inspection
+                    Inspeksi Baru
                   </Button>
                 </Link>
               )}
@@ -47,7 +47,7 @@ export default function DashboardPage() {
                 <Link href="/verification">
                   <Button>
                     <FileText className="w-4 h-4 mr-2" />
-                    Review Inspections
+                    Tinjau Inspeksi
                   </Button>
                 </Link>
               )}
@@ -57,7 +57,7 @@ export default function DashboardPage() {
                   <Link href="/users">
                     <Button variant="outline">
                       <Users className="w-4 h-4 mr-2" />
-                      Manage Users
+                      Kelola Pengguna
                     </Button>
                   </Link>
                 </div>

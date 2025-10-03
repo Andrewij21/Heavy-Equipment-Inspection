@@ -9,12 +9,21 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { LogOut, User, Settings, FileText, Download } from "lucide-react";
+import { LogOut, User, Settings, FileText, Download, Menu } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useLogout } from "@/queries/auth";
 import { useAuth } from "@/context/AuthContext";
 import Image from "next/image";
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "../ui/sheet";
 
 export default function Navigation() {
   const { mutate: logout } = useLogout();
@@ -40,7 +49,40 @@ export default function Navigation() {
         return "bg-gray-100 text-gray-800";
     }
   };
-
+  const navLinks = (
+    <>
+      <Link
+        href="/dashboard"
+        className="text-gray-900 hover:text-primary px-3 py-2 rounded-md text-sm font-medium"
+      >
+        Dashboard
+      </Link>
+      {user.role === "mechanic" && (
+        <Link
+          href="/inspections"
+          className="text-gray-900 hover:text-primary px-3 py-2 rounded-md text-sm font-medium"
+        >
+          Inspeksi Saya
+        </Link>
+      )}
+      {(user.role === "leader" || user.role === "admin") && (
+        <Link
+          href="/verification"
+          className="text-gray-900 hover:text-primary px-3 py-2 rounded-md text-sm font-medium"
+        >
+          Verifikasi
+        </Link>
+      )}
+      {user.role === "admin" && (
+        <Link
+          href="/users"
+          className="text-gray-900 hover:text-primary px-3 py-2 rounded-md text-sm font-medium"
+        >
+          Pengguna
+        </Link>
+      )}
+    </>
+  );
   return (
     <nav className="border-b bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -61,11 +103,71 @@ export default function Navigation() {
                 className="rounded-full flex-shrink-0"
               /> */}
               <span className="font-bold text-lg text-gray-900 whitespace-nowrap">
-                ANTARJAYA MAHAJDA MAKMUR
+                PT. Antareja Mahada Makmur{" "}
               </span>
             </Link>
             {/* END: BRANDING */}
+            {/* Tampilan Mobile: Tampil di layar kecil, tersembunyi di layar medium ke atas */}
+            <div className="md:hidden ml-auto">
+              <Sheet>
+                <SheetTrigger asChild>
+                  <Button variant="ghost" size="icon">
+                    <Menu className="h-6 w-6" />
+                  </Button>
+                </SheetTrigger>
+                <SheetContent side="right">
+                  <SheetHeader>
+                    <SheetTitle>PT. Antareja Mahada Makmur</SheetTitle>
+                  </SheetHeader>
+                  <div className="flex flex-col border-t border-gray-200 pt-4 space-y-1">
+                    {/* The border-t and pt-4 create a clean separator above the links */}
 
+                    <SheetClose asChild>
+                      <Link
+                        href="/dashboard"
+                        // Added py-2 for vertical padding, rounded-md for soft corners
+                        className="text-lg font-medium text-gray-700 py-2 px-3 rounded-md transition duration-150 ease-in-out hover:bg-gray-50 hover:text-primary"
+                      >
+                        Dashboard
+                      </Link>
+                    </SheetClose>
+
+                    {user.role === "mechanic" && (
+                      <SheetClose asChild>
+                        <Link
+                          href="/inspections"
+                          className="text-lg font-medium text-gray-700 py-2 px-3 rounded-md transition duration-150 ease-in-out hover:bg-gray-50 hover:text-primary"
+                        >
+                          Inspeksi Saya
+                        </Link>
+                      </SheetClose>
+                    )}
+
+                    {(user.role === "leader" || user.role === "admin") && (
+                      <SheetClose asChild>
+                        <Link
+                          href="/verification"
+                          className="text-lg font-medium text-gray-700 py-2 px-3 rounded-md transition duration-150 ease-in-out hover:bg-gray-50 hover:text-primary"
+                        >
+                          Verifikasi
+                        </Link>
+                      </SheetClose>
+                    )}
+
+                    {user.role === "admin" && (
+                      <SheetClose asChild>
+                        <Link
+                          href="/users"
+                          className="text-lg font-medium text-gray-700 py-2 px-3 rounded-md transition duration-150 ease-in-out hover:bg-gray-50 hover:text-primary"
+                        >
+                          Pengguna
+                        </Link>
+                      </SheetClose>
+                    )}
+                  </div>
+                </SheetContent>
+              </Sheet>
+            </div>
             <div className="hidden md:flex ml-10 space-x-8">
               <Link
                 href="/dashboard"
@@ -144,7 +246,7 @@ export default function Navigation() {
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={handleLogout}>
                   <LogOut className="mr-2 h-4 w-4" />
-                  <span>Log out</span>
+                  <span>Keluar</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

@@ -24,6 +24,7 @@ import type {
 
 // NEW IMPORT: Import the track mutation hook
 import { useCreateTrackInspection } from "@/queries/track";
+import BackButton from "@/components/BackButton";
 // Note: Assuming you have a separate utility to show toasts/notifications
 
 type EquipmentType = "track" | "wheel" | "support";
@@ -39,41 +40,37 @@ export default function NewInspectionPage() {
 
   // Determine the overall submitting state
   const isSubmitting = trackMutation.isPending;
-  // || wheelMutation.isPending || supportMutation.isPending;
 
   const equipmentTypes = [
     {
       type: "track" as const,
-      title: "Track Equipment",
-      description: "Excavators, bulldozers, and other tracked machinery",
+      title: "Track Equipment", // Tetap dalam Bahasa Inggris
+      description: "Ekskavator, buldoser, dan mesin terlacak lainnya", // Diubah ke Bahasa Indonesia
       icon: <Settings className="w-8 h-8" />,
       color: "bg-blue-50 border-blue-200 hover:bg-blue-100",
     },
     {
       type: "wheel" as const,
-      title: "Wheel Equipment",
-      description: "Loaders, dump trucks, and other wheeled machinery",
+      title: "Wheel Equipment", // Tetap dalam Bahasa Inggris
+      description: "Loader, dump truck, dan mesin beroda lainnya", // Diubah ke Bahasa Indonesia
       icon: <Wrench className="w-8 h-8" />,
       color: "bg-green-50 border-green-200 hover:bg-green-100",
     },
     {
       type: "support" as const,
-      title: "Support Equipment",
-      description: "Cranes, scaffolding, and other support structures",
+      title: "Support Equipment", // Tetap dalam Bahasa Inggris
+      description: "Crane, perancah, dan struktur pendukung lainnya", // Diubah ke Bahasa Indonesia
       icon: <FileText className="w-8 h-8" />,
       color: "bg-orange-50 border-orange-200 hover:bg-orange-100",
     },
   ];
 
   const handleSubmit = async (data: InspectionFormData) => {
-    // Note: The isSubmitting state is now managed by the react-query hook (trackMutation.isPending)
     try {
       if (data.equipmentType === "track") {
-        // Use mutateAsync to await the API call
         await trackMutation.mutateAsync(data as TrackInspection);
 
-        // Success notification and redirection
-        console.log("Track inspection submitted successfully.");
+        console.log("Pemeriksaan Track berhasil diserahkan."); // Diubah ke Bahasa Indonesia
         // showSuccessToast("Track inspection created successfully!"); // Placeholder for toast
         router.push("/inspections");
       } else if (data.equipmentType === "wheel") {
@@ -84,8 +81,7 @@ export default function NewInspectionPage() {
         // router.push("/inspections");
       }
     } catch (error) {
-      // Error handling from the API response
-      console.error("Failed to submit inspection:", error);
+      console.error("Gagal mengirimkan pemeriksaan:", error); // Diubah ke Bahasa Indonesia
       // showErrorToast("Submission failed: " + error.message); // Placeholder for toast
     }
   };
@@ -122,19 +118,13 @@ export default function NewInspectionPage() {
     <div className="min-h-screen bg-gray-50">
       <main className="max-w-4xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
         <div className="mb-6">
-          <Button
-            variant="ghost"
-            onClick={() => router.back()}
-            className="mb-4"
-          >
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Back
-          </Button>
+          <BackButton />
 
           <div className="flex items-center justify-between">
             <div>
+              {/* Judul utama tetap dalam Bahasa Inggris */}
               <h1 className="text-3xl font-bold text-gray-900">
-                New Inspection
+                Inspeksi Baru
               </h1>
             </div>
             {selectedType && (
@@ -164,7 +154,7 @@ export default function NewInspectionPage() {
                 </CardHeader>
                 <CardContent className="text-center">
                   <Button variant="outline" className="w-full bg-transparent">
-                    Select
+                    Pilih {/* Diubah ke Bahasa Indonesia */}
                   </Button>
                 </CardContent>
               </Card>
@@ -172,7 +162,16 @@ export default function NewInspectionPage() {
           </div>
         ) : (
           <div>
-            <div className="mb-4"></div>
+            <div className="mb-4">
+              <Button
+                variant="ghost"
+                onClick={() => setSelectedType(null)}
+                className="text-gray-600 hover:text-gray-900"
+              >
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                Kembali ke Pilihan Tipe {/* Diubah ke Bahasa Indonesia */}
+              </Button>
+            </div>
             {renderForm()}
           </div>
         )}

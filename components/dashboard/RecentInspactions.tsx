@@ -107,13 +107,13 @@ export function RecentInspections({ userRole }: RecentInspectionsProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Recent Inspections</CardTitle>
+        <CardTitle>Inspeksi Terbaru</CardTitle>
         <CardDescription>
           {userRole === "mechanic"
-            ? "Your latest inspection submissions"
+            ? "Laporan inspeksi terakhir Anda"
             : userRole === "leader"
-            ? "Inspections requiring your review"
-            : "Latest system activity"}
+            ? "Inspeksi yang memerlukan tinjauan Anda"
+            : "Aktivitas sistem terbaru"}
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -137,15 +137,7 @@ export function RecentInspections({ userRole }: RecentInspectionsProps) {
                   </Badge>
                 </div>
                 <div className="mt-2 flex items-center space-x-4 text-sm text-muted-foreground">
-                  {/* <span>By {inspection.mechanicName}</span> */}
                   <span>📅 {formatDate(inspection.createdAt)}</span>
-
-                  {/* {inspection.issues > 0 && (
-                    <span className="text-orange-600">
-                      {inspection.issues} issue
-                      {inspection.issues > 1 ? "s" : ""}
-                    </span>
-                  )} */}
                 </div>
               </div>
               <div className="flex space-x-2">
@@ -155,7 +147,7 @@ export function RecentInspections({ userRole }: RecentInspectionsProps) {
                   onClick={() => router.push(`/inspections/${inspection.id}`)}
                 >
                   <Eye className="w-4 h-4 mr-1" />
-                  View
+                  Lihat
                 </Button>
                 {userRole === "admin" && (
                   <Button
@@ -166,7 +158,7 @@ export function RecentInspections({ userRole }: RecentInspectionsProps) {
                     }
                   >
                     <Edit className="w-4 h-4 mr-1" />
-                    Edit
+                    Ubah
                   </Button>
                 )}
               </div>
@@ -179,7 +171,7 @@ export function RecentInspections({ userRole }: RecentInspectionsProps) {
               userRole === "mechanic" ? "/inspections" : "/verification"
             }`}
           >
-            <Button variant="outline">View All Inspections</Button>
+            <Button variant="outline">Lihat Semua Inspeksi</Button>
           </Link>
         </div>
       </CardContent>

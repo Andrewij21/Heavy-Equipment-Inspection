@@ -60,8 +60,8 @@ export default function LoginForm() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
       <Card className="w-full max-w-md">
-        <CardHeader className="flex flex-col items-center pb-4 pt-6">
-          <div className="flex items-end space-x-3 mb-3">
+        <CardHeader className="flex flex-col items-center pb-0">
+          <div className="flex items-center space-x-3">
             {/* LOGO IMAGE (Pastikan file berada di /public/logo.png) */}
             <Image
               src="/logo.png"
@@ -74,11 +74,11 @@ export default function LoginForm() {
               ANTARJAYA MAHAJDA MAKMUR
             </h2> */}
             <div>
-              <CardTitle className="text-2xl pt-2">
+              <CardTitle className="text-xl">
                 Daily Inspection Monitoring (DIM)
               </CardTitle>
               <CardDescription>
-                Enter your credentials to access the dashboard.
+                Masukkan kredensial Anda untuk mengakses dashboard.
               </CardDescription>
             </div>
           </div>
@@ -96,28 +96,27 @@ export default function LoginForm() {
                   <FormItem>
                     <FormLabel>Email</FormLabel>
                     <FormControl>
-                      {/* We spread the `field` object to pass down props like onChange, onBlur, value */}
                       <Input
                         type="email"
-                        placeholder="Enter your Email"
+                        placeholder="Masukkan Email Anda"
                         {...field}
                       />
                     </FormControl>
-                    <FormMessage />{" "}
-                    {/* Displays validation errors for this field */}
+                    <FormMessage />
                   </FormItem>
                 )}
               />
+
               <FormField
                 control={form.control}
                 name="password"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Password</FormLabel>
+                    <FormLabel>Kata Sandi</FormLabel>
                     <FormControl>
                       <Input
                         type="password"
-                        placeholder="Enter your password"
+                        placeholder="Masukkan Kata Sandi Anda"
                         {...field}
                       />
                     </FormControl>

@@ -35,136 +35,140 @@ interface WheelInspectionFormProps {
 
 const formSections = [
   {
-    title: "A. Engine System",
+    title: "A. Sistem Mesin (Engine System)",
     fields: [
       {
         name: "engineOilLevel",
-        label: "Check engine oil level & any leakage",
+        label: "Periksa level oli mesin & kebocoran",
         type: "select",
       },
       {
         name: "engineMounting",
-        label: "Check engine mounting & fitting parts",
+        label: "Periksa dudukan mesin & bagian fitting",
         type: "select",
       },
       {
         name: "coolantLevel",
-        label: "Check water coolant level & any lekage",
+        label: "Periksa level air pendingin (coolant) & kebocoran",
         type: "select",
       },
       {
         name: "fuelSystem",
-        label: "Check fuel system & any leakage",
+        label: "Periksa sistem bahan bakar & kebocoran",
         type: "select",
       },
       {
         name: "beltTension",
-        label: "Check all -belt tension & related parts",
+        label: "Periksa semua ketegangan belt & bagian terkait",
         type: "select",
       },
       {
         name: "airIntakeExhaust",
-        label: "Check air intake & exhaust connection",
+        label: "Periksa sambungan saluran masuk udara (air intake) & knalpot",
         type: "select",
       },
     ],
   },
   {
-    title: "B. Powertrain (Transmission & Axle)",
+    title: "B. Powertrain (Transmisi & Axle)",
     fields: [
       {
         name: "transmissionOilLevel",
-        label: "Check oil level and any leakage",
+        label: "Periksa level oli dan kebocoran",
         type: "select",
       },
       {
         name: "clutchFunction",
-        label: "Check Clutch Function & Wear Pad Clutch",
+        label: "Periksa Fungsi Kopling & Keausan Pad Kopling",
         type: "select",
       },
       {
         name: "universalJoint",
-        label: "Check Universal Joint",
+        label: "Periksa Universal Joint",
         type: "select",
       },
     ],
   },
   {
-    title: "C. Hydraulic System",
+    title: "C. Sistem Hidraulik",
     fields: [
       {
         name: "hydraulicOilLevel",
-        label: "Check hydraulic oil level",
+        label: "Periksa level oli hidraulik",
         type: "select",
       },
       {
         name: "hydraulicCylinder",
-        label: "Check hydraulic cylinder & connection condition",
+        label: "Periksa silinder hidraulik & kondisi sambungan",
         type: "select",
       },
       {
         name: "hydraulicPump",
         label:
-          "Check any leakage from Pump, Motor, PTO, Hose/ piping connection",
+          "Periksa kebocoran dari Pompa, Motor, PTO, Sambungan Selang/perpipaan",
         type: "select",
       },
       {
         name: "hydraulicControlValve",
-        label: "Check leak's from control valve",
+        label: "Periksa kebocoran dari control valve",
         type: "select",
       },
     ],
   },
   {
-    title: "F. Attachment & Structure",
+    title: "F. Attachment & Struktur",
     fields: [
       {
         name: "dumpBody",
-        label: "Check Dump Body, Pin, Pad, Stabilizer, tail gate & vesel",
+        label: "Periksa Dump Body, Pin, Pad, Stabilizer, tail gate & vessel",
         type: "select",
       },
       {
         name: "safetyDumpFunction",
-        label: "Check Safety Dump Function",
+        label: "Periksa Fungsi Pengaman Dump",
         type: "select",
       },
-      { name: "centralGrease", label: "Check Cental Grease", type: "select" },
+      {
+        name: "centralGrease",
+        label: "Periksa Central Grease",
+        type: "select",
+      },
       {
         name: "allGreasingPoints",
-        label: "Check All Greasing Point Area",
+        label: "Periksa Semua Titik Pemberian Gemuk (Greasing Point Area)",
         type: "select",
       },
     ],
   },
   {
-    title: "G. Top-Up Lubricant & Coolant",
+    title: "G. Penambahan Pelumas & Coolant",
     fields: [
       {
         name: "engineOilTopUp",
-        label: "Engine Oil (SAE 15W-40)",
+        label: "Oli Mesin (SAE 15W-40)",
         type: "checkbox",
       },
       {
         name: "transmissionOilTopUp",
-        label: "Transmission (RORED EPA 90)",
+        label: "Transmisi (RORED EPA 90)",
         type: "checkbox",
       },
       {
         name: "hydraulicOilTopUp",
-        label: "Hydraulic (TURALIK 46)",
+        label: "Hidraulik (TURALIK 46)",
         type: "checkbox",
       },
       {
         name: "differentialOilTopUp",
-        label: "Differential (85W-140)",
+        label: "Differensial (85W-140)",
         type: "checkbox",
       },
       {
         name: "steeringFluidTopUp",
-        label: "Steering (ATF 220)",
+        label: "Fluida Kemudi (Steering) (ATF 220)",
         type: "checkbox",
       },
-      { name: "greaseTopUp", label: "Grease (V220)", type: "checkbox" },
+      { name: "greaseTopUp", label: "Gemuk (Grease) (V220)", type: "checkbox" },
       { name: "coolantTopUp", label: "Coolant", type: "checkbox" },
     ],
   },
@@ -211,11 +215,11 @@ export default function DumpTruckInspectionForm({
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              Header Information
-              <Badge variant="outline">Wheel Equipment</Badge>
+              Informasi Header
+              <Badge variant="outline">Peralatan Roda</Badge>
             </CardTitle>
             <CardDescription>
-              CN Unit, model, location, personnel, date & HM
+              Unit CN, model, lokasi, personel, tanggal & HM
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -225,9 +229,9 @@ export default function DumpTruckInspectionForm({
                 name="equipmentId"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>CN Unit</FormLabel>
+                    <FormLabel>Nomor Unit (CN Unit)</FormLabel>
                     <FormControl>
-                      <Input placeholder="e.g., WHL-001" {...field} />
+                      <Input placeholder="Contoh: WHL-001" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -241,7 +245,7 @@ export default function DumpTruckInspectionForm({
                   <FormItem>
                     <FormLabel>Model Unit</FormLabel>
                     <FormControl>
-                      <Input placeholder="e.g., CAT 950H" {...field} />
+                      <Input placeholder="Contoh: CAT 950H" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -253,9 +257,9 @@ export default function DumpTruckInspectionForm({
                 name="location"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Location</FormLabel>
+                    <FormLabel>Lokasi</FormLabel>
                     <FormControl>
-                      <Input placeholder="e.g., Site B, Zone 2" {...field} />
+                      <Input placeholder="Contoh: Site B, Zona 2" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -267,7 +271,7 @@ export default function DumpTruckInspectionForm({
                 name="inspectionDate"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Date</FormLabel>
+                    <FormLabel>Tanggal</FormLabel>
                     <FormControl>
                       <Input type="date" {...field} />
                     </FormControl>
@@ -281,7 +285,7 @@ export default function DumpTruckInspectionForm({
                 name="inspectionTime"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Time</FormLabel>
+                    <FormLabel>Waktu</FormLabel>
                     <FormControl>
                       <Input type="time" {...field} />
                     </FormControl>
@@ -295,7 +299,7 @@ export default function DumpTruckInspectionForm({
                 name="workingHours"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Working Hours (HM)</FormLabel>
+                    <FormLabel>Jam Kerja (HM)</FormLabel>
                     <FormControl>
                       <Input
                         type="number"
@@ -325,9 +329,6 @@ export default function DumpTruckInspectionForm({
 
         {/* Tombol Submit tetap di akhir */}
         <div className="flex justify-end space-x-4">
-          <Button type="button" variant="outline">
-            Save as Draft
-          </Button>
           <Button type="submit" disabled={isSubmitting}>
             {isSubmitting ? "Submitting..." : "Submit Inspection"}
           </Button>

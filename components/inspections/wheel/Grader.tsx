@@ -35,294 +35,304 @@ interface WheelInspectionFormProps {
 
 const formSections = [
   {
-    title: "A. Engine",
+    title: "A. Mesin (Engine)",
     fields: [
       {
         name: "engineVisualCheck",
-        label: "Visual check engine condition form : leaks, lose bolt & etc",
+        label:
+          "Pemeriksaan visual kondisi mesin dari: kebocoran, baut kendor & lain-lain",
         type: "select",
       },
       {
         name: "engineUpperLeaks",
         label:
-          "Check oil leak, coolant leak dan gas leak at upper engine compartment area",
+          "Periksa kebocoran oli, kebocoran coolant, dan kebocoran gas di area kompartemen mesin atas",
         type: "select",
       },
       {
         name: "engineFuelLine",
-        label: "Check all fuel line for tighneass, wear dan leakage",
+        label:
+          "Periksa semua saluran bahan bakar dari kekencangan, keausan, dan kebocoran",
         type: "select",
       },
       {
         name: "engineOilLevel",
-        label: "Check Engine oil level (add if necessary)",
+        label: "Periksa level oli mesin (tambahkan jika perlu)",
         type: "select",
       },
       {
         name: "engineCoolantLevel",
-        label: "Check Coolant level (add if necessary)",
+        label: "Periksa level Coolant (tambahkan jika perlu)",
         type: "select",
       },
       {
         name: "engineHydraulicPump",
-        label: "Check Hydraulic Pump & Line condition",
+        label: "Periksa kondisi Pompa Hidraulik & Saluran",
         type: "select",
       },
       {
         name: "engineElectricalHarness",
-        label: "Check electrical harness for damage dan positionin",
+        label: "Periksa wiring harness listrik dari kerusakan dan posisi",
         type: "select",
       },
       {
         name: "engineBatteryElectrolyte",
-        label: "Check batteray electrolit level",
+        label: "Periksa level elektrolit baterai",
         type: "select",
       },
       {
         name: "engineBelts",
-        label: "Check all belt for tighness dan wear",
+        label: "Periksa semua belt dari kekencangan dan keausan",
         type: "select",
       },
       {
         name: "engineCoverHandRail",
-        label: "Check all cover and hand rail",
+        label: "Periksa semua cover dan pegangan tangan (hand rail)",
         type: "select",
       },
       {
         name: "engineAlternator",
-        label: "Check Alternator mounting and connector",
+        label: "Periksa dudukan dan konektor Alternator",
         type: "select",
       },
       {
         name: "engineTransmissionLeaks",
-        label: "Check transmision for leaks",
+        label: "Periksa transmisi dari kebocoran",
         type: "select",
       },
     ],
   },
   {
-    title: "B. Cooling System",
+    title: "B. Sistem Pendingin (Cooling System)",
     fields: [
       {
         name: "coolingRadiator",
-        label: "Check Check Radiator, Aftercooler, Hyd oil cooler & connection",
+        label: "Periksa Radiator, Aftercooler, Hyd oil cooler & koneksi",
         type: "select",
       },
       {
         name: "coolingFanGuard",
-        label: "Check Fan quard condition",
+        label: "Periksa kondisi pelindung Kipas (Fan guard)",
         type: "select",
       },
       {
         name: "coolingBeltTension",
-        label: "Check Belt Tension",
+        label: "Periksa Ketegangan Belt",
         type: "select",
       },
     ],
   },
   {
-    title: "C. Hydraulic System",
+    title: "C. Sistem Hidraulik",
     fields: [
       {
         name: "hydraulicWheelLeanCylinder",
-        label: "Check wheel lean cylinder dan mounting",
+        label:
+          "Periksa silinder kemiringan roda (wheel lean cylinder) dan dudukannya",
         type: "select",
       },
       {
         name: "hydraulicSteeringCylinder",
-        label: "Check streering cylinder dan mounting",
+        label: "Periksa silinder kemudi (steering cylinder) dan dudukannya",
         type: "select",
       },
       {
         name: "hydraulicBladeLiftCylinder",
-        label: "Check blade lift cylinder dan mounting",
+        label: "Periksa silinder pengangkat blade dan dudukannya",
         type: "select",
       },
       {
         name: "hydraulicSideShiftCylinder",
-        label: "Check side shift cylinder dan mounting",
+        label:
+          "Periksa silinder pergeseran samping (side shift cylinder) dan dudukannya",
         type: "select",
       },
       {
         name: "hydraulicCenterShiftCylinder",
-        label: "Check center shift cylinder dan mounting",
+        label:
+          "Periksa silinder pergeseran tengah (center shift cylinder) dan dudukannya",
         type: "select",
       },
       {
         name: "hydraulicRipperCylinder",
-        label: "Check ripper cylinder dan mounting",
+        label: "Periksa silinder ripper dan dudukannya",
         type: "select",
       },
       {
         name: "hydraulicArticulationCylinder",
-        label: "Check articulation cylinder dan mounting",
+        label: "Periksa silinder artikulasi dan dudukannya",
         type: "select",
       },
       {
         name: "hydraulicOilLevel",
-        label: "Check hydraulic oil level (add it necessary)",
+        label: "Periksa level oli hidraulik (tambahkan jika perlu)",
         type: "select",
       },
     ],
   },
   {
-    title: "D. LH - RH Side of Machine Check",
+    title: "D. Pemeriksaan Sisi Kiri (LH) - Kanan (RH) Mesin",
     fields: [
       {
         name: "sideMachineFrame",
-        label: "Check entire Machine frame, chasis body for cracks",
+        label: "Periksa seluruh rangka mesin, badan chassis dari keretakan",
         type: "select",
       },
       {
         name: "sideBladeGet",
-        label: "Check condition of blade & G.E.T for missing bolts dan wear",
+        label:
+          "Periksa kondisi blade & G.E.T (Ground Engaging Tools) dari baut hilang dan keausan",
         type: "select",
       },
       {
         name: "sideStapeLadder",
-        label: "Check Stape Ladder & hands hold condition",
+        label: "Periksa kondisi Tangga & pegangan tangan",
         type: "select",
       },
       {
         name: "sideTandemHousing",
-        label: "Check LH/RH Tandem housing for leaks",
+        label: "Periksa rumah Tandem Kiri/Kanan dari kebocoran",
         type: "select",
       },
       {
         name: "sideCoverGuards",
-        label: "Check Cover & Guards condition",
+        label: "Periksa kondisi Cover & Pelindung",
         type: "select",
       },
       {
         name: "sideWheelSpindle",
-        label: "Check all wheel spindle bearing for leaks",
+        label: "Periksa semua bearing spindle roda dari kebocoran",
         type: "select",
       },
       {
         name: "sideFuelTank",
-        label: "Check Fuel tank for damage & leak",
+        label: "Periksa tangki bahan bakar dari kerusakan & kebocoran",
         type: "select",
       },
       {
         name: "sideCircleDrive",
-        label: "Check circle drive for leaks",
+        label: "Periksa penggerak lingkaran (circle drive) dari kebocoran",
         type: "select",
       },
       {
         name: "sideArticulationArea",
-        label: "Check articulation area for dirt buld up",
+        label: "Periksa area artikulasi dari penumpukan kotoran",
         type: "select",
       },
       {
         name: "sideHydraulicTank",
-        label: "Check hydraulic oil tank for damage & leaks",
+        label: "Periksa tangki oli hidraulik dari kerusakan & kebocoran",
         type: "select",
       },
     ],
   },
   {
-    title: "G. Cabin - Electric - & Safety Device",
+    title: "G. Kabin - Kelistrikan - & Perangkat Keselamatan",
     fields: [
       {
         name: "cabinGlass",
-        label: "Check cabin Glass Condition",
+        label: "Periksa Kondisi Kaca Kabin",
         type: "select",
       },
       {
         name: "cabinRops",
-        label: "Check Condition of cabin & ROPS",
+        label: "Periksa Kondisi kabin & ROPS",
         type: "select",
       },
       {
         name: "cabinSeatBelt",
-        label: "Check Seat & Safety belt condition",
+        label: "Periksa kondisi Kursi & Sabuk Pengaman",
         type: "select",
       },
-      { name: "cabinDoorLock", label: "Check Door & Lock", type: "select" },
+      { name: "cabinDoorLock", label: "Periksa Pintu & Kunci", type: "select" },
       {
         name: "cabinTransmissionSteeringLever",
-        label: "Check Transmissi & Steering Control Lever Function",
+        label: "Periksa Fungsi Tuas Transmisi & Kontrol Kemudi",
         type: "select",
       },
       {
         name: "cabinAttachmentLever",
-        label: "Check Attachment Control Lever",
+        label: "Periksa Tuas Kontrol Attachment",
         type: "select",
       },
       {
         name: "cabinReverseCamera",
-        label: "Check Reverse Camera function",
+        label: "Periksa fungsi Kamera Mundur",
         type: "select",
       },
-      { name: "cabinMdvr", label: "Check MDVR", type: "select" },
-      { name: "cabinAcBlower", label: "Check AC / Blower", type: "select" },
-      { name: "cabinMirror", label: "Check Mirror condidtion", type: "select" },
+      { name: "cabinMdvr", label: "Periksa MDVR", type: "select" },
+      { name: "cabinAcBlower", label: "Periksa AC / Blower", type: "select" },
+      {
+        name: "cabinMirror",
+        label: "Periksa kondisi Kaca Spion",
+        type: "select",
+      },
       {
         name: "cabinWiper",
-        label: "Check wiper condition & function",
+        label: "Periksa kondisi & fungsi wiper",
         type: "select",
       },
-      { name: "cabinHorn", label: "Check horn function", type: "select" },
+      { name: "cabinHorn", label: "Periksa fungsi klakson", type: "select" },
       {
         name: "cabinMonitoringSystem",
-        label: "Check monitoring system condition",
+        label: "Periksa kondisi sistem pemantauan",
         type: "select",
       },
       {
         name: "cabinSwitch",
-        label: "Check all switch function",
+        label: "Periksa semua fungsi saklar",
         type: "select",
       },
       {
         name: "cabinLamps",
-        label: "Check all lamp function & Rotary lamp",
+        label: "Periksa semua fungsi lampu & Rotary lamp",
         type: "select",
       },
       {
         name: "cabinEmergencyStop",
-        label: "Check Function Emergency Stop",
+        label: "Periksa Fungsi Tombol Emergency Stop",
         type: "select",
       },
       {
         name: "cabinBattery",
-        label: "Check Battery & connection condition",
+        label: "Periksa Baterai & kondisi sambungan",
         type: "select",
       },
       {
         name: "cabinRadio",
-        label: "Check Radio Communication",
+        label: "Periksa Komunikasi Radio",
         type: "select",
       },
-      { name: "cabinBrake", label: "Check all Brake function", type: "select" },
+      { name: "cabinBrake", label: "Periksa semua fungsi Rem", type: "select" },
       {
         name: "cabinParkingBrake",
-        label: "Chek Parking Brake Control",
+        label: "Periksa Kontrol Rem Parkir",
         type: "select",
       },
       {
         name: "cabinFireExtinguisher",
-        label: "Check Fire Extinghuiser",
+        label: "Periksa Alat Pemadam Api Ringan (APAR)",
         type: "select",
       },
     ],
   },
   {
-    title: "I. Top Up Lubricant & Coolant",
+    title: "I. Penambahan Pelumas & Coolant",
     fields: [
       {
         name: "topUpEngineOil",
-        label: "Engine Oil (SAE 15W-40)",
+        label: "Oli Mesin (SAE 15W-40)",
         type: "select",
       },
       {
         name: "topUpHydraulic",
-        label: "Hydraulic (TURALIK 46)",
+        label: "Hidraulik (TURALIK 46)",
         type: "select",
       },
       { name: "topUpCircle", label: "Circle (TURALIK 46)", type: "select" },
       {
         name: "topUpTransmission",
-        label: "Transmission (SAE-30)",
+        label: "Transmisi (SAE-30)",
         type: "select",
       },
       { name: "topUpTandem", label: "Tandem (SAE-30)", type: "select" },
@@ -333,11 +343,11 @@ const formSections = [
       },
       {
         name: "topUpFrontWheelHub",
-        label: "Front Wheel Hub (SAE-30)",
+        label: "Hub Roda Depan (Front Wheel Hub) (SAE-30)",
         type: "select",
       },
-      { name: "topUpSteering", label: "Steering", type: "select" },
-      { name: "topUpGrease", label: "Grease (V220)", type: "select" },
+      { name: "topUpSteering", label: "Kemudi (Steering)", type: "select" },
+      { name: "topUpGrease", label: "Gemuk (Grease) (V220)", type: "select" },
       { name: "topUpCoolant", label: "Coolant", type: "select" },
     ],
   },
@@ -384,11 +394,11 @@ export default function GraderInspectionForm({
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              Header Information
-              <Badge variant="outline">Wheel Equipment</Badge>
+              Informasi Header
+              <Badge variant="outline">Peralatan Roda</Badge>
             </CardTitle>
             <CardDescription>
-              CN Unit, model, location, personnel, date & HM
+              Unit CN, model, lokasi, personel, tanggal & HM
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -398,9 +408,9 @@ export default function GraderInspectionForm({
                 name="equipmentId"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>CN Unit</FormLabel>
+                    <FormLabel>Nomor Unit (CN Unit)</FormLabel>
                     <FormControl>
-                      <Input placeholder="e.g., WHL-001" {...field} />
+                      <Input placeholder="Contoh: WHL-001" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -414,7 +424,7 @@ export default function GraderInspectionForm({
                   <FormItem>
                     <FormLabel>Model Unit</FormLabel>
                     <FormControl>
-                      <Input placeholder="e.g., CAT 950H" {...field} />
+                      <Input placeholder="Contoh: CAT 950H" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -426,9 +436,9 @@ export default function GraderInspectionForm({
                 name="location"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Location</FormLabel>
+                    <FormLabel>Lokasi</FormLabel>
                     <FormControl>
-                      <Input placeholder="e.g., Site B, Zone 2" {...field} />
+                      <Input placeholder="Contoh: Site B, Zona 2" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -440,7 +450,7 @@ export default function GraderInspectionForm({
                 name="inspectionDate"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Date</FormLabel>
+                    <FormLabel>Tanggal</FormLabel>
                     <FormControl>
                       <Input type="date" {...field} />
                     </FormControl>
@@ -454,7 +464,7 @@ export default function GraderInspectionForm({
                 name="inspectionTime"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Time</FormLabel>
+                    <FormLabel>Waktu</FormLabel>
                     <FormControl>
                       <Input type="time" {...field} />
                     </FormControl>
@@ -468,7 +478,7 @@ export default function GraderInspectionForm({
                 name="workingHours"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Working Hours (HM)</FormLabel>
+                    <FormLabel>Jam Kerja (HM)</FormLabel>
                     <FormControl>
                       <Input
                         type="number"
@@ -498,9 +508,6 @@ export default function GraderInspectionForm({
 
         {/* Tombol Submit tetap di akhir */}
         <div className="flex justify-end space-x-4">
-          <Button type="button" variant="outline">
-            Save as Draft
-          </Button>
           <Button type="submit" disabled={isSubmitting}>
             {isSubmitting ? "Submitting..." : "Submit Inspection"}
           </Button>

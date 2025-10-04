@@ -37,16 +37,16 @@ interface SupportInspectionFormProps {
 // Gunakan konstanta ini untuk form inspeksi baru Anda
 export const formSections = [
   {
-    title: "A. Engine",
+    title: "A. Mesin",
     fields: [
       {
         name: "engineFan",
-        label: "Perbaiki/ ganti bila fane rusak",
+        label: "Perbaiki/ganti bila kipas rusak",
         type: "select",
       },
       {
         name: "engineCoolantSystem",
-        label: "Periksa coolen System",
+        label: "Periksa sistem pendingin (coolant system)",
         type: "select",
       },
       {
@@ -56,83 +56,87 @@ export const formSections = [
       },
       {
         name: "engineBreather",
-        label: "Periksa dan bersihkan engine breather",
+        label: "Periksa dan bersihkan breather mesin",
         type: "select",
       },
       {
         name: "engineFuelTank",
         label:
-          "Periksa dfuel tank cap, fuel lines dan conections periksa jg kebocoran fuel tank",
+          "Periksa tutup tangki solar, jalur bahan bakar & sambungan. Cek juga kebocoran tangki",
         type: "select",
       },
       {
         name: "engineExhaustPipe",
         label:
-          "Periksa, perbaiki Exhaust pipe(mufler) dari kebocoran dan kerusakan",
+          "Periksa/perbaiki pipa knalpot (muffler) dari kebocoran dan kerusakan",
         type: "select",
       },
       {
         name: "engineTurbocharger",
-        label: "Periksa kondisi turbochanger dari kebocoran dan kerusakan",
+        label: "Periksa kondisi turbocharger dari kebocoran dan kerusakan",
         type: "select",
       },
       {
         name: "engineFloorCleanliness",
-        label: "Periksa kebersihan engine flor/bersihkan bila kotor",
+        label: "Periksa kebersihan lantai mesin / bersihkan bila kotor",
         type: "select",
       },
     ],
   },
   {
-    title: "B. Electric",
+    title: "B. Kelistrikan",
     fields: [
       {
         name: "electricTerminals",
-        label: "Check terminals, dan electroda wire",
+        label: "Periksa terminal & kabel elektroda",
         type: "select",
       },
       {
         name: "electricIndicators",
-        label: "Check all indikator dan gauge in control panel",
+        label: "Periksa semua indikator & pengukur di panel kontrol",
         type: "select",
       },
       {
         name: "electricBattery",
-        label: "Check battery electrolit level, terminal dan battery cables",
+        label: "Periksa level elektrolit aki, terminal, dan kabel aki",
         type: "select",
       },
       {
         name: "electricSwitchMode",
-        label: "Check switch mode off, run, start",
+        label: "Periksa mode saklar (Off, Run, Start)",
         type: "select",
       },
       {
         name: "electricBatteryConnection",
-        label: "Check Battery & connection condition",
+        label: "Periksa aki & kondisi sambungannya",
         type: "select",
       },
     ],
   },
   {
     title: "C. Opsional",
-    fields: [{ name: "optionalApar", label: "Check APAR", type: "select" }],
+    fields: [{ name: "optionalApar", label: "Periksa APAR", type: "select" }],
   },
   {
-    title: "D. Top Up Lubricant & Coolant",
+    title: "D. Penambahan Pelumas & Pendingin",
     fields: [
       {
         name: "topUpEngineOil",
-        label: "Engine Oil (SAE 15W-40)",
+        label: "Oli Mesin (SAE 15W-40)",
         type: "select",
       },
       {
         name: "topUpCompressor",
-        label: "Compressor (CORENA S4)",
+        label: "Oli Kompresor (CORENA S4)",
         type: "select",
       },
-      { name: "topUpHydraulic", label: "Hydraulic (TO 10)", type: "select" },
+      { name: "topUpHydraulic", label: "Oli Hidrolik (TO 10)", type: "select" },
       { name: "topUpGrease", label: "Grease (EP NLGI-2)", type: "select" },
-      { name: "topUpCoolant", label: "Coolant", type: "select" },
+      {
+        name: "topUpCoolant",
+        label: "Cairan Pendingin (Coolant)",
+        type: "select",
+      },
     ],
   },
 ];
@@ -174,11 +178,11 @@ export default function WeldingMechineInspectionForm({
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              Header Information
-              <Badge variant="outline">Wheel Equipment</Badge>
+              Informasi Header
+              <Badge variant="outline">Peralatan Roda</Badge>
             </CardTitle>
             <CardDescription>
-              CN Unit, model, location, personnel, date & HM
+              Unit CN, model, lokasi, personel, tanggal & HM
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -188,9 +192,9 @@ export default function WeldingMechineInspectionForm({
                 name="equipmentId"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>CN Unit</FormLabel>
+                    <FormLabel>Nomor Unit (CN Unit)</FormLabel>
                     <FormControl>
-                      <Input placeholder="e.g., WHL-001" {...field} />
+                      <Input placeholder="Contoh: WHL-001" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -204,7 +208,7 @@ export default function WeldingMechineInspectionForm({
                   <FormItem>
                     <FormLabel>Model Unit</FormLabel>
                     <FormControl>
-                      <Input placeholder="e.g., CAT 950H" {...field} />
+                      <Input placeholder="Contoh: CAT 950H" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -216,9 +220,9 @@ export default function WeldingMechineInspectionForm({
                 name="location"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Location</FormLabel>
+                    <FormLabel>Lokasi</FormLabel>
                     <FormControl>
-                      <Input placeholder="e.g., Site B, Zone 2" {...field} />
+                      <Input placeholder="Contoh: Site B, Zona 2" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -230,7 +234,7 @@ export default function WeldingMechineInspectionForm({
                 name="inspectionDate"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Date</FormLabel>
+                    <FormLabel>Tanggal</FormLabel>
                     <FormControl>
                       <Input type="date" {...field} />
                     </FormControl>
@@ -244,7 +248,7 @@ export default function WeldingMechineInspectionForm({
                 name="inspectionTime"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Time</FormLabel>
+                    <FormLabel>Waktu</FormLabel>
                     <FormControl>
                       <Input type="time" {...field} />
                     </FormControl>
@@ -258,7 +262,7 @@ export default function WeldingMechineInspectionForm({
                 name="workingHours"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Working Hours (HM)</FormLabel>
+                    <FormLabel>Jam Kerja (HM)</FormLabel>
                     <FormControl>
                       <Input
                         type="number"

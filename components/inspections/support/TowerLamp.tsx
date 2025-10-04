@@ -36,106 +36,105 @@ interface SupportInspectionFormProps {
 // Gunakan konstanta ini untuk form inspeksi baru Anda
 export const formSections = [
   {
-    title: "A. Engine",
+    title: "A. Mesin",
     fields: [
       {
         name: "engineOilLevel",
-        label: "Check engine oil level & any leakage",
+        label: "Periksa level oli mesin & kebocoran",
         type: "select",
       },
       {
         name: "engineMounting",
-        label: "Check engine mounting",
+        label: "Periksa dudukan mesin",
         type: "select",
       },
       {
         name: "engineCoolantLevel",
-        label: "Check water coolant level & any lekage",
+        label: "Periksa level air coolant & kebocoran",
         type: "select",
       },
       {
         name: "engineFuelSystem",
-        label: "Check fuel system & any leakage",
+        label: "Periksa sistem bahan bakar & kebocoran",
         type: "select",
       },
       {
         name: "engineBeltTension",
-        label: "Check all -belt tension & related parts",
+        label: "Periksa ketegangan belt & komponen terkait",
         type: "select",
       },
       {
         name: "engineAirIntake",
-        label: "Check air intake & exhaust connection",
+        label: "Periksa saluran udara masuk & sambungan knalpot",
         type: "select",
       },
     ],
   },
   {
-    title: "B. Hydraulic",
+    title: "B. Hidrolik",
     fields: [
       {
         name: "hydraulicOilLevel",
-        label: "Check hydraulic oil level",
+        label: "Periksa level oli hidrolik",
         type: "select",
       },
       {
         name: "hydraulicPumpLeakage",
-        label:
-          "Check any leakage from Pump, Motor,PTO, Hose/ piping connection",
+        label: "Periksa kebocoran pada pompa, motor, PTO, selang/pipa",
         type: "select",
       },
       {
         name: "hydraulicValveLeakage",
-        label: "Check leak's from control valve",
+        label: "Periksa kebocoran pada control valve",
         type: "select",
       },
-      { name: "hydraulicWireRope", label: "Check wire rope", type: "select" },
+      { name: "hydraulicWireRope", label: "Periksa wire rope", type: "select" },
       {
         name: "hydraulicTelescopicTower",
-        label: "Check telescopic tower",
+        label: "Periksa menara teleskopik",
         type: "select",
       },
     ],
   },
   {
-    title: "C. Electric",
+    title: "C. Kelistrikan",
     fields: [
       {
         name: "electricWorkLamp",
-        label: "Check all work lamp",
+        label: "Periksa semua lampu kerja",
         type: "select",
       },
       {
         name: "electricSwitchLamp",
-        label: "Check all switch lamp",
+        label: "Periksa semua saklar lampu",
         type: "select",
       },
       {
         name: "electricPanelMonitor",
-        label: "Check fungsion panel monitor",
+        label: "Periksa fungsi panel monitor",
         type: "select",
       },
       {
         name: "electricGeneratorConnection",
-        label: "Check Generator conection",
+        label: "Periksa koneksi generator",
         type: "select",
       },
       {
         name: "electricBattery",
-        label: "Check Battery & connection condition",
+        label: "Periksa aki & kondisi koneksi",
         type: "select",
       },
       {
         name: "electricGeneratorVoltage",
-        label: "Check Tegangan Output Generator",
+        label: "Periksa tegangan output generator",
         type: "select",
       },
       {
         name: "electricBreakerCurrent",
-        label: "Check Arus Output Breker",
+        label: "Periksa arus output breaker",
         type: "select",
       },
-      { name: "electricFrequency", label: "Check Frekuensi", type: "select" },
+      { name: "electricFrequency", label: "Periksa frekuensi", type: "select" },
     ],
   },
   {
@@ -143,24 +142,25 @@ export const formSections = [
     fields: [
       {
         name: "optionalVisualSkidding",
-        label: "Check visual Skiding",
+        label: "Periksa kondisi visual skidding",
         type: "select",
       },
-      { name: "optionalApar", label: "Check APAR", type: "select" },
+      { name: "optionalApar", label: "Periksa APAR", type: "select" },
     ],
   },
   {
-    title: "E. Top Up Lubricant & Coolant",
+    title: "E. Penambahan Pelumas & Pendingin",
     fields: [
       {
         name: "topUpEngineOil",
-        label: "Engine Oil (SAE 15W-40)",
+        label: "Oli Mesin (SAE 15W-40)",
         type: "select",
       },
       { name: "topUpCoolant", label: "Coolant", type: "select" },
     ],
   },
 ];
+
 export default function TowerLampInspectionForm({
   onSubmit,
   initialData,
@@ -198,11 +198,11 @@ export default function TowerLampInspectionForm({
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              Header Information
-              <Badge variant="outline">Wheel Equipment</Badge>
+              Informasi Header
+              <Badge variant="outline">Peralatan Roda</Badge>
             </CardTitle>
             <CardDescription>
-              CN Unit, model, location, personnel, date & HM
+              Unit CN, model, lokasi, personel, tanggal & HM
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -212,9 +212,9 @@ export default function TowerLampInspectionForm({
                 name="equipmentId"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>CN Unit</FormLabel>
+                    <FormLabel>Nomor Unit (CN Unit)</FormLabel>
                     <FormControl>
-                      <Input placeholder="e.g., WHL-001" {...field} />
+                      <Input placeholder="Contoh: WHL-001" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -228,7 +228,7 @@ export default function TowerLampInspectionForm({
                   <FormItem>
                     <FormLabel>Model Unit</FormLabel>
                     <FormControl>
-                      <Input placeholder="e.g., CAT 950H" {...field} />
+                      <Input placeholder="Contoh: CAT 950H" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -240,9 +240,9 @@ export default function TowerLampInspectionForm({
                 name="location"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Location</FormLabel>
+                    <FormLabel>Lokasi</FormLabel>
                     <FormControl>
-                      <Input placeholder="e.g., Site B, Zone 2" {...field} />
+                      <Input placeholder="Contoh: Site B, Zona 2" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -254,7 +254,7 @@ export default function TowerLampInspectionForm({
                 name="inspectionDate"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Date</FormLabel>
+                    <FormLabel>Tanggal</FormLabel>
                     <FormControl>
                       <Input type="date" {...field} />
                     </FormControl>
@@ -268,7 +268,7 @@ export default function TowerLampInspectionForm({
                 name="inspectionTime"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Time</FormLabel>
+                    <FormLabel>Waktu</FormLabel>
                     <FormControl>
                       <Input type="time" {...field} />
                     </FormControl>
@@ -282,7 +282,7 @@ export default function TowerLampInspectionForm({
                 name="workingHours"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Working Hours (HM)</FormLabel>
+                    <FormLabel>Jam Kerja (HM)</FormLabel>
                     <FormControl>
                       <Input
                         type="number"

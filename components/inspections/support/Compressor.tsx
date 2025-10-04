@@ -38,93 +38,102 @@ interface SupportInspectionFormProps {
 // Gunakan konstanta ini untuk form inspeksi baru Anda
 export const formSections = [
   {
-    title: "A. Engine",
+    title: "A. Mesin",
     fields: [
       {
         name: "engineOilLevel",
-        label: "Check engine oil level & any leakage",
+        label: "Periksa level oli mesin & kebocoran",
         type: "select",
       },
       {
         name: "engineMounting",
-        label: "Check engine mounting",
+        label: "Periksa dudukan mesin",
         type: "select",
       },
       {
         name: "engineCoolantLevel",
-        label: "Check water coolant level & any lekage",
+        label: "Periksa level air pendingin & kebocoran",
         type: "select",
       },
       {
         name: "engineFuelSystem",
-        label: "Check fuel system & any leakage",
+        label: "Periksa sistem bahan bakar & kebocoran",
         type: "select",
       },
       {
         name: "engineBeltTension",
-        label: "Check all -belt tension & related parts",
+        label: "Periksa semua ketegangan sabuk & bagian terkait",
         type: "select",
       },
       {
         name: "engineFilterConditions",
-        label: "Check all filter conditions",
+        label: "Periksa kondisi semua filter",
         type: "select",
       },
       {
         name: "engineAirCleaner",
-        label: "Check air cleaner (clean if necessary)",
+        label: "Periksa pembersih udara (bersihkan jika perlu)",
         type: "select",
       },
     ],
   },
   {
-    title: "B. Electric",
+    title: "B. Kelistrikan",
     fields: [
       {
         name: "electricTerminals",
-        label: "Check terminals, dan electroda wire",
+        label: "Periksa terminal dan kabel elektroda",
         type: "select",
       },
       {
         name: "electricIndicators",
-        label: "Check all indikator dan gauge in control panel",
+        label: "Periksa semua indikator & pengukur di panel kontrol",
         type: "select",
       },
       {
         name: "electricBattery",
-        label: "Check battery electrolit level, terminal dan battery cables",
+        label: "Periksa level elektrolit baterai, terminal & kabel baterai",
         type: "select",
       },
       {
         name: "electricSwitchMode",
-        label: "Check switch mode off, run, start",
+        label: "Periksa saklar mode off, run, start",
         type: "select",
       },
       {
         name: "electricBatteryConnection",
-        label: "Check Battery & connection condition",
+        label: "Periksa kondisi baterai & koneksi",
         type: "select",
       },
     ],
   },
   {
     title: "C. Opsional",
-    fields: [{ name: "optionalApar", label: "Check APAR", type: "select" }],
+    fields: [{ name: "optionalApar", label: "Periksa APAR", type: "select" }],
   },
   {
-    title: "D. Top Up Lubricant & Coolant",
+    title: "D. Pengisian Pelumas & Pendingin",
     fields: [
       {
         name: "topUpEngineOil",
-        label: "Engine Oil (SAE 15W-40)",
+        label: "Oli Mesin (SAE 15W-40)",
         type: "select",
       },
-      { name: "topUpHydraulic", label: "Hydraulic (TO 10)", type: "select" },
-      { name: "topUpGrease", label: "Grease (EP NLGI-2)", type: "select" },
-      { name: "topUpCoolant", label: "Coolant", type: "select" },
+      {
+        name: "topUpHydraulic",
+        label: "Hidrolik (TO 10)",
+        type: "select",
+      },
+      {
+        name: "topUpGrease",
+        label: "Gemuk (EP NLGI-2)",
+        type: "select",
+      },
+      { name: "topUpCoolant", label: "Pendingin", type: "select" },
     ],
   },
 ];
+
 export default function CompressorInspectionForm({
   onSubmit,
   initialData,
@@ -162,11 +171,11 @@ export default function CompressorInspectionForm({
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              Header Information
-              <Badge variant="outline">Wheel Equipment</Badge>
+              Informasi Header
+              <Badge variant="outline">Peralatan Roda</Badge>
             </CardTitle>
             <CardDescription>
-              CN Unit, model, location, personnel, date & HM
+              Unit CN, model, lokasi, personel, tanggal & HM
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -176,9 +185,9 @@ export default function CompressorInspectionForm({
                 name="equipmentId"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>CN Unit</FormLabel>
+                    <FormLabel>Nomor Unit (CN Unit)</FormLabel>
                     <FormControl>
-                      <Input placeholder="e.g., WHL-001" {...field} />
+                      <Input placeholder="Contoh: WHL-001" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -192,7 +201,7 @@ export default function CompressorInspectionForm({
                   <FormItem>
                     <FormLabel>Model Unit</FormLabel>
                     <FormControl>
-                      <Input placeholder="e.g., CAT 950H" {...field} />
+                      <Input placeholder="Contoh: CAT 950H" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -204,9 +213,9 @@ export default function CompressorInspectionForm({
                 name="location"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Location</FormLabel>
+                    <FormLabel>Lokasi</FormLabel>
                     <FormControl>
-                      <Input placeholder="e.g., Site B, Zone 2" {...field} />
+                      <Input placeholder="Contoh: Site B, Zona 2" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -218,7 +227,7 @@ export default function CompressorInspectionForm({
                 name="inspectionDate"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Date</FormLabel>
+                    <FormLabel>Tanggal</FormLabel>
                     <FormControl>
                       <Input type="date" {...field} />
                     </FormControl>
@@ -232,7 +241,7 @@ export default function CompressorInspectionForm({
                 name="inspectionTime"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Time</FormLabel>
+                    <FormLabel>Waktu</FormLabel>
                     <FormControl>
                       <Input type="time" {...field} />
                     </FormControl>
@@ -246,7 +255,7 @@ export default function CompressorInspectionForm({
                 name="workingHours"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Working Hours (HM)</FormLabel>
+                    <FormLabel>Jam Kerja (HM)</FormLabel>
                     <FormControl>
                       <Input
                         type="number"

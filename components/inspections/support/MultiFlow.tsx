@@ -185,11 +185,11 @@ export default function MultiFlowInspectionForm({
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              Header Information
-              <Badge variant="outline">Wheel Equipment</Badge>
+              Informasi Header
+              <Badge variant="outline">Peralatan Roda</Badge>
             </CardTitle>
             <CardDescription>
-              CN Unit, model, location, personnel, date & HM
+              Unit CN, model, lokasi, personel, tanggal & HM
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -199,9 +199,9 @@ export default function MultiFlowInspectionForm({
                 name="equipmentId"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>CN Unit</FormLabel>
+                    <FormLabel>Nomor Unit (CN Unit)</FormLabel>
                     <FormControl>
-                      <Input placeholder="e.g., WHL-001" {...field} />
+                      <Input placeholder="Contoh: WHL-001" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -215,7 +215,7 @@ export default function MultiFlowInspectionForm({
                   <FormItem>
                     <FormLabel>Model Unit</FormLabel>
                     <FormControl>
-                      <Input placeholder="e.g., CAT 950H" {...field} />
+                      <Input placeholder="Contoh: CAT 950H" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -227,9 +227,9 @@ export default function MultiFlowInspectionForm({
                 name="location"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Location</FormLabel>
+                    <FormLabel>Lokasi</FormLabel>
                     <FormControl>
-                      <Input placeholder="e.g., Site B, Zone 2" {...field} />
+                      <Input placeholder="Contoh: Site B, Zona 2" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -241,7 +241,7 @@ export default function MultiFlowInspectionForm({
                 name="inspectionDate"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Date</FormLabel>
+                    <FormLabel>Tanggal</FormLabel>
                     <FormControl>
                       <Input type="date" {...field} />
                     </FormControl>
@@ -255,7 +255,7 @@ export default function MultiFlowInspectionForm({
                 name="inspectionTime"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Time</FormLabel>
+                    <FormLabel>Waktu</FormLabel>
                     <FormControl>
                       <Input type="time" {...field} />
                     </FormControl>
@@ -269,7 +269,7 @@ export default function MultiFlowInspectionForm({
                 name="workingHours"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Working Hours (HM)</FormLabel>
+                    <FormLabel>Jam Kerja (HM)</FormLabel>
                     <FormControl>
                       <Input
                         type="number"

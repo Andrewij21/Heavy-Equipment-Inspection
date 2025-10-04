@@ -37,149 +37,163 @@ interface SupportInspectionFormProps {
 // Gunakan konstanta ini untuk form inspeksi baru Anda
 export const formSections = [
   {
-    title: "A. Engine",
+    title: "A. Mesin",
     fields: [
       {
         name: "engineOilLevel",
-        label: "Engine Oil (Check Level or Add oil)",
+        label: "Oli Mesin (Periksa Level / Tambah Oli)",
         type: "select",
       },
-      { name: "engineOilFilter", label: "Oil Filter (Check)", type: "select" },
+      {
+        name: "engineOilFilter",
+        label: "Filter Oli (Periksa)",
+        type: "select",
+      },
       {
         name: "engineFuelFilter",
-        label: "Fuel Filter (Check)",
+        label: "Filter Bahan Bakar (Periksa)",
         type: "select",
       },
       {
         name: "engineAirCleaner",
-        label: "Air Cleaner (Check & Clean)",
+        label: "Saringan Udara (Periksa & Bersihkan)",
         type: "select",
       },
       {
         name: "engineRadiatorCoolant",
-        label: "Radiator Coolant (Check)",
+        label: "Air Pendingin Radiator (Periksa)",
         type: "select",
       },
       {
         name: "engineRubberMounting",
-        label: "Engine Rubber Mounting (Check & retighten)",
+        label: "Karet Dudukan Mesin (Periksa & Kencangkan Ulang)",
         type: "select",
       },
       {
         name: "engineFanBelt",
-        label: "Fan Belt Tension (Check & Adjust)",
+        label: "Tali Kipas (Fan Belt) (Periksa & Sesuaikan)",
         type: "select",
       },
       {
         name: "engineVisualCheck",
-        label: "Complete Visual Check of Unit (Inspect)",
+        label: "Pemeriksaan Visual Unit Lengkap",
         type: "select",
       },
       {
         name: "engineLeaks",
-        label: "Check Leaks (Vacum oil, air & water connector)",
+        label: "Kebocoran (Oli vakum, udara & konektor air)",
         type: "select",
       },
       {
         name: "engineBearing",
-        label: "Bearing (Visual Check & Replace)",
+        label: "Bearing (Periksa Visual & Ganti bila perlu)",
         type: "select",
       },
       {
         name: "engineBoltTightening",
-        label: "Bolt Thigtening (Eng & Gen Mounting) (Check & Retorque)",
+        label:
+          "Pengencangan Baut (Mesin & Dudukan Genset) (Periksa & Kencangkan Ulang)",
         type: "select",
       },
     ],
   },
   {
-    title: "B. Electric",
+    title: "B. Kelistrikan",
     fields: [
       {
         name: "electricStartingCharging",
-        label: "Starting & Charging System (check)",
+        label: "Sistem Starter & Pengisian (Periksa)",
         type: "select",
       },
       {
         name: "electricStartingMotor",
-        label: "Starting Motor (check or replace)",
+        label: "Motor Starter (Periksa / Ganti)",
         type: "select",
       },
       {
         name: "electricBattery",
-        label: "Battery Electrolite & Terminal (Check or Replace)",
+        label: "Aki (Elektrolit & Terminal) (Periksa / Ganti)",
         type: "select",
       },
       {
         name: "electricStartingSwitch",
-        label: "Starting Switch (Check Or Replace)",
+        label: "Saklar Starter (Periksa / Ganti)",
         type: "select",
       },
       {
         name: "electricAlternator",
-        label: "Alternator (Check or Replace)",
+        label: "Alternator (Periksa / Ganti)",
         type: "select",
       },
       {
         name: "electricWiringHarness",
-        label: "Wiring Harness & Monitor Panel (Check)",
+        label: "Kabel Harness & Panel Monitor (Periksa)",
         type: "select",
       },
       {
         name: "electricMcb",
-        label: "All MCB (Check or Replace)",
+        label: "Semua MCB (Periksa / Ganti)",
         type: "select",
       },
       {
         name: "electricMeters",
-        label: "Ampere Meter, Freq MTR(Hz) (check)",
+        label: "Ampere Meter & Frequency Meter (Hz) (Periksa)",
         type: "select",
       },
       {
         name: "electricSelectorSwitch",
-        label: "Selector Switch (Check & replace)",
+        label: "Saklar Selektor (Periksa / Ganti)",
         type: "select",
       },
       {
         name: "electricPowerCouple",
-        label: "Cables Power Couple (check)",
+        label: "Kabel Power & Coupling (Periksa)",
         type: "select",
       },
-      { name: "electricAvr", label: "AVR (clean)", type: "select" },
+      { name: "electricAvr", label: "AVR (Bersihkan)", type: "select" },
       {
         name: "electricGeneratorSet",
-        label: "Generator Set (Visual Check)",
+        label: "Genset (Pemeriksaan Visual)",
         type: "select",
       },
       {
         name: "electricGrounding",
-        label: "Grounding (Earth tester)",
+        label: "Grounding (Tes Pentanahan)",
         type: "select",
       },
       {
         name: "electricLightningArrester",
-        label: "Penyalur Petir (Earth Tester)",
+        label: "Penyalur Petir (Tes Pentanahan)",
         type: "select",
       },
-      { name: "electricGuarding", label: "Guarding (Check)", type: "select" },
+      {
+        name: "electricGuarding",
+        label: "Pelindung (Periksa)",
+        type: "select",
+      },
     ],
   },
   {
     title: "C. Opsional",
-    fields: [{ name: "optionalApar", label: "Check APAR", type: "select" }],
+    fields: [{ name: "optionalApar", label: "APAR (Periksa)", type: "select" }],
   },
   {
-    title: "D. Top Up Lubricant & Coolant",
+    title: "D. Pengisian Pelumas & Pendingin",
     fields: [
       {
         name: "topUpEngineOil",
-        label: "Engine Oil (SAE 15W-40)",
+        label: "Oli Mesin (SAE 15W-40) (Isi Ulang)",
         type: "select",
       },
-      { name: "topUpCoolant", label: "Coolant", type: "select" },
+      {
+        name: "topUpCoolant",
+        label: "Air Pendingin (Isi Ulang)",
+        type: "select",
+      },
     ],
   },
 ];
+
 export default function GensetInspectionForm({
   onSubmit,
   initialData,
@@ -217,11 +231,11 @@ export default function GensetInspectionForm({
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              Header Information
-              <Badge variant="outline">Wheel Equipment</Badge>
+              Informasi Header
+              <Badge variant="outline">Peralatan Roda</Badge>
             </CardTitle>
             <CardDescription>
-              CN Unit, model, location, personnel, date & HM
+              Unit CN, model, lokasi, personel, tanggal & HM
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -231,9 +245,9 @@ export default function GensetInspectionForm({
                 name="equipmentId"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>CN Unit</FormLabel>
+                    <FormLabel>Nomor Unit (CN Unit)</FormLabel>
                     <FormControl>
-                      <Input placeholder="e.g., WHL-001" {...field} />
+                      <Input placeholder="Contoh: WHL-001" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -247,7 +261,7 @@ export default function GensetInspectionForm({
                   <FormItem>
                     <FormLabel>Model Unit</FormLabel>
                     <FormControl>
-                      <Input placeholder="e.g., CAT 950H" {...field} />
+                      <Input placeholder="Contoh: CAT 950H" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -259,9 +273,9 @@ export default function GensetInspectionForm({
                 name="location"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Location</FormLabel>
+                    <FormLabel>Lokasi</FormLabel>
                     <FormControl>
-                      <Input placeholder="e.g., Site B, Zone 2" {...field} />
+                      <Input placeholder="Contoh: Site B, Zona 2" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -273,7 +287,7 @@ export default function GensetInspectionForm({
                 name="inspectionDate"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Date</FormLabel>
+                    <FormLabel>Tanggal</FormLabel>
                     <FormControl>
                       <Input type="date" {...field} />
                     </FormControl>
@@ -287,7 +301,7 @@ export default function GensetInspectionForm({
                 name="inspectionTime"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Time</FormLabel>
+                    <FormLabel>Waktu</FormLabel>
                     <FormControl>
                       <Input type="time" {...field} />
                     </FormControl>
@@ -301,7 +315,7 @@ export default function GensetInspectionForm({
                 name="workingHours"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Working Hours (HM)</FormLabel>
+                    <FormLabel>Jam Kerja (HM)</FormLabel>
                     <FormControl>
                       <Input
                         type="number"

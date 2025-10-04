@@ -38,303 +38,312 @@ interface SupportInspectionFormProps {
 // Gunakan konstanta ini untuk form inspeksi baru Anda
 export const formSections = [
   {
-    title: "A. Engine",
+    title: "A. Mesin",
     fields: [
       {
         name: "engineRadiator",
-        label: "Check Radiator condition",
+        label: "Periksa kondisi radiator",
         type: "select",
       },
       {
         name: "engineFanGuard",
-        label: "Check Fan quard condition",
+        label: "Periksa kondisi pelindung kipas (fan guard)",
         type: "select",
       },
       {
         name: "engineBeltTension",
-        label: "Check Belt Tension",
+        label: "Periksa ketegangan sabuk (belt)",
         type: "select",
       },
       {
         name: "engineVisualCheck",
-        label: "Visual check engine condition form : leaks, lose bolt & etc",
+        label: "Pemeriksaan visual mesin (kebocoran, baut kendor, dll.)",
         type: "select",
       },
       {
         name: "engineUnusualSound",
-        label: "Check unusualy sound/noise",
+        label: "Periksa suara/bunyi tidak normal",
         type: "select",
       },
       {
         name: "engineAlternator",
-        label: "Check alternator condition",
+        label: "Periksa kondisi alternator",
         type: "select",
       },
       {
         name: "engineStarterMotor",
-        label: "Check starter motor condition",
+        label: "Periksa kondisi motor starter",
         type: "select",
       },
       {
         name: "engineTurbocharger",
-        label: "Check Turbocharger RH/LH",
+        label: "Periksa turbocharger RH/LH",
         type: "select",
       },
       {
         name: "engineWaterPump",
-        label: "Check Water Pump condition",
+        label: "Periksa kondisi pompa air",
         type: "select",
       },
       {
         name: "engineLeftFrontWheel",
-        label: "Check left front wheel pressure & fastener",
+        label: "Periksa tekanan & baut roda depan kiri",
         type: "select",
       },
       {
         name: "engineRopsCabin",
-        label: "Check ROPS cabin mounting",
+        label: "Periksa mounting kabin ROPS",
         type: "select",
       },
       {
         name: "engineSteeringLinkage",
-        label: "Check Steering Link Age",
+        label: "Periksa linkage kemudi",
         type: "select",
       },
       {
         name: "engineFrontSuspension",
-        label: "Check Front Suspension cylinder & Mounting",
+        label: "Periksa silinder & mounting suspensi depan",
         type: "select",
       },
       {
         name: "engineRearSuspension",
-        label: "Check Rear Suspension cylinder & Mounting",
+        label: "Periksa silinder & mounting suspensi belakang",
         type: "select",
       },
       {
         name: "engineBrakeSystem",
-        label: "Check Brake System",
+        label: "Periksa sistem rem",
         type: "select",
       },
       {
         name: "engineHydraulicTank",
-        label: "Check Hydraulic tank",
+        label: "Periksa tangki hidrolik",
         type: "select",
       },
       {
         name: "engineBrazeForkLifting",
-        label: "Check Braze Fork lifting",
+        label: "Periksa braze fork lifting",
         type: "select",
       },
       {
         name: "engineChassisFrame",
-        label: "Check Chasis/Min Frame",
+        label: "Periksa rangka/chassis utama",
         type: "select",
       },
       {
         name: "engineHoistCylinder",
-        label: "Check Hoist Cylinder & mounting",
+        label: "Periksa silinder hoist & mounting",
         type: "select",
       },
       {
         name: "engineLeftRearWheel",
-        label: "Check left Rear Wheel",
+        label: "Periksa roda belakang kiri",
         type: "select",
       },
       {
         name: "engineLeftRearFinalDrive",
-        label: "Check left rear Final Drive",
+        label: "Periksa final drive belakang kiri",
         type: "select",
       },
-      { name: "engineGreaseLine", label: "Check Grease Line", type: "select" },
+      {
+        name: "engineGreaseLine",
+        label: "Periksa saluran grease",
+        type: "select",
+      },
       {
         name: "engineHydraulicLine",
-        label: "Check Hydraulic Line",
+        label: "Periksa saluran hidrolik",
         type: "select",
       },
       {
         name: "engineDifferential",
-        label: "Check Differential Condition",
+        label: "Periksa kondisi differential",
         type: "select",
       },
       {
         name: "engineTransmission",
-        label: "Check Transmission condition",
+        label: "Periksa kondisi transmisi",
         type: "select",
       },
       {
         name: "enginePowerTrainLine",
-        label: "Chek Power Train line condition",
+        label: "Periksa saluran power train",
         type: "select",
       },
       {
         name: "engineDriveShaft",
-        label: "Check Drive Shaft joint condidtion",
+        label: "Periksa kondisi joint drive shaft",
         type: "select",
       },
       {
         name: "engineFrontSuspensionGrease",
-        label: "Fornt suspension RH / LH (check grease)",
+        label: "Suspensi depan RH/LH (periksa grease)",
         type: "select",
       },
       {
         name: "engineSteeringCylinderGrease",
-        label: "Steering cylinder (check grease)",
+        label: "Silinder kemudi (periksa grease)",
         type: "select",
       },
       {
         name: "engineSpiderJointGrease",
-        label: "Spider Joint (check grease)",
+        label: "Spider joint (periksa grease)",
         type: "select",
       },
       {
         name: "engineRearSuspensionGrease",
-        label: "Rear suspension RH / LH (check grease)",
+        label: "Suspensi belakang RH/LH (periksa grease)",
         type: "select",
       },
       {
         name: "engineFrontRearAxleGrease",
-        label: "Fornt & Rear Axle Tie Rod (check grease)",
+        label: "Tie rod as depan & belakang (periksa grease)",
         type: "select",
       },
       {
         name: "enginePinForkLiftingGrease",
-        label: "PIN Fork Lifting (check grease)",
+        label: "Pin fork lifting (periksa grease)",
         type: "select",
       },
       {
         name: "engineParkingBrake",
-        label: "Chek Parking Brake Control",
+        label: "Periksa kontrol rem parkir",
         type: "select",
       },
       {
         name: "engineAirCleaner",
-        label: "Check Air Cleaner condition",
+        label: "Periksa kondisi saringan udara",
         type: "select",
       },
       {
         name: "engineSteeringOilTank",
-        label: "Check Steering Oil Tank",
+        label: "Periksa tangki oli kemudi",
         type: "select",
       },
       {
         name: "engineTankMounting",
-        label: "Check Tank Mounting",
+        label: "Periksa mounting tangki",
         type: "select",
       },
       {
         name: "engineGreaseSystem",
-        label: "Check Grease System",
+        label: "Periksa sistem grease",
         type: "select",
       },
       {
         name: "engineRightRearWheel",
-        label: "Check Right Rear wheel pressure & fastener",
+        label: "Periksa tekanan & baut roda belakang kanan",
         type: "select",
       },
       {
         name: "engineRhFinalDrive",
-        label: "Check RH Final Drive condition",
+        label: "Periksa kondisi final drive kanan (RH)",
         type: "select",
       },
       {
         name: "engineBrakeSystem2",
-        label: "Check Brake System",
+        label: "Periksa sistem rem",
         type: "select",
       },
       {
         name: "engineRearSuspension2",
-        label: "Check Rear Suspensison Cylinder & Mounting",
+        label: "Periksa silinder & mounting suspensi belakang",
         type: "select",
       },
       {
         name: "engineFuelTank",
-        label: "Check Fuel Tank & Mounting",
+        label: "Periksa tangki & mounting bahan bakar",
         type: "select",
       },
       {
         name: "engineFuelLine",
-        label: "Check fuel Line condition",
+        label: "Periksa kondisi saluran bahan bakar",
         type: "select",
       },
       {
         name: "engineChassisMounting",
-        label: "Check Chasis & Mounting",
+        label: "Periksa rangka & mounting",
         type: "select",
       },
       {
         name: "engineFrontSuspension2",
-        label: "Check Front Suspension Cylinder & Mounting",
+        label: "Periksa silinder & mounting suspensi depan",
         type: "select",
       },
       {
         name: "engineSteeringLinkage2",
-        label: "Check Steering Linkage",
+        label: "Periksa linkage kemudi",
         type: "select",
       },
     ],
   },
   {
-    title: "B. Cabin & Electric",
+    title: "B. Kabin & Kelistrikan",
     fields: [
       {
         name: "cabinRops",
-        label: "Check Condition of cabin & ROPS",
+        label: "Periksa kondisi kabin & ROPS",
         type: "select",
       },
       {
         name: "cabinCleaning",
-        label: "Cleaning cabin & check panel Function",
+        label: "Bersihkan kabin & periksa fungsi panel",
         type: "select",
       },
       {
         name: "cabinLock",
-        label: "Check lock cabin & lock tilt cabin",
+        label: "Periksa kunci kabin & kunci kemiringan kabin",
         type: "select",
       },
-      { name: "cabinAcBlower", label: "Check AC / Blower", type: "select" },
-      { name: "cabinSafetyBelt", label: "Check Safety Belt", type: "select" },
-      { name: "cabinApar", label: "Check APAR", type: "select" },
+      { name: "cabinAcBlower", label: "Periksa AC / Blower", type: "select" },
+      {
+        name: "cabinSafetyBelt",
+        label: "Periksa sabuk pengaman",
+        type: "select",
+      },
+      { name: "cabinApar", label: "Periksa APAR", type: "select" },
       {
         name: "cabinWheelChock",
-        label: "Check Wheel chock and safety cone",
+        label: "Periksa wheel chock & safety cone",
         type: "select",
       },
       {
         name: "cabinEmergencyStop",
-        label: "Check Emergency Stop function",
+        label: "Periksa fungsi tombol darurat (Emergency Stop)",
         type: "select",
       },
       {
         name: "cabinSwitchFunction",
-        label: "Check switch function",
+        label: "Periksa fungsi switch",
         type: "select",
       },
       {
         name: "cabinLampFunction",
-        label: "Check all lamp function & Rotary lamp",
+        label: "Periksa semua lampu & lampu rotary",
         type: "select",
       },
       {
         name: "cabinBattery",
-        label: "Check Battery, connection condition, and electrolit level",
+        label: "Periksa aki, kondisi koneksi, & level elektrolit",
         type: "select",
       },
     ],
   },
   {
-    title: "C. Top Up Lubricant & Coolant",
+    title: "C. Penambahan Oli & Pendingin",
     fields: [
       {
         name: "topUpEngineOil",
-        label: "Engine Oil (SAE 15W-40)",
+        label: "Oli Mesin (SAE 15W-40)",
         type: "select",
       },
-      { name: "topUpHydraulic", label: "Hydraulic (TO 10)", type: "select" },
-      { name: "topUpGrease", label: "Grease (EP NLGI-2)", type: "select" },
-      { name: "topUpCoolant", label: "Coolant (VCS)", type: "select" },
+      { name: "topUpHydraulic", label: "Oli Hidrolik (TO 10)", type: "select" },
+      { name: "topUpGrease", label: "Gemuk (EP NLGI-2)", type: "select" },
+      { name: "topUpCoolant", label: "Cairan Pendingin (VCS)", type: "select" },
     ],
   },
 ];
+
 export default function DeiciInspectionForm({
   onSubmit,
   initialData,
@@ -372,11 +381,11 @@ export default function DeiciInspectionForm({
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              Header Information
-              <Badge variant="outline">Wheel Equipment</Badge>
+              Informasi Header
+              <Badge variant="outline">Peralatan Roda</Badge>
             </CardTitle>
             <CardDescription>
-              CN Unit, model, location, personnel, date & HM
+              Unit CN, model, lokasi, personel, tanggal & HM
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -386,9 +395,9 @@ export default function DeiciInspectionForm({
                 name="equipmentId"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>CN Unit</FormLabel>
+                    <FormLabel>Nomor Unit (CN Unit)</FormLabel>
                     <FormControl>
-                      <Input placeholder="e.g., WHL-001" {...field} />
+                      <Input placeholder="Contoh: WHL-001" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -402,7 +411,7 @@ export default function DeiciInspectionForm({
                   <FormItem>
                     <FormLabel>Model Unit</FormLabel>
                     <FormControl>
-                      <Input placeholder="e.g., CAT 950H" {...field} />
+                      <Input placeholder="Contoh: CAT 950H" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -414,9 +423,9 @@ export default function DeiciInspectionForm({
                 name="location"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Location</FormLabel>
+                    <FormLabel>Lokasi</FormLabel>
                     <FormControl>
-                      <Input placeholder="e.g., Site B, Zone 2" {...field} />
+                      <Input placeholder="Contoh: Site B, Zona 2" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -428,7 +437,7 @@ export default function DeiciInspectionForm({
                 name="inspectionDate"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Date</FormLabel>
+                    <FormLabel>Tanggal</FormLabel>
                     <FormControl>
                       <Input type="date" {...field} />
                     </FormControl>
@@ -442,7 +451,7 @@ export default function DeiciInspectionForm({
                 name="inspectionTime"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Time</FormLabel>
+                    <FormLabel>Waktu</FormLabel>
                     <FormControl>
                       <Input type="time" {...field} />
                     </FormControl>
@@ -456,7 +465,7 @@ export default function DeiciInspectionForm({
                 name="workingHours"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Working Hours (HM)</FormLabel>
+                    <FormLabel>Jam Kerja (HM)</FormLabel>
                     <FormControl>
                       <Input
                         type="number"

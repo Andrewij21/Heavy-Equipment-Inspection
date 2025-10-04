@@ -35,186 +35,189 @@ interface SupportInspectionFormProps {
 
 const formSections = [
   {
-    title: "A. Engine",
+    title: "A. Mesin",
     fields: [
       {
         name: "engineOilLevel",
-        label: "Check engine oil level & any leakage",
+        label: "Periksa level oli mesin & kebocoran",
         type: "select",
       },
       {
         name: "engineMounting",
-        label: "Check engine mounting",
+        label: "Periksa dudukan mesin",
         type: "select",
       },
       {
         name: "engineCoolantLevel",
-        label: "Check water coolant level & any lekage",
+        label: "Periksa level air coolant & kebocoran",
         type: "select",
       },
       {
         name: "engineFuelSystem",
-        label: "Check fuel system & any leakage",
+        label: "Periksa sistem bahan bakar & kebocoran",
         type: "select",
       },
       {
         name: "engineBeltTension",
-        label: "Check all -belt tension & related parts",
+        label: "Periksa ketegangan semua belt & komponen terkait",
         type: "select",
       },
       {
         name: "engineAirIntake",
-        label: "Check air intake & exhaust connection",
+        label: "Periksa saluran udara & sambungan knalpot",
         type: "select",
       },
     ],
   },
   {
-    title: "B. Transmission & Clutch",
+    title: "B. Transmisi & Kopling",
     fields: [
       {
         name: "transmissionOilLevel",
-        label: "Check oil level and any leakage",
+        label: "Periksa level oli & kebocoran",
         type: "select",
       },
       {
         name: "transmissionClutch",
-        label: "Check Clutch Function & Wear Pad Clutch",
+        label: "Periksa fungsi kopling & keausan kampas kopling",
         type: "select",
       },
       {
         name: "transmissionUniversalJoint",
-        label: "Check Universal Joint",
+        label: "Periksa universal joint",
         type: "select",
       },
     ],
   },
   {
-    title: "C. Hydraulic",
+    title: "C. Hidrolik",
     fields: [
       {
         name: "hydraulicOilLevel",
-        label: "Check hydraulic oil level",
+        label: "Periksa level oli hidrolik",
         type: "select",
       },
       {
         name: "hydraulicPumpLeakage",
-        label:
-          "Check any leakage from Pump, Motor,PTO, Hose/ piping connection",
+        label: "Periksa kebocoran pada pompa, motor, PTO, selang/pipa",
         type: "select",
       },
       {
         name: "hydraulicValveLeakage",
-        label: "Check leak's from control valve",
+        label: "Periksa kebocoran pada control valve",
         type: "select",
       },
     ],
   },
   {
-    title: "D. Cabin & Electric",
+    title: "D. Kabin & Kelistrikan",
     fields: [
       {
         name: "cabinCleaning",
-        label: "Cleaning cabin & check panel Function",
+        label: "Bersihkan kabin & periksa fungsi panel",
         type: "select",
       },
       {
         name: "cabinLock",
-        label: "Check lock cabin & lock tilt cabin",
+        label: "Periksa kunci kabin & pengunci kemiringan kabin",
         type: "select",
       },
       {
         name: "cabinSteeringLever",
-        label: "Check Transmissi & Steering Control Lever Function",
+        label: "Periksa fungsi tuas transmisi & kemudi",
         type: "select",
       },
       {
         name: "cabinAttachmentLever",
-        label: "Check Attachment Control Lever",
+        label: "Periksa tuas kontrol attachment",
         type: "select",
       },
       {
         name: "cabinBallJointTieRod",
-        label: "Check ball joint tie rod",
+        label: "Periksa ball joint tie rod",
         type: "select",
       },
       {
         name: "cabinBallJointDrakLink",
-        label: "Check ball joint drak link",
+        label: "Periksa ball joint drag link",
         type: "select",
       },
-      { name: "cabinAcBlower", label: "Check AC / Blower", type: "select" },
+      { name: "cabinAcBlower", label: "Periksa AC / Blower", type: "select" },
       {
         name: "cabinSwitchFunction",
-        label: "Check switch function",
+        label: "Periksa fungsi switch",
         type: "select",
       },
       {
         name: "cabinLampFunction",
-        label: "Check all lamp function & Rotary lamp",
+        label: "Periksa semua lampu & lampu rotary",
         type: "select",
       },
       {
         name: "cabinBattery",
-        label: "Check Battery & connection condition",
+        label: "Periksa aki & kondisi koneksi",
         type: "select",
       },
-      { name: "cabinSafetyBelt", label: "Check Safety Belt", type: "select" },
-      { name: "cabinApar", label: "Check APAR", type: "select" },
+      {
+        name: "cabinSafetyBelt",
+        label: "Periksa sabuk pengaman",
+        type: "select",
+      },
+      { name: "cabinApar", label: "Periksa APAR", type: "select" },
     ],
   },
   {
-    title: "E. Front Axle, Rear Axle & Brake",
+    title: "E. As Roda Depan, Belakang & Rem",
     fields: [
       {
         name: "axleDifferentialOil",
-        label: "Check Oil Level of Differential & any leakage",
+        label: "Periksa level oli diferensial & kebocoran",
         type: "select",
       },
       {
         name: "axleLockCabin",
-        label: "Check lock cabin & lock tilt cabin",
+        label: "Periksa kunci kabin & pengunci kemiringan kabin",
         type: "select",
       },
       {
         name: "axlePinSpring",
-        label: "Check & lubricate Pin Spring, Steering likage & Trunion",
+        label: "Periksa & lumasi pin per, linkage kemudi & trunion",
         type: "select",
       },
       {
         name: "axleTorqueRod",
-        label: "Check Mounting & Rubber Torque Rod",
+        label: "Periksa dudukan & karet torque rod",
         type: "select",
       },
       {
         name: "axleTyreBrake",
-        label: "Check Tyre & Brake function",
+        label: "Periksa ban & fungsi rem",
         type: "select",
       },
       {
         name: "axleSpringUBolt",
-        label: "Check Spring & U Bolt",
+        label: "Periksa per & U-Bolt",
         type: "select",
       },
       {
         name: "axleBallJointTieRod",
-        label: "Check ball joint tie rod",
+        label: "Periksa ball joint tie rod",
         type: "select",
       },
       {
         name: "axleBallJointDrakLink",
-        label: "Check ball joint drak link",
+        label: "Periksa ball joint drag link",
         type: "select",
       },
       {
         name: "axleShockAbsorber",
-        label: "Check Shock Absorber",
+        label: "Periksa shock absorber",
         type: "select",
       },
-      { name: "axleBoltTyre", label: "Check Bolt Tyre", type: "select" },
+      { name: "axleBoltTyre", label: "Periksa baut roda", type: "select" },
       {
         name: "axleHollowSpring",
-        label: "Check Rubber Hollow spring",
+        label: "Periksa karet hollow spring",
         type: "select",
       },
     ],
@@ -224,78 +227,82 @@ const formSections = [
     fields: [
       {
         name: "attachmentTankLeakage",
-        label: "Check body and any leakage Tanki WT - LT - FT",
+        label: "Periksa bodi & kebocoran tangki WT - LT - FT",
         type: "select",
       },
       {
         name: "attachmentBallValve",
-        label: "Check ball valve conection, hose rail and Gun WT - LT - FT",
+        label: "Periksa ball valve, selang, pipa & gun WT - LT - FT",
         type: "select",
       },
       {
         name: "attachmentAirCompressor",
-        label: "Check air compressor LT",
+        label: "Periksa kompresor udara LT",
         type: "select",
       },
       {
         name: "attachmentAirPump",
-        label: "Check all air pump and pressure guage LT",
+        label: "Periksa semua pompa udara & tekanan manometer LT",
         type: "select",
       },
       {
         name: "attachmentWaterSprayer",
-        label: "Check water sprayer &water canon WT",
+        label: "Periksa sprayer air & water canon WT",
         type: "select",
       },
       {
         name: "attachmentDriveCoupling",
-        label: "Check drive coupling WT",
+        label: "Periksa drive coupling WT",
         type: "select",
       },
       {
         name: "attachmentWaterPump",
-        label: "Check Water pump and pressure guage WT",
+        label: "Periksa pompa air & tekanan manometer WT",
         type: "select",
       },
       {
         name: "attachmentFuelPump",
-        label: "Check Fuel pump and pressure guage FT",
+        label: "Periksa pompa bahan bakar & tekanan manometer FT",
         type: "select",
       },
       {
         name: "attachmentCouplingJointer",
-        label: "Check coupling jointer FT & LT",
+        label: "Periksa coupling jointer FT & LT",
         type: "select",
       },
     ],
   },
   {
-    title: "G. Top Up Lubricant & Coolant",
+    title: "G. Penambahan Pelumas & Pendingin",
     fields: [
       {
         name: "topUpEngineOil",
-        label: "Engine Oil (SAE 15W-40)",
+        label: "Oli Mesin (SAE 15W-40)",
         type: "select",
       },
       {
         name: "topUpTransmission",
-        label: "Transmissi (80W-90)",
+        label: "Oli Transmisi (80W-90)",
         type: "select",
       },
       {
         name: "topUpHydraulic",
-        label: "Hydraulic (TELLUS 46)",
+        label: "Oli Hidrolik (TELLUS 46)",
         type: "select",
       },
       {
         name: "topUpDifferential",
-        label: "Differential (85W-140)",
+        label: "Oli Diferensial (85W-140)",
         type: "select",
       },
-      { name: "topUpSteering", label: "Steering (ATF 220)", type: "select" },
+      {
+        name: "topUpSteering",
+        label: "Oli Power Steering (ATF 220)",
+        type: "select",
+      },
       {
         name: "topUpClutchFluid",
-        label: "Clutch Fluid (DOT 3)",
+        label: "Minyak Kopling (DOT 3)",
         type: "select",
       },
       { name: "topUpGrease", label: "Grease (EP NLGI-2)", type: "select" },
@@ -341,11 +348,11 @@ export default function MobileTruckInspectionForm({
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              Header Information
-              <Badge variant="outline">Wheel Equipment</Badge>
+              Informasi Header
+              <Badge variant="outline">Peralatan Roda</Badge>
             </CardTitle>
             <CardDescription>
-              CN Unit, model, location, personnel, date & HM
+              Unit CN, model, lokasi, personel, tanggal & HM
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -355,9 +362,9 @@ export default function MobileTruckInspectionForm({
                 name="equipmentId"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>CN Unit</FormLabel>
+                    <FormLabel>Nomor Unit (CN Unit)</FormLabel>
                     <FormControl>
-                      <Input placeholder="e.g., WHL-001" {...field} />
+                      <Input placeholder="Contoh: WHL-001" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -371,7 +378,7 @@ export default function MobileTruckInspectionForm({
                   <FormItem>
                     <FormLabel>Model Unit</FormLabel>
                     <FormControl>
-                      <Input placeholder="e.g., CAT 950H" {...field} />
+                      <Input placeholder="Contoh: CAT 950H" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -383,9 +390,9 @@ export default function MobileTruckInspectionForm({
                 name="location"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Location</FormLabel>
+                    <FormLabel>Lokasi</FormLabel>
                     <FormControl>
-                      <Input placeholder="e.g., Site B, Zone 2" {...field} />
+                      <Input placeholder="Contoh: Site B, Zona 2" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -397,7 +404,7 @@ export default function MobileTruckInspectionForm({
                 name="inspectionDate"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Date</FormLabel>
+                    <FormLabel>Tanggal</FormLabel>
                     <FormControl>
                       <Input type="date" {...field} />
                     </FormControl>
@@ -411,7 +418,7 @@ export default function MobileTruckInspectionForm({
                 name="inspectionTime"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Time</FormLabel>
+                    <FormLabel>Waktu</FormLabel>
                     <FormControl>
                       <Input type="time" {...field} />
                     </FormControl>
@@ -425,7 +432,7 @@ export default function MobileTruckInspectionForm({
                 name="workingHours"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Working Hours (HM)</FormLabel>
+                    <FormLabel>Jam Kerja (HM)</FormLabel>
                     <FormControl>
                       <Input
                         type="number"

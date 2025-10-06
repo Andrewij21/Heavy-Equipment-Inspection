@@ -93,10 +93,7 @@ export default function CreateUserPage() {
 
       {/* 4. Bungkus form dengan komponen Form dari shadcn/ui */}
       <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit, (e) => console.log({ e }))}
-          className=""
-        >
+        <form onSubmit={form.handleSubmit(onSubmit)} className="">
           <Card>
             <CardHeader>
               <CardTitle>Informasi Pengguna</CardTitle>

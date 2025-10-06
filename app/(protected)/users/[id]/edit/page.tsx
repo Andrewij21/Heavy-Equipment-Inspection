@@ -52,7 +52,6 @@ export default function EditUserPage() {
     isLoading: isFetching,
     isError: isFetchError,
   } = useGetUser(id);
-  console.log({ userData });
   const user: User | undefined = userData?.data; // Asumsi API mengembalikan array
 
   // 3. Inisialisasi useForm
@@ -120,7 +119,6 @@ export default function EditUserPage() {
 
     // Perlakuan khusus untuk contact (set null jika string kosong)
     payload.contact = data?.contact || "";
-    console.log({ payload });
     // Panggil mutasi
     updateMutation.mutate(
       { userId: id, userData: payload },

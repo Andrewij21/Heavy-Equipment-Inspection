@@ -44,21 +44,21 @@ export default function NewInspectionPage() {
   const equipmentTypes = [
     {
       type: "track" as const,
-      title: "Track Equipment", // Tetap dalam Bahasa Inggris
+      title: "Section Track", // Tetap dalam Bahasa Inggris
       description: "Ekskavator, buldoser, dan mesin terlacak lainnya", // Diubah ke Bahasa Indonesia
       icon: <Settings className="w-8 h-8" />,
       color: "bg-blue-50 border-blue-200 hover:bg-blue-100",
     },
     {
       type: "wheel" as const,
-      title: "Wheel Equipment", // Tetap dalam Bahasa Inggris
+      title: "Section Wheel", // Tetap dalam Bahasa Inggris
       description: "Loader, dump truck, dan mesin beroda lainnya", // Diubah ke Bahasa Indonesia
       icon: <Wrench className="w-8 h-8" />,
       color: "bg-green-50 border-green-200 hover:bg-green-100",
     },
     {
       type: "support" as const,
-      title: "Support Equipment", // Tetap dalam Bahasa Inggris
+      title: "SuSection pport", // Tetap dalam Bahasa Inggris
       description: "Crane, perancah, dan struktur pendukung lainnya", // Diubah ke Bahasa Indonesia
       icon: <FileText className="w-8 h-8" />,
       color: "bg-orange-50 border-orange-200 hover:bg-orange-100",

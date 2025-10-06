@@ -45,7 +45,7 @@ export default function NewInspectionPage() {
     {
       type: "track" as const,
       title: "Section Track", // Tetap dalam Bahasa Inggris
-      description: "Ekskavator, buldoser, dan mesin terlacak lainnya", // Diubah ke Bahasa Indonesia
+      description: "Ekskavator, buldozer, dan unit track lain nya", // Diubah ke Bahasa Indonesia
       icon: <Settings className="w-8 h-8" />,
       color: "bg-blue-50 border-blue-200 hover:bg-blue-100",
     },
@@ -59,7 +59,7 @@ export default function NewInspectionPage() {
     {
       type: "support" as const,
       title: "SuSection pport", // Tetap dalam Bahasa Inggris
-      description: "Crane, perancah, dan struktur pendukung lainnya", // Diubah ke Bahasa Indonesia
+      description: "Generator, Tower Lamp dan struktur pendukung lainya", // Diubah ke Bahasa Indonesia
       icon: <FileText className="w-8 h-8" />,
       color: "bg-orange-50 border-orange-200 hover:bg-orange-100",
     },

@@ -185,16 +185,29 @@ export const trackFormSections = [
     ],
   },
   {
+    //ada penambahan pada bagian ini khisisnya di tipe result, ntar periksa lagi nanti lalu tambahkan ke zod dan be
     title: "Pengukuran Temperatur Silinder",
     fields: [
+      {
+        name: "tempCylBoom",
+        label: "Silinder Boom",
+        type: "result",
+      },
       {
         name: "tempCylBoomRh",
         label: "Silinder Boom Kanan (RH)",
         type: "temp",
       },
       { name: "tempCylBoomLh", label: "Silinder Boom Kiri (LH)", type: "temp" },
+
+      { name: "tempCylArm", label: "Silinder Arm", type: "result" },
       { name: "tempCylArmRh", label: "Silinder Arm Kanan (RH)", type: "temp" },
       { name: "tempCylArmLh", label: "Silinder Arm Kiri (LH)", type: "temp" },
+      {
+        name: "tempCylBucket",
+        label: "Silinder Bucket",
+        type: "result",
+      },
       {
         name: "tempCylBucketRh",
         label: "Silinder Bucket Kanan (RH)",

@@ -10,7 +10,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 const getUsers = async (): Promise<ApiResponse<User[]>> => {
   return await apiClient.get("/users");
 };
-const getUser = async (userId: string): Promise<ApiResponse<User[]>> => {
+const getUser = async (userId: string): Promise<ApiResponse<User>> => {
   return await apiClient.get(`/users/${userId}`);
 };
 const createUser = async (
@@ -76,6 +76,9 @@ export const useUpdateUser = () => {
     onSuccess: (data, variables) => {
       // The `variables` here will be the single object you pass to `mutate`
       queryClient.invalidateQueries({ queryKey: userKeys.lists() });
+      queryClient.invalidateQueries({
+        queryKey: userKeys.detail(variables.userId),
+      });
       queryClient.setQueryData(userKeys.detail(variables.userId), data);
     },
   });

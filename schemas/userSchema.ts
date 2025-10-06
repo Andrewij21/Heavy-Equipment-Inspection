@@ -7,7 +7,7 @@ export const userSchema = z.object({
   username: z.string().min(1, { message: "Username minimal 1 karakter." }),
   email: z.email({ message: "Email tidak valid." }),
   role: z.enum(["mechanic", "leader", "admin"]),
-  contact: z.string(),
+  contact: z.string().optional().nullable(),
   employeeId: z.string().min(1, { message: "Employee ID minimal 1 karakter." }),
   department: z.string().optional().nullable(),
   createdAt: z.string(),

@@ -199,10 +199,20 @@ export const trackFormSections = [
         type: "temp",
       },
       { name: "tempCylBoomLh", label: "Silinder Boom Kiri (LH)", type: "temp" },
+      {
+        name: "deltaTCylBoom",
+        label: "Perbedaan Suhu Silinder Boom (\u0394T)",
+        type: "temp",
+      },
 
       { name: "tempCylArm", label: "Silinder Arm", type: "result" },
       { name: "tempCylArmRh", label: "Silinder Arm Kanan (RH)", type: "temp" },
       { name: "tempCylArmLh", label: "Silinder Arm Kiri (LH)", type: "temp" },
+      {
+        name: "deltaTCylArm",
+        label: "Perbedaan Suhu Silinder Arm (\u0394T)",
+        type: "temp",
+      },
       {
         name: "tempCylBucket",
         label: "Silinder Bucket",
@@ -216,6 +226,11 @@ export const trackFormSections = [
       {
         name: "tempCylBucketLh",
         label: "Silinder Bucket Kiri (LH)",
+        type: "temp",
+      },
+      {
+        name: "deltaTCylBucket",
+        label: "Perbedaan Suhu Silinder Bucket (\u0394T)",
         type: "temp",
       },
     ],

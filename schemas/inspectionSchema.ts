@@ -84,6 +84,9 @@ export const trackInspectionSchema = baseInspectionSchema.extend({
   upperCoverHandRail: resultEnum,
 
   // Measure Cylinder Temperature
+  deltaTCylBoom: tempField,
+  deltaTCylArm: tempField,
+  deltaTCylBucket: tempField,
   tempCylBoom: resultEnum,
   tempCylBoomRh: tempField,
   tempCylBoomLh: tempField,

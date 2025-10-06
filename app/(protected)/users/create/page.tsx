@@ -93,7 +93,7 @@ export default function CreateUserPage() {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="role">Peran (Role) *</Label>
+                <Label htmlFor="role">Jabatan*</Label>
                 <Select
                   value={formData.role}
                   onValueChange={(value) => handleInputChange("role", value)}
@@ -104,7 +104,7 @@ export default function CreateUserPage() {
                   <SelectContent>
                     <SelectItem value="mechanic">Mekanik</SelectItem>
                     <SelectItem value="leader">Leader</SelectItem>
-                    <SelectItem value="support">Dukungan</SelectItem>
+                    <SelectItem value="admin">Admin</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -121,7 +121,7 @@ export default function CreateUserPage() {
                 <Label htmlFor="employeeId">ID Karyawan</Label>
                 <Input
                   id="employeeId"
-                  placeholder="Contoh: MECH-007"
+                  placeholder="Contoh: 123456789"
                   value={formData.employeeId}
                   onChange={(e) =>
                     handleInputChange("employeeId", e.target.value)

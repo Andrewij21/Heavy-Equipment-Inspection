@@ -58,7 +58,7 @@ export default function NewInspectionPage() {
     },
     {
       type: "support" as const,
-      title: "SuSection pport", // Tetap dalam Bahasa Inggris
+      title: "Section Support", // Tetap dalam Bahasa Inggris
       description: "Generator, Tower Lamp dan struktur pendukung lainya", // Diubah ke Bahasa Indonesia
       icon: <FileText className="w-8 h-8" />,
       color: "bg-orange-50 border-orange-200 hover:bg-orange-100",

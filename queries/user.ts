@@ -60,6 +60,15 @@ export const useCreateUser = () => {
     },
   });
 };
+export const useDeleteUser = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: deleteUser,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: userKeys.lists() });
+    },
+  });
+};
 export const useUpdateUser = () => {
   const queryClient = useQueryClient();
   return useMutation({

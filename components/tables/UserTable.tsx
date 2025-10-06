@@ -41,22 +41,13 @@ import {
   UserCheck,
   UserX,
 } from "lucide-react";
-
-interface User {
-  id: string;
-  username: string;
-  email: string;
-  fullName: string;
-  role: string;
-  status: string;
-  createdAt: string;
-  lastLogin: string;
-}
+import type { User } from "@/schemas/userSchema";
 
 interface UsersTableProps {
   data: User[];
   onEditUser: (userId: string) => void;
   onDeleteUser: (userId: string) => void;
+  isDeleting: boolean;
 }
 
 type SortField = keyof User;
@@ -66,6 +57,7 @@ export function UsersTable({
   data,
   onEditUser,
   onDeleteUser,
+  isDeleting,
 }: UsersTableProps) {
   const [searchTerm, setSearchTerm] = useState("");
   const [roleFilter, setRoleFilter] = useState("all");
@@ -140,7 +132,6 @@ export function UsersTable({
     const filtered = data.filter((user) => {
       // Filter Pencarian
       const matchesSearch =
-        user.fullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
         user.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
         user.email.toLowerCase().includes(searchTerm.toLowerCase());
 
@@ -149,7 +140,7 @@ export function UsersTable({
 
       // Filter Status
       const matchesStatus =
-        statusFilter === "all" || user.status === statusFilter;
+        statusFilter === "all" || user.role === statusFilter;
 
       return matchesSearch && matchesRole && matchesStatus;
     });
@@ -160,7 +151,7 @@ export function UsersTable({
       let bValue = b[sortField] as any;
 
       // Penanganan pengurutan tanggal
-      if (sortField === "createdAt" || sortField === "lastLogin") {
+      if (sortField === "createdAt") {
         aValue = new Date(aValue as string).getTime();
         bValue = new Date(bValue as string).getTime();
       }
@@ -191,7 +182,7 @@ export function UsersTable({
 
   // Perhitungan Statistik
   const totalUsers = data.length;
-  const activeUsers = data.filter((u) => u.status === "active").length;
+  // const activeUsers = data.filter((u) => u.status === "active").length;
   const filteredCount = filteredAndSortedData.length;
 
   return (
@@ -210,7 +201,7 @@ export function UsersTable({
             <p className="text-xs text-muted-foreground">Terdaftar di sistem</p>
           </CardContent>
         </Card>
-        <Card>
+        {/* <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 gap-2">
             <CardTitle className="text-sm font-medium">
               Pengguna Aktif
@@ -221,11 +212,11 @@ export function UsersTable({
             <div className="text-2xl font-bold">{activeUsers}</div>
             <p className="text-xs text-muted-foreground">Saat ini aktif</p>
           </CardContent>
-        </Card>
+        </Card> */}
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 gap-2">
             <CardTitle className="text-sm font-medium">Hasil Filter</CardTitle>
-            <UserX className="h-4 w-4 text-muted-foreground" />
+            <UserCheck className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{filteredCount}</div>
@@ -263,7 +254,7 @@ export function UsersTable({
                 <SelectItem value="mechanic">Mekanik</SelectItem>
               </SelectContent>
             </Select>
-            <Select value={statusFilter} onValueChange={setStatusFilter}>
+            {/* <Select value={statusFilter} onValueChange={setStatusFilter}>
               <SelectTrigger className="w-full sm:w-[140px]">
                 <SelectValue placeholder="Status" />
               </SelectTrigger>
@@ -272,7 +263,7 @@ export function UsersTable({
                 <SelectItem value="active">Aktif</SelectItem>
                 <SelectItem value="inactive">Nonaktif</SelectItem>
               </SelectContent>
-            </Select>
+            </Select> */}
             <Button variant="outline" onClick={clearFilters}>
               <Filter className="w-4 h-4 mr-2" />
               Bersihkan Filter
@@ -290,11 +281,11 @@ export function UsersTable({
                 <TableHead>
                   <Button
                     variant="ghost"
-                    onClick={() => handleSort("fullName")}
+                    onClick={() => handleSort("username")}
                     className="h-auto p-0 font-semibold"
                   >
                     Nama
-                    {getSortIcon("fullName")}
+                    {getSortIcon("username")}
                   </Button>
                 </TableHead>
                 <TableHead>
@@ -317,7 +308,7 @@ export function UsersTable({
                     {getSortIcon("role")}
                   </Button>
                 </TableHead>
-                <TableHead>
+                {/* <TableHead>
                   <Button
                     variant="ghost"
                     onClick={() => handleSort("status")}
@@ -326,7 +317,7 @@ export function UsersTable({
                     Status
                     {getSortIcon("status")}
                   </Button>
-                </TableHead>
+                </TableHead> */}
                 <TableHead>
                   <Button
                     variant="ghost"
@@ -343,7 +334,7 @@ export function UsersTable({
             <TableBody>
               {filteredAndSortedData.map((user) => (
                 <TableRow key={user.id} className="hover:bg-muted/50">
-                  <TableCell className="font-medium">{user.fullName}</TableCell>
+                  <TableCell className="font-medium">{user.username}</TableCell>
                   <TableCell className="text-muted-foreground">
                     {user.email}
                   </TableCell>
@@ -353,20 +344,23 @@ export function UsersTable({
                       {user.role.charAt(0).toUpperCase() + user.role.slice(1)}
                     </Badge>
                   </TableCell>
-                  <TableCell>
+                  {/* <TableCell>
                     <Badge className={getStatusColor(user.status)}>
-                      {/* Kapitalisasi huruf pertama */}
                       {user.status.charAt(0).toUpperCase() +
                         user.status.slice(1)}
                     </Badge>
-                  </TableCell>
+                  </TableCell> */}
                   <TableCell className="text-sm text-muted-foreground">
                     {formatDate(user.createdAt)}
                   </TableCell>
                   <TableCell className="text-right">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" className="h-8 w-8 p-0">
+                        <Button
+                          variant="ghost"
+                          disabled={isDeleting}
+                          className="h-8 w-8 p-0"
+                        >
                           <span className="sr-only">Buka menu</span>
                           <MoreHorizontal className="h-4 w-4" />
                         </Button>

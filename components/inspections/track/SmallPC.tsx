@@ -52,7 +52,7 @@ export const trackFormSections = [
     fields: [
       {
         name: "lowerLockOutSwitch",
-        label: "Periksa Saklar Lock Out",
+        label: "Periksa Lock Out Switch",
         type: "result",
       },
       {
@@ -188,21 +188,19 @@ export const trackFormSections = [
     title: "Pengukuran Temperatur Silinder",
     fields: [
       {
+        name: "tempCylBoom",
+        label: "Silinder Boom",
+        type: "result",
+      },
+      {
         name: "tempCylBoomRh",
         label: "Silinder Boom Kanan (RH)",
         type: "temp",
       },
       { name: "tempCylBoomLh", label: "Silinder Boom Kiri (LH)", type: "temp" },
-      { name: "tempCylArmRh", label: "Silinder Arm Kanan (RH)", type: "temp" },
-      { name: "tempCylArmLh", label: "Silinder Arm Kiri (LH)", type: "temp" },
       {
-        name: "tempCylBucketRh",
-        label: "Silinder Bucket Kanan (RH)",
-        type: "temp",
-      },
-      {
-        name: "tempCylBucketLh",
-        label: "Silinder Bucket Kiri (LH)",
+        name: "deltaTCylBoom",
+        label: "Perbedaan Suhu Silinder Boom (\u0394T)",
         type: "temp",
       },
     ],
@@ -343,7 +341,7 @@ export const trackFormSections = [
     fields: [
       {
         name: "topUpCoolant",
-        label: "Coolant (AF-NACDM)",
+        label: "Coolant",
         type: "qty",
       },
       {

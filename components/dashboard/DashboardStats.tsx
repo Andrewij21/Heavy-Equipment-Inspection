@@ -1,9 +1,28 @@
+// src/components/dashboard/DashboardStats.tsx
 "use client";
 
 import type React from "react";
+import { useMemo } from "react";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { FileText, CheckCircle, Clock, AlertTriangle } from "lucide-react";
+import {
+  FileText,
+  CheckCircle,
+  Clock,
+  AlertTriangle,
+  Loader2,
+  Users,
+} from "lucide-react";
+
+// NEW IMPORT: Import the general inspection hook
+import { useGetGeneralInspections } from "@/queries/inspection"; // Menggunakan path yang disediakan
+import { useDashboardStats } from "@/queries/dashboard";
+
+// Definisikan struktur data yang diharapkan dari API untuk memudahkan penghitungan
+interface InspectionItem {
+  status: "PENDING" | "APPROVED" | "REJECTED";
+  // ... fields lain yang diperlukan untuk filtering jika ada
+}
 
 interface StatsCardProps {
   title: string;
@@ -43,35 +62,44 @@ interface DashboardStatsProps {
 }
 
 export function DashboardStats({ userRole }: DashboardStatsProps) {
-  // Mock data - replace with real data from API
-  const getStatsForRole = () => {
+  // 1. Panggil hook API baru
+  const { data: apiResponse, isLoading, isError } = useDashboardStats();
+  const statsData = apiResponse?.data;
+
+  // 2. Map data API yang sudah difilter server ke format StatsCard
+  const stats = useMemo(() => {
+    // Jika data belum tersedia, kembalikan array kosong
+    if (!statsData) return [];
+
+    // Ambil field utama (sudah difilter oleh server berdasarkan userRole)
+    const { total, pending, approved, rejected, reviewedToday } = statsData;
+
+    // --- LOGIC MAPPING BERDASARKAN PERAN ---
     switch (userRole) {
       case "mechanic":
         return [
           {
-            title: "Total Inspeksi",
-            value: 24,
-            description: "Selesai bulan ini",
+            title: "Total Inspeksi Anda", // Berdasarkan filter server (mechanicId)
+            value: total,
+            description: "Total yang telah Anda serahkan",
             icon: <FileText className="h-4 w-4 text-muted-foreground" />,
-            trend: { value: 12, isPositive: true },
           },
           {
             title: "Menunggu Tinjauan",
-            value: 3,
+            value: pending,
             description: "Menunggu persetujuan leader",
             icon: <Clock className="h-4 w-4 text-muted-foreground" />,
           },
           {
             title: "Disetujui",
-            value: 21,
-            description: "Berhasil diverifikasi",
+            value: approved,
+            description: "Inspeksi berhasil diverifikasi",
             icon: <CheckCircle className="h-4 w-4 text-muted-foreground" />,
-            trend: { value: 8, isPositive: true },
           },
           {
             title: "Ditolak",
-            value: 5,
-            description: "Alat memerlukan perhatian",
+            value: rejected,
+            description: "Memerlukan revisi/perhatian",
             icon: <AlertTriangle className="h-4 w-4 text-muted-foreground" />,
           },
         ];
@@ -79,66 +107,67 @@ export function DashboardStats({ userRole }: DashboardStatsProps) {
       case "leader":
         return [
           {
-            title: "Tinjauan Tertunda",
-            value: 12,
+            title: "Tinjauan Tertunda", // Global Pending
+            value: pending,
             description: "Inspeksi menunggu verifikasi",
             icon: <Clock className="h-4 w-4 text-muted-foreground" />,
           },
           {
-            title: "Ditinjau Hari Ini",
-            value: 8,
-            description: "Inspeksi telah diproses",
+            title: "Ditinjau Hari Ini", // Data tambahan dari server
+            value: reviewedToday || 0,
+            description: "Inspeksi yang Anda setujui/tolak",
             icon: <CheckCircle className="h-4 w-4 text-muted-foreground" />,
           },
-          // {
-          //   title: "Inspeksi Tim",
-          //   value: 156,
-          //   description: "Total bulan ini",
-          //   icon: <FileText className="h-4 w-4 text-muted-foreground" />,
-          //   trend: { value: 15, isPositive: true },
-          // },
-          // {
-          //   title: "Masalah Kritis",
-          //   value: 3,
-          //   description: "Memerlukan perhatian segera",
-          //   icon: <AlertTriangle className="h-4 w-4 text-muted-foreground" />,
-          // },
+          {
+            title: "Total Disetujui",
+            value: approved,
+            description: "Total persetujuan (Global)",
+            icon: <FileText className="h-4 w-4 text-muted-foreground" />,
+          },
+          {
+            title: "Total Ditolak",
+            value: rejected,
+            description: "Total penolakan (Global)",
+            icon: <AlertTriangle className="h-4 w-4 text-muted-foreground" />,
+          },
         ];
 
       case "admin":
         return [];
-      //     {
-      //       title: "Total Inspections",
-      //       value: 1247,
-      //       description: "All time completed",
-      //       icon: <FileText className="h-4 w-4 text-muted-foreground" />,
-      //       trend: { value: 18, isPositive: true },
-      //     },
-      //     {
-      //       title: "Active Users",
-      //       value: 45,
-      //       description: "Mechanics and leaders",
-      //       icon: <CheckCircle className="h-4 w-4 text-muted-foreground" />,
-      //     },
-      //     {
-      //       title: "This Month",
-      //       value: 234,
-      //       description: "Inspections completed",
-      //       icon: <Clock className="h-4 w-4 text-muted-foreground" />,
-      //       trend: { value: 22, isPositive: true },
-      //     },
-      // {
-      //   title: "Equipment Issues",
-      //   value: 18,
-      //   description: "Requiring maintenance",
-      //   icon: <AlertTriangle className="h-4 w-4 text-muted-foreground" />,
-      // },
-      // ];
+      default:
+        return [];
     }
-  };
+  }, [statsData, userRole]);
 
-  const stats = getStatsForRole();
+  // 3. Tampilan Loading dan Error (Sama seperti sebelumnya)
+  if (isLoading) {
+    return (
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        {[1, 2, 3, 4].map((i) => (
+          <Card key={i} className="animate-pulse">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <div className="h-4 w-3/4 rounded bg-gray-200"></div>
+              <Loader2 className="h-4 w-4 text-gray-300 animate-spin" />
+            </CardHeader>
+            <CardContent>
+              <div className="h-8 w-1/2 rounded bg-gray-300 mb-2"></div>
+              <div className="h-3 w-full rounded bg-gray-200"></div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+    );
+  }
 
+  if (isError) {
+    return (
+      <div className="text-red-600 text-center p-4 col-span-full">
+        Gagal memuat statistik dashboard.
+      </div>
+    );
+  }
+
+  // 5. Render Kartu
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
       {stats.map((stat, index) => (

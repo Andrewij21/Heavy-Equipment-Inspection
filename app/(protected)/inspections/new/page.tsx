@@ -25,6 +25,8 @@ import type {
 // NEW IMPORT: Import the track mutation hook
 import { useCreateTrackInspection } from "@/queries/track";
 import BackButton from "@/components/BackButton";
+import { useAuth } from "@/context/AuthContext";
+import { toast } from "sonner";
 // Note: Assuming you have a separate utility to show toasts/notifications
 
 type EquipmentType = "track" | "wheel" | "support";
@@ -32,6 +34,9 @@ type EquipmentType = "track" | "wheel" | "support";
 export default function NewInspectionPage() {
   const [selectedType, setSelectedType] = useState<EquipmentType | null>(null);
   const router = useRouter();
+  const { user } = useAuth();
+
+  const userId = user?.id;
 
   // Initialize mutation hooks
   const trackMutation = useCreateTrackInspection();
@@ -66,12 +71,28 @@ export default function NewInspectionPage() {
   ];
 
   const handleSubmit = async (data: InspectionFormData) => {
+    // Pastikan ID mekanik tersedia
+    if (!userId) {
+      console.error("User ID not found. Cannot submit inspection.");
+      toast.error("User session required.");
+      return;
+    }
+
+    // Objek data yang siap dikirim
+    const payload = {
+      ...data,
+      mechanicId: userId,
+    };
     try {
       if (data.equipmentType === "track") {
-        await trackMutation.mutateAsync(data as TrackInspection);
+        await trackMutation.mutateAsync(payload as TrackInspection);
 
         console.log("Pemeriksaan Track berhasil diserahkan."); // Diubah ke Bahasa Indonesia
-        // showSuccessToast("Track inspection created successfully!"); // Placeholder for toast
+        toast.success("Pemeriksaan Berhasil Dibuat", {
+          description:
+            "Pemeriksaan track telah berhasil diserahkan dan menunggu tinjauan.",
+          duration: 3000,
+        });
         router.push("/inspections");
       } else if (data.equipmentType === "wheel") {
         // await wheelMutation.mutateAsync(data as WheelInspection);

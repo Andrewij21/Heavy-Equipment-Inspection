@@ -312,7 +312,7 @@ export const trackFormSections = [
     fields: [
       {
         name: "topUpCoolant",
-        label: "Coolant (AF-NACDM)",
+        label: "Coolant",
         type: "qty",
       },
       {
@@ -326,8 +326,8 @@ export const trackFormSections = [
         type: "qty",
       },
       {
-        name: "topUpSwingMachinery",
-        label: "Mekanisme Putar (Swing Machinary) (HD 30)",
+        name: "topUpTransmission",
+        label: "Transmisi (HD 30)",
         type: "qty",
       },
       {

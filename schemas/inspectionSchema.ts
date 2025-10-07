@@ -141,6 +141,7 @@ export const trackInspectionSchema = baseInspectionSchema.extend({
   topUpHydraulic: quantityField,
   topUpSwingMachinery: quantityField,
   topUpFinalDrive: quantityField,
+  topUpTransmission: quantityField,
 
   // Top-Up Lubricant (BigDigger/Bulldozer-specific fields - need to include them to avoid Zod error)
   topUpCoolantQty: quantityField,

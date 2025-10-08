@@ -27,6 +27,7 @@ import { useCreateTrackInspection } from "@/queries/track";
 import BackButton from "@/components/BackButton";
 import { useAuth } from "@/context/AuthContext";
 import { toast } from "sonner";
+import { useCreateWheelInspection } from "@/queries/wheele";
 // Note: Assuming you have a separate utility to show toasts/notifications
 
 type EquipmentType = "track" | "wheel" | "support";
@@ -40,6 +41,7 @@ export default function NewInspectionPage() {
 
   // Initialize mutation hooks
   const trackMutation = useCreateTrackInspection();
+  const wheelMutation = useCreateWheelInspection();
   // const wheelMutation = useCreateWheelInspection(); // Placeholder
   // const supportMutation = useCreateSupportInspection(); // Placeholder
 
@@ -83,6 +85,7 @@ export default function NewInspectionPage() {
       ...data,
       mechanicId: userId,
     };
+
     try {
       if (data.equipmentType === "track") {
         await trackMutation.mutateAsync(payload as TrackInspection);
@@ -95,15 +98,26 @@ export default function NewInspectionPage() {
         });
         router.push("/inspections");
       } else if (data.equipmentType === "wheel") {
-        // await wheelMutation.mutateAsync(data as WheelInspection);
-        // router.push("/inspections");
+        await wheelMutation.mutateAsync(payload as any);
+        console.log("Pemeriksaan Wheel berhasil diserahkan.");
+        toast.success("Pemeriksaan Berhasil Dibuat", {
+          description:
+            "Pemeriksaan wheel telah berhasil diserahkan dan menunggu tinjauan.",
+          duration: 3000,
+        });
+        router.push("/inspections");
+        // --- AKHIR LOGIC WHEEL INSPECTION ---
       } else if (data.equipmentType === "support") {
         // await supportMutation.mutateAsync(data as SupportInspection);
         // router.push("/inspections");
       }
     } catch (error) {
       console.error("Gagal mengirimkan pemeriksaan:", error); // Diubah ke Bahasa Indonesia
-      // showErrorToast("Submission failed: " + error.message); // Placeholder for toast
+      // Menampilkan pesan error spesifik dari server jika ada
+      const errorMessage =
+        (error as any)?.response?.data?.message ||
+        "Submission failed: Terjadi kesalahan saat mengirim data.";
+      toast.error(errorMessage);
     }
   };
 

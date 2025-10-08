@@ -506,9 +506,20 @@ export function BigDiggerInspectionForm({
                         type="number"
                         placeholder="0"
                         {...field}
-                        onChange={(e) =>
-                          field.onChange(Number.parseFloat(e.target.value) || 0)
-                        }
+                        // 1. KONTROL TAMPILAN:
+                        // Jika field.value adalah 0, tampilkan string kosong ("").
+                        // Jika tidak, tampilkan nilai sebenarnya.
+                        value={field.value === 0 ? "" : field.value}
+                        // 2. KONTROL PERUBAHAN:
+                        // Jika input kosong (e.target.value === ""), kirim 0 ke useForm.
+                        // Jika ada nilai, kirim nilai numeriknya.
+                        onChange={(e) => {
+                          const rawValue = e.target.value;
+                          const numericValue = Number.parseFloat(rawValue);
+
+                          // Kirim 0 jika string kosong, jika tidak kirim nilai numerik (atau NaN jika tidak valid)
+                          field.onChange(rawValue === "" ? 0 : numericValue);
+                        }}
                       />
                     </FormControl>
                     <FormMessage />

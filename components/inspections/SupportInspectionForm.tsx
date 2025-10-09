@@ -24,7 +24,7 @@ import MultiFlowInspectionForm from "./support/MultiFlow";
 import DeiciInspectionForm from "./support/Deici";
 
 interface SupportInspectionFormProps {
-  onSubmit: (data: SupportInspection) => void;
+  onSubmit: (data: any) => void;
   initialData?: Partial<SupportInspection>;
   isSubmitting?: boolean;
 }

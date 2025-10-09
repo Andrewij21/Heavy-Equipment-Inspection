@@ -6,6 +6,7 @@ const SupportGeneralTypeEnum = z.enum([
   "Genset",
   "WeldingMachine",
   "Compressor",
+  "MultiFlow",
 ]);
 const ShiftEnum = z.enum(["day", "night"]);
 
@@ -178,6 +179,20 @@ const supportDetailsSchema = z.object({
   // Comressor
   engineFilterConditions: z.string().optional().nullable(),
   topUpCompressor: z.number().nullable().optional(),
+
+  // MultiFlow
+  engineVisual: z.string().optional().nullable(),
+  engineAirFilter: z.string().optional().nullable(),
+  engineHose: z.string().optional().nullable(),
+
+  // ==========================================================
+  // PONTON, FRAME, & PUMP
+  // ==========================================================
+  pontonCondition: z.string().optional().nullable(),
+  pumpCondition: z.string().optional().nullable(),
+  pumpMounting: z.string().optional().nullable(),
+  boltTightness: z.string().optional().nullable(),
+  suctionDischargeHose: z.string().optional().nullable(),
 });
 
 // --- SKEMA UTAMA UNTUK CREATION (BODY API) ---

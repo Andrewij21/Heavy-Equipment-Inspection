@@ -28,6 +28,7 @@ import BackButton from "@/components/BackButton";
 import { useAuth } from "@/context/AuthContext";
 import { toast } from "sonner";
 import { useCreateWheelInspection } from "@/queries/wheele";
+import { useCreateSupportInspection } from "@/queries/support";
 // Note: Assuming you have a separate utility to show toasts/notifications
 
 type EquipmentType = "track" | "wheel" | "support";
@@ -42,6 +43,7 @@ export default function NewInspectionPage() {
   // Initialize mutation hooks
   const trackMutation = useCreateTrackInspection();
   const wheelMutation = useCreateWheelInspection();
+  const supportMutation = useCreateSupportInspection();
   // const wheelMutation = useCreateWheelInspection(); // Placeholder
   // const supportMutation = useCreateSupportInspection(); // Placeholder
 
@@ -108,8 +110,8 @@ export default function NewInspectionPage() {
         router.push("/inspections");
         // --- AKHIR LOGIC WHEEL INSPECTION ---
       } else if (data.equipmentType === "support") {
-        // await supportMutation.mutateAsync(data as SupportInspection);
-        // router.push("/inspections");
+        await supportMutation.mutateAsync(payload as any);
+        router.push("/inspections");
       }
     } catch (error) {
       console.error("Gagal mengirimkan pemeriksaan:", error); // Diubah ke Bahasa Indonesia

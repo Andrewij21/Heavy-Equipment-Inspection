@@ -5,6 +5,7 @@ const SupportGeneralTypeEnum = z.enum([
   "Towerlamp",
   "Genset",
   "WeldingMachine",
+  "Compressor",
 ]);
 const ShiftEnum = z.enum(["day", "night"]);
 
@@ -173,6 +174,10 @@ const supportDetailsSchema = z.object({
   electricIndicators: z.string().optional().nullable(),
   electricSwitchMode: z.string().optional().nullable(),
   electricBatteryConnection: z.string().optional().nullable(),
+
+  // Comressor
+  engineFilterConditions: z.string().optional().nullable(),
+  topUpCompressor: z.number().nullable().optional(),
 });
 
 // --- SKEMA UTAMA UNTUK CREATION (BODY API) ---

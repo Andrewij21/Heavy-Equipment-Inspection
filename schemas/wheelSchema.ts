@@ -249,6 +249,76 @@ const wheelDetailsSchema = z.object({
   conditionSteering: z.string().optional().nullable(),
   conditionGrease: z.string().optional().nullable(),
   conditionCoolant: z.string().optional().nullable(),
+
+  // GRADER
+  // ==========================================================
+  // A. ENGINE SYSTEM
+  // ==========================================================
+  engineHydraulicPump: z.string().optional().nullable(),
+  engineElectricalHarness: z.string().optional().nullable(),
+  engineBatteryElectrolyte: z.string().optional().nullable(),
+  engineBelts: z.string().optional().nullable(),
+  engineCoverHandRail: z.string().optional().nullable(),
+  engineTransmissionLeaks: z.string().optional().nullable(),
+
+  // ==========================================================
+  // B. COOLING SYSTEM
+  // ==========================================================
+  coolingRadiator: z.string().optional().nullable(),
+  coolingFanGuard: z.string().optional().nullable(),
+  coolingBeltTension: z.string().optional().nullable(),
+
+  // ==========================================================
+  // C. HYDRAULIC SYSTEM
+  // ==========================================================
+  hydraulicRipperCylinder: z.string().optional().nullable(),
+
+  // ==========================================================
+  // D. MACHINE SIDE CHECK (SIDE)
+  // ==========================================================
+  sideMachineFrame: z.string().optional().nullable(),
+  sideBladeGet: z.string().optional().nullable(),
+  sideStapeLadder: z.string().optional().nullable(),
+  sideTandemHousing: z.string().optional().nullable(),
+  sideCoverGuards: z.string().optional().nullable(),
+  sideWheelSpindle: z.string().optional().nullable(),
+  sideFuelTank: z.string().optional().nullable(),
+  sideCircleDrive: z.string().optional().nullable(),
+  sideArticulationArea: z.string().optional().nullable(),
+  sideHydraulicTank: z.string().optional().nullable(),
+
+  // ==========================================================
+  // E. CABIN & SAFETY DEVICE
+  // ==========================================================
+  cabinDoorLock: z.string().optional().nullable(),
+  cabinTransmissionSteeringLever: z.string().optional().nullable(),
+  cabinSwitch: z.string().optional().nullable(),
+  cabinBattery: z.string().optional().nullable(),
+  cabinRadio: z.string().optional().nullable(),
+  cabinBrake: z.string().optional().nullable(),
+  cabinParkingBrake: z.string().optional().nullable(),
+  cabinFireExtinguisher: z.string().optional().nullable(),
+
+  // ==========================================================
+  // F. TOP-UP (Result Status, bukan Quantity)
+  // ==========================================================
+  topUpEngineOil: z.number().optional().nullable(),
+  topUpCircle: z.number().optional().nullable(),
+  topUpTandem: z.number().optional().nullable(),
+  topUpFrontWheelHub: z.number().optional().nullable(),
+  topUpBreak: z.number().optional().nullable(),
+  // ==========================================================
+  // G. GENERAL STRUCTURE (Tambahan yang Anda sediakan)
+  // ==========================================================
+  structureBladeGETCondition: z.string().optional().nullable(),
+  structureStepLadderCondition: z.string().optional().nullable(),
+  structureTandemHousingLeaks: z.string().optional().nullable(),
+  structureCoverGuards: z.string().optional().nullable(),
+  structureWheelSpindleLeaks: z.string().optional().nullable(),
+  fuelTankDamageLeaks: z.string().optional().nullable(),
+  structureCircleDriveLeaks: z.string().optional().nullable(),
+  structureArticulationCleanliness: z.string().optional().nullable(),
+  hydraulicTankDamageLeaks: z.string().optional().nullable(),
 });
 
 // --- SKEMA UTAMA UNTUK CREATION (BODY API) ---

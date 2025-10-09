@@ -1,10 +1,10 @@
 "use client";
-import { type WheelInspection } from "@/schemas/inspectionSchema"; // Pastikan path ini benar
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import DumpTruckInspectionForm from "./wheel/DumpTruck";
 import HeavyDumpTruckInspectionForm from "./wheel/HeavyDumpTruck";
 import GraderInspectionForm from "./wheel/Grader";
 import CompactorInspectionForm from "./wheel/Compactor";
+import type { WheelInspection } from "@/schemas/wheelSchema";
 
 interface WheelInspectionFormProps {
   onSubmit: (data: WheelInspection) => void;

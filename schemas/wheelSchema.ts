@@ -48,6 +48,7 @@ const wheelDetailsSchema = z.object({
   greaseCentralGrease: z.string().optional().nullable(),
   greaseAllPointsArea: z.string().optional().nullable(),
 
+  // HeavyDumpTruck
   // ==========================================================
   // A. ENGINE SYSTEM
   // ==========================================================
@@ -61,6 +62,7 @@ const wheelDetailsSchema = z.object({
   engineAirIntake: z.string().optional().nullable(),
   engineExhaustLeakage: z.string().optional().nullable(),
   engineOperationalSound: z.string().optional().nullable(),
+  engineUnusualSound: z.string().optional().nullable(),
   engineAlternator: z.string().optional().nullable(),
   engineStarterMotor: z.string().optional().nullable(),
   engineAcCompressor: z.string().optional().nullable(),
@@ -147,6 +149,106 @@ const wheelDetailsSchema = z.object({
   topUpCoolant: z.number().nullable().optional(),
   topUpGrease: z.number().nullable().optional(),
   topUpSteering: z.number().nullable().optional(),
+
+  unusualSound: z.string().optional().nullable(),
+  alternatorCondition: z.string().optional().nullable(),
+  starterMotorCondition: z.string().optional().nullable(),
+  acCompressorCondition: z.string().optional().nullable(),
+  turbochargerCondition: z.string().optional().nullable(),
+  waterPumpCondition: z.string().optional().nullable(),
+
+  // ==========================================================
+  // B. COOLING SYSTEM
+  // ==========================================================
+  radiatorConnection: z.string().optional().nullable(),
+  fanGuardCondition: z.string().optional().nullable(),
+  beltTension: z.string().optional().nullable(),
+
+  // ==========================================================
+  // C. PEMERIKSAAN SISI KIRI (LH) MESIN
+  // ==========================================================
+  leftFrontWheel: z.string().optional().nullable(),
+  ropsMounting: z.string().optional().nullable(),
+  steeringLinkage: z.string().optional().nullable(),
+  frontSuspension: z.string().optional().nullable(),
+  rearSuspension: z.string().optional().nullable(),
+  hydraulicTank: z.string().optional().nullable(),
+  tankMounting: z.string().optional().nullable(),
+  chassisMainFrame: z.string().optional().nullable(),
+  hoistCylinder: z.string().optional().nullable(),
+  leftRearWheel: z.string().optional().nullable(),
+  leftRearFinalDrive: z.string().optional().nullable(),
+  dumpBody: z.string().optional().nullable(),
+  greaseLine: z.string().optional().nullable(),
+  hydraulicLine: z.string().optional().nullable(),
+  airCleaner: z.string().optional().nullable(),
+  steeringOilTank: z.string().optional().nullable(),
+  greaseSystem: z.string().optional().nullable(),
+  batteryElectrolyte: z.string().optional().nullable(),
+  handRail: z.string().optional().nullable(),
+  walkways: z.string().optional().nullable(),
+
+  // ==========================================================
+  // D. PEMERIKSAAN SISI KANAN (RH) MESIN
+  // ==========================================================
+  rightRearWheel: z.string().optional().nullable(),
+  rhFinalDrive: z.string().optional().nullable(),
+  rhRearSuspension: z.string().optional().nullable(),
+  fuelTankMounting: z.string().optional().nullable(),
+  fuelLineCondition: z.string().optional().nullable(),
+  rhChassisMounting: z.string().optional().nullable(),
+  rhFrontSuspension: z.string().optional().nullable(),
+  rhSteeringLinkage: z.string().optional().nullable(),
+  rhDumpBodyCondition: z.string().optional().nullable(),
+
+  // ==========================================================
+  // E. RAKITAN AXLE BELAKANG (REAR AXLE ASSEMBLY)
+  // ==========================================================
+  rearAxleLooseBolts: z.string().optional().nullable(),
+  rearAxleOilLeaks: z.string().optional().nullable(),
+
+  // ==========================================================
+  // F. POWER TRAIN
+  // ==========================================================
+  differentialCondition: z.string().optional().nullable(),
+  transmissionCondition: z.string().optional().nullable(),
+  powerTrainLine: z.string().optional().nullable(),
+  torqueConverter: z.string().optional().nullable(),
+  driveShaftJoint: z.string().optional().nullable(),
+
+  // ==========================================================
+  // G. KABIN & PERANGKAT KESELAMATAN
+  // ==========================================================
+  cabinGlass: z.string().optional().nullable(),
+  cabinRops: z.string().optional().nullable(),
+  seatSafetyBelt: z.string().optional().nullable(),
+  wiperFunction: z.string().optional().nullable(),
+  hornFunction: z.string().optional().nullable(),
+  radioCommunication: z.string().optional().nullable(),
+  mdvr: z.string().optional().nullable(),
+  mirrorCondition: z.string().optional().nullable(),
+  doorLock: z.string().optional().nullable(),
+  monitoringSystem: z.string().optional().nullable(),
+  secondarySteering: z.string().optional().nullable(),
+  allBrakeFunction: z.string().optional().nullable(),
+  parkingBrakeControl: z.string().optional().nullable(),
+  emergencyStop: z.string().optional().nullable(),
+  fireExtinguisher: z.string().optional().nullable(),
+
+  // ==========================================================
+  // I. PENAMBAHAN PELUMAS & COOLANT (KONDISI STATUS)
+  // ==========================================================
+  conditionEngineOil: z.string().optional().nullable(),
+  conditionHydraulic: z.string().optional().nullable(),
+  conditionFrontSuspension: z.string().optional().nullable(),
+  conditionRearSuspension: z.string().optional().nullable(),
+  conditionTransmission: z.string().optional().nullable(),
+  conditionDifferential: z.string().optional().nullable(),
+  conditionFinalDrive: z.string().optional().nullable(),
+  conditionBrakeFluid: z.string().optional().nullable(),
+  conditionSteering: z.string().optional().nullable(),
+  conditionGrease: z.string().optional().nullable(),
+  conditionCoolant: z.string().optional().nullable(),
 });
 
 // --- SKEMA UTAMA UNTUK CREATION (BODY API) ---

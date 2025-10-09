@@ -72,7 +72,7 @@ export default function NewInspectionPage() {
     },
   ];
 
-  const handleSubmit = async (data: InspectionFormData) => {
+  const handleSubmit = async (data: any) => {
     // Pastikan ID mekanik tersedia
     if (!userId) {
       console.error("User ID not found. Cannot submit inspection.");
@@ -85,7 +85,7 @@ export default function NewInspectionPage() {
       ...data,
       mechanicId: userId,
     };
-
+    console.log({ payload });
     try {
       if (data.equipmentType === "track") {
         await trackMutation.mutateAsync(payload as TrackInspection);

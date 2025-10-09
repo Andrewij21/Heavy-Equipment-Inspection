@@ -292,6 +292,8 @@ const formSections = [
   {
     title: "G. Penambahan Pelumas & Pendingin",
     fields: [
+      { name: "topUpCoolant", label: "Coolant", type: "qty" },
+
       {
         name: "topUpEngineOil",
         label: "Oli Mesin (SAE 15W-40)",
@@ -300,11 +302,6 @@ const formSections = [
       {
         name: "topUpTransmission",
         label: "Oli Transmisi (80W-90)",
-        type: "qty",
-      },
-      {
-        name: "topUpHydraulic",
-        label: "Oli Hidrolik (TELLUS 46)",
         type: "qty",
       },
       {
@@ -318,12 +315,10 @@ const formSections = [
         type: "qty",
       },
       {
-        name: "topUpClutchFluid",
-        label: "Minyak Kopling (DOT 3)",
+        name: "topUpHydraulic",
+        label: "Oli Hidrolik (TELLUS 46)",
         type: "qty",
       },
-      { name: "topUpGrease", label: "Grease (EP NLGI-2)", type: "qty" },
-      { name: "topUpCoolant", label: "Coolant (VCS)", type: "qty" },
     ],
   },
 ];

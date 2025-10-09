@@ -1,5 +1,5 @@
 import { z } from "zod";
-const SupportGeneralTypeEnum = z.enum(["Mobile"]);
+const SupportGeneralTypeEnum = z.enum(["Mobile", "Crane"]);
 const ShiftEnum = z.enum(["day", "night"]);
 
 // --- ZOD SCHEMA UNTUK DETAIL PEMERIKSAAN (WHEEL INSPECTION DETAILS) ---
@@ -92,6 +92,14 @@ const supportDetailsSchema = z.object({
   topUpClutchFluid: z.number().nullable().optional(),
   topUpGrease: z.number().nullable().optional(),
   topUpCoolant: z.number().nullable().optional(),
+
+  // Crane
+  craneShackleRope: z.string().optional().nullable(),
+  craneRopeWire: z.string().optional().nullable(),
+  craneSafetyDevice: z.string().optional().nullable(),
+  craneWireTerminal: z.string().optional().nullable(),
+  craneRopeStretch: z.string().optional().nullable(),
+  craneHookBlock: z.string().optional().nullable(),
 });
 
 // --- SKEMA UTAMA UNTUK CREATION (BODY API) ---

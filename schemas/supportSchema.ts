@@ -1,5 +1,10 @@
 import { z } from "zod";
-const SupportGeneralTypeEnum = z.enum(["Mobile", "Crane", "Towerlamp"]);
+const SupportGeneralTypeEnum = z.enum([
+  "Mobile",
+  "Crane",
+  "Towerlamp",
+  "Genset",
+]);
 const ShiftEnum = z.enum(["day", "night"]);
 
 // --- ZOD SCHEMA UNTUK DETAIL PEMERIKSAAN (WHEEL INSPECTION DETAILS) ---
@@ -116,6 +121,39 @@ const supportDetailsSchema = z.object({
 
   optionalVisualSkidding: z.string().optional().nullable(),
   optionalApar: z.string().optional().nullable(),
+
+  // Genset
+  // ==========================================================
+  // ENGINE SYSTEM (STATUS)
+  // ==========================================================
+  engineOilFilter: z.string().optional().nullable(),
+  engineFuelFilter: z.string().optional().nullable(),
+  engineAirCleaner: z.string().optional().nullable(),
+  engineRadiatorCoolant: z.string().optional().nullable(),
+  engineRubberMounting: z.string().optional().nullable(),
+  engineFanBelt: z.string().optional().nullable(),
+  engineVisualCheck: z.string().optional().nullable(),
+  engineLeaks: z.string().optional().nullable(),
+  engineBearing: z.string().optional().nullable(),
+  engineBoltTightening: z.string().optional().nullable(),
+
+  // ==========================================================
+  // ELECTRICAL & GENERATOR SYSTEM (STATUS)
+  // ==========================================================
+  electricStartingCharging: z.string().optional().nullable(),
+  electricStartingMotor: z.string().optional().nullable(),
+  electricStartingSwitch: z.string().optional().nullable(),
+  electricAlternator: z.string().optional().nullable(),
+  electricWiringHarness: z.string().optional().nullable(),
+  electricMcb: z.string().optional().nullable(),
+  electricMeters: z.string().optional().nullable(),
+  electricSelectorSwitch: z.string().optional().nullable(),
+  electricPowerCouple: z.string().optional().nullable(),
+  electricAvr: z.string().optional().nullable(),
+  electricGeneratorSet: z.string().optional().nullable(),
+  electricGrounding: z.string().optional().nullable(),
+  electricLightningArrester: z.string().optional().nullable(),
+  electricGuarding: z.string().optional().nullable(),
 });
 
 // --- SKEMA UTAMA UNTUK CREATION (BODY API) ---

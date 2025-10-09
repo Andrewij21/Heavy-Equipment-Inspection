@@ -7,6 +7,7 @@ const SupportGeneralTypeEnum = z.enum([
   "WeldingMachine",
   "Compressor",
   "MultiFlow",
+  "TyreHandler",
 ]);
 const ShiftEnum = z.enum(["day", "night"]);
 
@@ -193,6 +194,57 @@ const supportDetailsSchema = z.object({
   pumpMounting: z.string().optional().nullable(),
   boltTightness: z.string().optional().nullable(),
   suctionDischargeHose: z.string().optional().nullable(),
+
+  // daici
+  engineRadiator: z.string().optional().nullable(),
+  engineFanGuard: z.string().optional().nullable(),
+  engineUnusualSound: z.string().optional().nullable(),
+  engineAlternator: z.string().optional().nullable(),
+  engineStarterMotor: z.string().optional().nullable(),
+  engineWaterPump: z.string().optional().nullable(),
+  engineLeftFrontWheel: z.string().optional().nullable(),
+  engineRopsCabin: z.string().optional().nullable(),
+  engineSteeringLinkage: z.string().optional().nullable(),
+  engineFrontSuspension: z.string().optional().nullable(),
+  engineRearSuspension: z.string().optional().nullable(),
+  engineBrakeSystem: z.string().optional().nullable(),
+  engineHydraulicTank: z.string().optional().nullable(),
+  engineBrazeForkLifting: z.string().optional().nullable(),
+  engineChassisFrame: z.string().optional().nullable(),
+  engineHoistCylinder: z.string().optional().nullable(),
+  engineLeftRearWheel: z.string().optional().nullable(),
+  engineLeftRearFinalDrive: z.string().optional().nullable(),
+  engineGreaseLine: z.string().optional().nullable(),
+  engineHydraulicLine: z.string().optional().nullable(),
+  engineDifferential: z.string().optional().nullable(),
+  engineTransmission: z.string().optional().nullable(),
+  enginePowerTrainLine: z.string().optional().nullable(),
+  engineDriveShaft: z.string().optional().nullable(),
+  engineFrontSuspensionGrease: z.string().optional().nullable(),
+  engineSteeringCylinderGrease: z.string().optional().nullable(),
+  engineSpiderJointGrease: z.string().optional().nullable(),
+  engineRearSuspensionGrease: z.string().optional().nullable(),
+  engineFrontRearAxleGrease: z.string().optional().nullable(),
+  enginePinForkLiftingGrease: z.string().optional().nullable(),
+  engineParkingBrake: z.string().optional().nullable(),
+  engineSteeringOilTank: z.string().optional().nullable(),
+  engineTankMounting: z.string().optional().nullable(),
+  engineGreaseSystem: z.string().optional().nullable(),
+  engineRightRearWheel: z.string().optional().nullable(),
+  engineRhFinalDrive: z.string().optional().nullable(),
+  engineBrakeSystem2: z.string().optional().nullable(),
+  engineRearSuspension2: z.string().optional().nullable(),
+  engineFuelLine: z.string().optional().nullable(),
+  engineChassisMounting: z.string().optional().nullable(),
+  engineFrontSuspension2: z.string().optional().nullable(),
+  engineSteeringLinkage2: z.string().optional().nullable(),
+
+  // ==========================================================
+  // CABIN & KELISTRIKAN (Status)
+  // ==========================================================
+  cabinRops: z.string().optional().nullable(),
+  cabinWheelChock: z.string().optional().nullable(),
+  cabinEmergencyStop: z.string().optional().nullable(),
 });
 
 // --- SKEMA UTAMA UNTUK CREATION (BODY API) ---

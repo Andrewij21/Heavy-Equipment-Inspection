@@ -21,7 +21,7 @@ import GensetInspectionForm from "./support/Genset";
 import WeldingMechineInspectionForm from "./support/WeldingMechine";
 import CompressorInspectionForm from "./support/Compressor";
 import MultiFlowInspectionForm from "./support/MultiFlow";
-import DeiciInspectionForm from "./support/Deici";
+import DeiciInspectionForm from "./support/TyreHandler";
 
 interface SupportInspectionFormProps {
   onSubmit: (data: any) => void;
@@ -137,7 +137,7 @@ export function SupportInspectionForm({
             <SelectItem value="welding-mechine">Welding Machine</SelectItem>
             <SelectItem value="compressor">Compressor</SelectItem>
             <SelectItem value="multi-flow">Multi Flow</SelectItem>
-            <SelectItem value="deici">Deici</SelectItem>
+            <SelectItem value="deici">Tyre Handler</SelectItem>
           </SelectContent>
         </Select>
       </div>

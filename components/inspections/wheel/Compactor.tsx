@@ -14,17 +14,33 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import {
-  wheelInspectionSchema,
-  type WheelInspection,
-} from "@/schemas/inspectionSchema";
-import { useForm } from "react-hook-form";
+import { useFieldArray, useForm } from "react-hook-form";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
-
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../../ui/table";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { InspectionSection } from "../InspectionSections";
+import {
+  WheelInspectionSchema,
+  type WheelInspection,
+} from "@/schemas/wheelSchema";
+import { useAuth } from "@/context/AuthContext";
+import { Trash2 } from "lucide-react";
 // Letakkan ini di file WheelInspectionForm.tsx Anda
 
 interface WheelInspectionFormProps {
@@ -215,13 +231,23 @@ const formSections = [
     title: "F. Attachment",
     fields: [
       {
-        name: "attachmentDrumReduction",
-        label: "Periksa level oli di drum reduction gear dan kebocoran",
+        name: "axleDriveAxleOilLevel",
+        label: "Check oil level in the drive axle and any leak",
         type: "select",
       },
       {
-        name: "attachmentVibrationBearing",
-        label: "Periksa level oli di bearing vibrasi dan kebocoran",
+        name: "axleWheelHubLevel",
+        label: "Check any level in the wheel hub and any leak",
+        type: "select",
+      },
+      {
+        name: "axleReducingGearLevel",
+        label: "Check in the axle reducing gear and any leak",
+        type: "select",
+      },
+      {
+        name: "axleNutWheelTyrePressure",
+        label: "Check nut wheel (550Nm) and tyre pressure",
         type: "select",
       },
     ],
@@ -229,39 +255,40 @@ const formSections = [
   {
     title: "G. Penambahan Pelumas & Coolant",
     fields: [
+      { name: "topUpCoolant", label: "Coolant", type: "qty" },
+
       {
         name: "topUpEngineOil",
         label: "Oli Mesin (SAE 15W-40)",
-        type: "select",
+        type: "qty",
       },
-      {
-        name: "topUpHydraulic",
-        label: "Hidraulik (TURALIK 46)",
-        type: "select",
-      },
+
       {
         name: "topUpTransmission",
         label: "Transmisi (85W-140)",
-        type: "select",
+        type: "qty",
       },
       {
         name: "topUpDifferential",
         label: "Differensial (85W-140)",
-        type: "select",
+        type: "qty",
       },
       {
         name: "topUpFinalDrive",
         label: "Final Drive (85W-140)",
-        type: "select",
+        type: "qty",
       },
       {
         name: "topUpWheelMotor",
         label: "Motor Roda (85W-140)",
-        type: "select",
+        type: "qty",
       },
-      { name: "topUpVibrator", label: "Vibrator (85W-140)", type: "select" },
-      { name: "topUpGrease", label: "Grease (V220)", type: "select" },
-      { name: "topUpCoolant", label: "Coolant", type: "select" },
+      { name: "topUpVibrator", label: "Vibrator (85W-140)", type: "qty" },
+      {
+        name: "topUpHydraulic",
+        label: "Hidraulik (TURALIX 46)",
+        type: "qty",
+      },
     ],
   },
 ];
@@ -271,33 +298,29 @@ export default function CompactorInspectionForm({
   initialData,
   isSubmitting = false,
 }: WheelInspectionFormProps) {
+  const { user } = useAuth();
   const form = useForm<WheelInspection>({
-    resolver: zodResolver(wheelInspectionSchema),
+    resolver: zodResolver(WheelInspectionSchema),
     defaultValues: {
       equipmentType: "wheel",
+      wheelGeneralType: "Compactor",
       equipmentId: "",
       modelUnit: "",
       location: "",
-      operatorName: "",
-      mechanicName: "",
+      operatorName: user?.username || "",
+      mechanicName: user?.username || "",
       inspectionDate: new Date().toISOString().split("T")[0],
       inspectionTime: new Date().toTimeString().slice(0, 5),
       workingHours: 0,
       notes: "",
       // Booleans default to false
-      engineOilLeakage: false,
-      coolantLeakage: false,
-      transmissionLeakage: false,
-      hydraulicLeakage: false,
-      engineOilTopUp: false,
-      transmissionOilTopUp: false,
-      hydraulicOilTopUp: false,
-      differentialOilTopUp: false,
-      steeringFluidTopUp: false,
-      greaseTopUp: false,
-      coolantTopUp: false,
+      findings: [{ description: "", status: "open" }],
       ...initialData,
     },
+  });
+  const { fields, append, remove } = useFieldArray({
+    control: form.control,
+    name: "findings",
   });
 
   return (
@@ -318,10 +341,23 @@ export default function CompactorInspectionForm({
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               <FormField
                 control={form.control}
+                name="inspectionDate"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Tanggal</FormLabel>
+                    <FormControl>
+                      <Input type="date" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
                 name="equipmentId"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Nomor Unit (CN Unit)</FormLabel>
+                    <FormLabel>Nomor Unit</FormLabel>
                     <FormControl>
                       <Input placeholder="Contoh: WHL-001" {...field} />
                     </FormControl>
@@ -329,7 +365,6 @@ export default function CompactorInspectionForm({
                   </FormItem>
                 )}
               />
-
               <FormField
                 control={form.control}
                 name="modelUnit"
@@ -338,6 +373,37 @@ export default function CompactorInspectionForm({
                     <FormLabel>Model Unit</FormLabel>
                     <FormControl>
                       <Input placeholder="Contoh: CAT 950H" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="smr" // Pastikan ini ditambahkan ke defaultValues
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>SMR (Pembacaan Meter Servis)</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="number"
+                        placeholder="0"
+                        {...field}
+                        // 1. KONTROL TAMPILAN:
+                        // Jika field.value adalah 0, tampilkan string kosong ("").
+                        // Jika tidak, tampilkan nilai sebenarnya.
+                        value={field.value === 0 ? "" : field.value}
+                        // 2. KONTROL PERUBAHAN:
+                        // Jika input kosong (e.target.value === ""), kirim 0 ke useForm.
+                        // Jika ada nilai, kirim nilai numeriknya.
+                        onChange={(e) => {
+                          const rawValue = e.target.value;
+                          const numericValue = Number.parseFloat(rawValue);
+
+                          // Kirim 0 jika string kosong, jika tidak kirim nilai numerik (atau NaN jika tidak valid)
+                          field.onChange(rawValue === "" ? 0 : numericValue);
+                        }}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -360,24 +426,34 @@ export default function CompactorInspectionForm({
 
               <FormField
                 control={form.control}
-                name="inspectionDate"
+                name="shift" // Pastikan ini ditambahkan ke defaultValues
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Tanggal</FormLabel>
-                    <FormControl>
-                      <Input type="date" {...field} />
-                    </FormControl>
+                    <FormLabel>Shift</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl className="w-full">
+                        <SelectTrigger>
+                          <SelectValue placeholder="Pilih Shift" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="day">Siang</SelectItem>
+                        <SelectItem value="night">Malam</SelectItem>
+                      </SelectContent>
+                    </Select>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-
               <FormField
                 control={form.control}
-                name="inspectionTime"
+                name="timeDown" // Pastikan ini ditambahkan ke defaultValues
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Waktu</FormLabel>
+                    <FormLabel>Waktu Turun (Time Down)</FormLabel>
                     <FormControl>
                       <Input type="time" {...field} />
                     </FormControl>
@@ -385,22 +461,14 @@ export default function CompactorInspectionForm({
                   </FormItem>
                 )}
               />
-
               <FormField
                 control={form.control}
-                name="workingHours"
+                name="timeOut" // Pastikan ini ditambahkan ke defaultValues
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Jam Kerja (HM)</FormLabel>
+                    <FormLabel>Waktu Keluar (Time Out)</FormLabel>
                     <FormControl>
-                      <Input
-                        type="number"
-                        placeholder="0"
-                        {...field}
-                        onChange={(e) =>
-                          field.onChange(Number.parseFloat(e.target.value) || 0)
-                        }
-                      />
+                      <Input type="time" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -418,7 +486,81 @@ export default function CompactorInspectionForm({
             fields={section.fields}
           />
         ))}
-
+        <Card>
+          <CardHeader>
+            <CardTitle>Finding Inspection Unit (Temuan Inspeksi)</CardTitle>
+            <CardDescription>
+              Catat kerusakan atau temuan lain di sini.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="w-[80%]">Finding Description</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead>Action</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {fields.map((field, index) => (
+                  <TableRow key={field.id}>
+                    <TableCell>
+                      <FormField
+                        control={form.control}
+                        name={`findings.${index}.description`}
+                        render={({ field }) => (
+                          <Input placeholder="Deskripsi temuan..." {...field} />
+                        )}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <FormField
+                        control={form.control}
+                        name={`findings.${index}.status`}
+                        render={({ field }) => (
+                          <Select
+                            onValueChange={field.onChange}
+                            defaultValue={field.value}
+                          >
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              <SelectItem value="open">Open</SelectItem>
+                              <SelectItem value="close">Close</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        )}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <Button
+                        type="button"
+                        variant="destructive"
+                        size="icon"
+                        onClick={() => remove(index)}
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              className="mt-4"
+              onClick={() => append({ description: "", status: "open" })}
+            >
+              + Add Finding
+            </Button>
+          </CardContent>
+        </Card>
         {/* Tombol Submit tetap di akhir */}
         <div className="flex justify-end space-x-4">
           <Button type="submit" disabled={isSubmitting}>

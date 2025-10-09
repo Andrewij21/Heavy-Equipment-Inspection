@@ -319,6 +319,44 @@ const wheelDetailsSchema = z.object({
   structureCircleDriveLeaks: z.string().optional().nullable(),
   structureArticulationCleanliness: z.string().optional().nullable(),
   hydraulicTankDamageLeaks: z.string().optional().nullable(),
+
+  // Compactor
+
+  // ==========================================================
+  // ENGINE & TRANSMISSION
+  // ==========================================================
+  engineFuelSystem: z.string().optional().nullable(),
+  transmissionOilLevel: z.string().optional().nullable(),
+  transmissionClutch: z.string().optional().nullable(),
+  transmissionUniversalJoint: z.string().optional().nullable(),
+
+  // ==========================================================
+  // HYDRAULIC SYSTEM
+  // ==========================================================
+  hydraulicCylinder: z.string().optional().nullable(),
+  hydraulicHoseLeakage: z.string().optional().nullable(),
+  hydraulicValveLeakage: z.string().optional().nullable(),
+
+  // ==========================================================
+  // CABIN CONTROLS
+  // ==========================================================
+  cabinSteeringLever: z.string().optional().nullable(),
+  cabinTravelControl: z.string().optional().nullable(),
+
+  // ==========================================================
+  // AXLE & WHEEL HUB (Menggabungkan semua variasi axle)
+  // ==========================================================
+  axleDriveOilLevel: z.string().optional().nullable(), // Dari axleDriveOilLevel dan axleDriveAxleOilLevel
+  axleWheelHubLevel: z.string().optional().nullable(),
+  axleReducingGear: z.string().optional().nullable(), // Dari axleReducingGear
+  axleNutWheel: z.string().optional().nullable(), // Dari axleNutWheel
+
+  // Catatan: Jika ada dua field yang secara fungsional berbeda (misalnya level oli vs. seal)
+  // tetapi namanya mirip, Anda harus memastikan nama uniknya digunakan di sini.
+
+  // Kami hanya mengambil satu nama untuk setiap fungsi:
+  axleReducingGearLevel: z.string().optional().nullable(), // Dari axleReducingGearLevel
+  axleNutWheelTyrePressure: z.string().optional().nullable(), // Dari axleNutWheelTyrePressure
 });
 
 // --- SKEMA UTAMA UNTUK CREATION (BODY API) ---

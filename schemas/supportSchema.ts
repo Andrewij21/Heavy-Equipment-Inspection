@@ -4,6 +4,7 @@ const SupportGeneralTypeEnum = z.enum([
   "Crane",
   "Towerlamp",
   "Genset",
+  "WeldingMachine",
 ]);
 const ShiftEnum = z.enum(["day", "night"]);
 
@@ -154,6 +155,24 @@ const supportDetailsSchema = z.object({
   electricGrounding: z.string().optional().nullable(),
   electricLightningArrester: z.string().optional().nullable(),
   electricGuarding: z.string().optional().nullable(),
+
+  // welding machine
+  engineFan: z.string().optional().nullable(),
+  engineCoolantSystem: z.string().optional().nullable(),
+  engineRadiatorLevel: z.string().optional().nullable(),
+  engineBreather: z.string().optional().nullable(),
+  engineFuelTank: z.string().optional().nullable(),
+  engineExhaustPipe: z.string().optional().nullable(),
+  engineTurbocharger: z.string().optional().nullable(),
+  engineFloorCleanliness: z.string().optional().nullable(),
+
+  // ==========================================================
+  // ELECTRICAL SYSTEM (STATUS)
+  // ==========================================================
+  electricTerminals: z.string().optional().nullable(),
+  electricIndicators: z.string().optional().nullable(),
+  electricSwitchMode: z.string().optional().nullable(),
+  electricBatteryConnection: z.string().optional().nullable(),
 });
 
 // --- SKEMA UTAMA UNTUK CREATION (BODY API) ---

@@ -105,6 +105,8 @@ const trackDetailsSchema = z.object({
   topUpHydraulic: z.number().default(0),
   topUpSwingMachinery: z.number().default(0),
   topUpFinalDrive: z.number().default(0),
+
+  upperRadiator: z.string().optional().nullable(),
 });
 
 // --- SKEMA UTAMA UNTUK CREATION (BODY API) ---

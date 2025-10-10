@@ -315,8 +315,6 @@ const formSections = [
         label: "Differential (85W-140)",
         type: "qty",
       },
-      { name: "topUpFinalDrive", label: "Final Drive (85W-140)", type: "qty" },
-      { name: "topUpCoolant", label: "Coolant", type: "qty" },
     ],
   },
 ];

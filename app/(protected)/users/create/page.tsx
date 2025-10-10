@@ -226,7 +226,7 @@ export default function CreateUserPage() {
                 />
 
                 {/* Field Kondisional: Departemen (Hanya untuk Leader) */}
-                {currentRole === "leader" && (
+                {/* {currentRole === "leader" && (
                   <FormField
                     control={form.control}
                     name="department"
@@ -252,7 +252,7 @@ export default function CreateUserPage() {
                       </FormItem>
                     )}
                   />
-                )}
+                )} */}
               </div>
 
               <div className="flex justify-end space-x-2 pt-4">

@@ -376,49 +376,39 @@ const formSections = [
     title: "I. Penambahan Pelumas & Coolant",
     description: "Pilih kondisi untuk setiap item pelumas dan pendingin.",
     fields: [
+      { name: "conditionCoolant", label: "Coolant", type: "qty" },
+
       {
         name: "conditionEngineOil",
-        label: "Oli Mesin (SAE 15W-40)",
-        type: "select",
+        label: "Oli Mesin (15W-40)",
+        type: "qty",
+      },
+      {
+        name: "conditionTransmission",
+        label: "Transmisi (HD-30)",
+        type: "qty",
+      },
+      {
+        name: "conditionDifferential",
+        label: "Differensial (HD-30)",
+        type: "qty",
+      },
+      {
+        name: "conditionFinalDrive",
+        label: "Final Drive (HD-30)",
+        type: "qty",
+      },
+      { name: "conditionBrakeFluid", label: "Rem (HD-30)", type: "qty" },
+      {
+        name: "conditionSuspension",
+        label: "Suspensi (TURALIK 46)",
+        type: "qty",
       },
       {
         name: "conditionHydraulic",
         label: "Hidraulik (TURALIK 46)",
-        type: "select",
+        type: "qty",
       },
-      {
-        name: "conditionFrontSuspension",
-        label: "Suspensi Depan (TURALIK 46)",
-        type: "select",
-      },
-      {
-        name: "conditionRearSuspension",
-        label: "Suspensi Belakang (TURALIK 46)",
-        type: "select",
-      },
-      {
-        name: "conditionTransmission",
-        label: "Transmisi (SAE-30)",
-        type: "select",
-      },
-      {
-        name: "conditionDifferential",
-        label: "Differensial (SAE-30)",
-        type: "select",
-      },
-      {
-        name: "conditionFinalDrive",
-        label: "Final Drive (SAE-30)",
-        type: "select",
-      },
-      { name: "conditionBrakeFluid", label: "Rem (SAE-30)", type: "select" },
-      { name: "conditionSteering", label: "Kemudi (Steering)", type: "select" },
-      {
-        name: "conditionGrease",
-        label: "Gemuk (Grease) (V220)",
-        type: "select",
-      },
-      { name: "conditionCoolant", label: "Coolant", type: "select" },
     ],
   },
 ];

@@ -272,6 +272,11 @@ const formSections = [
         label: "Check Back Up Alarm",
         type: "result",
       },
+    ],
+  },
+  {
+    title: "Attachment",
+    fields: [
       {
         name: "attachmentDumpBodyVessel", // Check Dump Body, Pin, Pad, Stabilizer, tail gate & vesel
         label: "Check Dump Body, Pin, Pad, Stabilizer, tail gate & vesel",

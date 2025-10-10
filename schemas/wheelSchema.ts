@@ -24,13 +24,47 @@ const wheelDetailsSchema = z.object({
     )
     .optional()
     .nullable(),
+
+  //Dumptruck
+  engineOilLevel: z.string().optional().nullable(),
+  engineMounting: z.string().optional().nullable(),
+  engineCoolantLevel: z.string().optional().nullable(),
   engineFuelSystemLeakage: z.string().optional().nullable(),
+  engineBeltTension: z.string().optional().nullable(),
+  engineAirIntake: z.string().optional().nullable(),
+
+  // Powertrain Fields
+  powertrainTransmissionOilLevel: z.string().optional().nullable(),
+  powertrainClutchFunction: z.string().optional().nullable(),
+  powertrainUniversalJoint: z.string().optional().nullable(),
+
+  // Hydraulic System Fields
+  hydraulicOilLevel: z.string().optional().nullable(),
+  hydraulicSystemLeakage: z.string().optional().nullable(),
+  hydraulicPumpLeakage: z.string().optional().nullable(),
+  hydraulicControlValveLeakage: z.string().optional().nullable(),
+
+  // Cabin Fields
+  cabinCleaning: z.string().optional().nullable(),
+  cabinLock: z.string().optional().nullable(),
+  cabinSeatBelt: z.string().optional().nullable(),
+  cabinControlLever: z.string().optional().nullable(),
+  cabinAttachmentLever: z.string().optional().nullable(),
   acBlower: z.string().optional().nullable(),
+  cabinMirror: z.string().optional().nullable(),
+  cabinSwitchFunction: z.string().optional().nullable(),
+  cabinWiper: z.string().optional().nullable(),
+  cabinHorn: z.string().optional().nullable(),
+  cabinLamps: z.string().optional().nullable(),
+  cabinBatteryConnection: z.string().optional().nullable(),
+  cabinRadioComm: z.string().optional().nullable(),
+  cabinBrakeFunction: z.string().optional().nullable(),
+  cabinEmergencyStop: z.string().optional().nullable(),
   reverseCamera: z.string().optional().nullable(),
   checkMDVR: z.string().optional().nullable(),
   apar: z.string().optional().nullable(),
-  coolant: z.number().optional().nullable(),
 
+  // Structure & Electrical Fields
   structureDriveAxleOilLevel: z.string().optional().nullable(),
   structurePinSpringSteeringTrunion: z.string().optional().nullable(),
   structureMountingRubberTorqueRod: z.string().optional().nullable(),
@@ -41,12 +75,22 @@ const wheelDetailsSchema = z.object({
   structureShockAbsorber: z.string().optional().nullable(),
   structureTyreBoltPressure: z.string().optional().nullable(),
   structureRubberHollowspring: z.string().optional().nullable(),
-
   electricalBackupAlarm: z.string().optional().nullable(),
+
+  // Attachment & Grease Fields
   attachmentDumpBodyVessel: z.string().optional().nullable(),
   attachmentSafetyDumpFunction: z.string().optional().nullable(),
   greaseCentralGrease: z.string().optional().nullable(),
   greaseAllPointsArea: z.string().optional().nullable(),
+
+  // Top-Up Lubricant & Coolant Fields
+  coolant: z.number().default(0),
+  topUpEngine: z.number().default(0),
+  topUpHydraulic: z.number().default(0),
+  topUpTransmission: z.number().default(0),
+  topUpDifferential: z.number().default(0),
+  topUpFinalDrive: z.number().default(0),
+  topUpCoolant: z.number().default(0),
 
   // HeavyDumpTruck
   // ==========================================================
@@ -55,11 +99,6 @@ const wheelDetailsSchema = z.object({
   engineVisualCheck: z.string().optional().nullable(),
   engineUpperLeaks: z.string().optional().nullable(),
   engineFuelLine: z.string().optional().nullable(),
-  engineOilLevel: z.string().optional().nullable(),
-  engineMounting: z.string().optional().nullable(),
-  engineCoolantLevel: z.string().optional().nullable(),
-  engineBeltTension: z.string().optional().nullable(),
-  engineAirIntake: z.string().optional().nullable(),
   engineExhaustLeakage: z.string().optional().nullable(),
   engineOperationalSound: z.string().optional().nullable(),
   engineUnusualSound: z.string().optional().nullable(),
@@ -72,9 +111,6 @@ const wheelDetailsSchema = z.object({
   // ==========================================================
   // B. POWER TRAIN
   // ==========================================================
-  powertrainTransmissionOilLevel: z.string().optional().nullable(),
-  powertrainClutchFunction: z.string().optional().nullable(),
-  powertrainUniversalJoint: z.string().optional().nullable(),
   powertrainDifferentialOil: z.string().optional().nullable(),
   powertrainFinalDriveOil: z.string().optional().nullable(),
   powertrainBrakeOperation: z.string().optional().nullable(),
@@ -83,10 +119,6 @@ const wheelDetailsSchema = z.object({
   // ==========================================================
   // C. HYDRAULIC SYSTEM
   // ==========================================================
-  hydraulicOilLevel: z.string().optional().nullable(),
-  hydraulicSystemLeakage: z.string().optional().nullable(),
-  hydraulicPumpLeakage: z.string().optional().nullable(),
-  hydraulicControlValveLeakage: z.string().optional().nullable(),
   hydraulicWheelLeanCylinder: z.string().optional().nullable(),
   hydraulicSteeringCylinder: z.string().optional().nullable(),
   hydraulicBladeLiftCylinder: z.string().optional().nullable(),
@@ -116,21 +148,9 @@ const wheelDetailsSchema = z.object({
   // ==========================================================
   // E. CABIN & SAFETY DEVICE
   // ==========================================================
-  cabinCleaning: z.string().optional().nullable(),
-  cabinLock: z.string().optional().nullable(),
-  cabinSeatBelt: z.string().optional().nullable(),
-  cabinControlLever: z.string().optional().nullable(),
-  cabinAttachmentLever: z.string().optional().nullable(),
+
   cabinAcBlower: z.string().optional().nullable(),
-  cabinMirror: z.string().optional().nullable(),
-  cabinSwitchFunction: z.string().optional().nullable(),
-  cabinWiper: z.string().optional().nullable(),
-  cabinHorn: z.string().optional().nullable(),
-  cabinLamps: z.string().optional().nullable(),
-  cabinBatteryConnection: z.string().optional().nullable(),
-  cabinRadioComm: z.string().optional().nullable(),
-  cabinBrakeFunction: z.string().optional().nullable(),
-  cabinEmergencyStop: z.string().optional().nullable(),
+
   cabinApar: z.string().optional().nullable(),
   cabinReverseCamera: z.string().optional().nullable(),
   cabinMdvr: z.string().optional().nullable(),
@@ -139,14 +159,9 @@ const wheelDetailsSchema = z.object({
   // ==========================================================
   // F. TOP-UP QUANTITIES (Angka)
   // ==========================================================
-  topUpEngine: z.number().nullable().optional(),
-  topUpHydraulic: z.number().nullable().optional(),
-  topUpTransmission: z.number().nullable().optional(),
-  topUpDifferential: z.number().nullable().optional(),
-  topUpFinalDrive: z.number().nullable().optional(),
+
   topUpWheelMotor: z.number().nullable().optional(),
   topUpVibrator: z.number().nullable().optional(),
-  topUpCoolant: z.number().nullable().optional(),
   topUpGrease: z.number().nullable().optional(),
   topUpSteering: z.number().nullable().optional(),
 

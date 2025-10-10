@@ -1,5 +1,4 @@
 "use client";
-import { type TrackInspection } from "@/schemas/inspectionSchema"; // Pastikan path ini benar
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { BigDiggerInspectionForm } from "./track/BigDigger";
 import { SmallPCInspectionForm } from "./track/SmallPC";
@@ -8,8 +7,8 @@ import { BullDozerInspectionForm } from "./track/Bulldozer";
 // 3. Komponen untuk input pengukuran temperatur silinder
 
 interface TrackInspectionFormProps {
-  onSubmit: (data: TrackInspection) => void;
-  initialData?: Partial<TrackInspection>;
+  onSubmit: (data: any) => void;
+  initialData?: Partial<any>;
   isSubmitting?: boolean;
 }
 

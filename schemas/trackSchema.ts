@@ -107,6 +107,71 @@ const trackDetailsSchema = z.object({
   topUpFinalDrive: z.number().default(0),
 
   upperRadiator: z.string().optional().nullable(),
+
+  // Bulldozer
+  // Top-Up Quantities
+  topUpCoolantQty: z.number().optional().nullable(),
+  topUpEngineQty: z.number().optional().nullable(),
+  topUpHydraulicQty: z.number().optional().nullable(),
+  topUpSwingMachineryQty: z.number().optional().nullable(),
+  topUpFinalDriveQty: z.number().optional().nullable(),
+  topUpTransmission: z.number().optional().nullable(),
+
+  // Hydraulic System
+  hydraulicOilLevel: z.string().optional().nullable(),
+  hydraulicSystemLeakage: z.string().optional().nullable(),
+  hydraulicPumpLineLeakage: z.string().optional().nullable(),
+  hydraulicHoseCondition: z.string().optional().nullable(),
+  hydraulicCylinderLiftBlade: z.string().optional().nullable(),
+  hydraulicCylinderTiltBlade: z.string().optional().nullable(),
+  hydraulicCylinderLiftRipper: z.string().optional().nullable(),
+  hydraulicCylinderTiltRipper: z.string().optional().nullable(),
+
+  // Structure/Frame/Autolube
+  structureAutolube: z.string().optional().nullable(),
+  structureEqualizerBarSeal: z.string().optional().nullable(),
+  structurePivotShaftLeakage: z.string().optional().nullable(),
+  structureFrameCracks: z.string().optional().nullable(),
+  structureTrackLinkBushing: z.string().optional().nullable(),
+  structureUndercarriageBolt: z.string().optional().nullable(),
+  structureTrackTension: z.string().optional().nullable(),
+  structureRipperFrame: z.string().optional().nullable(),
+  structureBogglePivot: z.string().optional().nullable(),
+  structureMasterLinkBolt: z.string().optional().nullable(),
+  structureIdlerMountingBolt: z.string().optional().nullable(),
+  structureEqualizerBarBearing: z.string().optional().nullable(),
+  structureBladeMountingPin: z.string().optional().nullable(),
+  structureCuttingEdge: z.string().optional().nullable(),
+  structureEndBit: z.string().optional().nullable(),
+  structureCarrieRoller: z.string().optional().nullable(),
+  structureRipperPoint: z.string().optional().nullable(),
+
+  // Electrical System
+  electricalBatteryMounting: z.string().optional().nullable(),
+  electricalBatteryElectrolyte: z.string().optional().nullable(),
+  electricalTerminalCleaning: z.string().optional().nullable(),
+  electricalConnectorCleaning: z.string().optional().nullable(),
+  electricalLamps: z.string().optional().nullable(),
+  electricalIsolationSwitch: z.string().optional().nullable(),
+  electricalGaugePanel: z.string().optional().nullable(),
+  electricalBackupAlarm: z.string().optional().nullable(),
+
+  // Engine
+  engineOilLevelLeakage: z.string().optional().nullable(),
+  engineCoolantLevelLeakage: z.string().optional().nullable(),
+  engineFuelSystemLeakage: z.string().optional().nullable(),
+  engineBelts: z.string().optional().nullable(),
+  engineIntakeClamps: z.string().optional().nullable(),
+  engineExhaustLeakage: z.string().optional().nullable(),
+  engineOperationalSound: z.string().optional().nullable(),
+
+  // Power Train
+  powertrainTransmissionOil: z.string().optional().nullable(),
+  powertrainTorqueConverterOil: z.string().optional().nullable(),
+  powertrainDifferentialOil: z.string().optional().nullable(),
+  powertrainFinalDriveOil: z.string().optional().nullable(),
+  powertrainBrakeOperation: z.string().optional().nullable(),
+  powertrainPropellerShaft: z.string().optional().nullable(),
 });
 
 // --- SKEMA UTAMA UNTUK CREATION (BODY API) ---

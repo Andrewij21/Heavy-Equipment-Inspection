@@ -3,9 +3,9 @@
 import { useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
-  trackInspectionSchema,
+  TrackInspectionSchema,
   type TrackInspection,
-} from "@/schemas/inspectionSchema";
+} from "@/schemas/trackSchema";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -43,6 +43,7 @@ import {
 import { Trash2 } from "lucide-react";
 import { useState } from "react";
 import { InspectionSection } from "../InspectionSections";
+import { useAuth } from "@/context/AuthContext";
 // Di atas komponen TrackInspectionForm Anda
 // Letakkan ini di file form Anda, di atas komponen utama
 
@@ -53,37 +54,37 @@ export const trackFormSections = [
       {
         name: "engineOilLevelLeakage",
         label: "Periksa Level & Kebocoran Oli Mesin",
-        type: "result",
+        type: "select",
       },
       {
         name: "engineCoolantLevelLeakage",
         label: "Periksa Level Coolant Radiator & Kebocoran Cooling System",
-        type: "result",
+        type: "select",
       },
       {
         name: "engineFuelSystemLeakage",
         label: "Periksa Kebocoran Pada Sistem Bahan Bakar",
-        type: "result",
+        type: "select",
       },
       {
         name: "engineBelts",
         label: "Periksa Kondisi Belt Alternator, AC & Fan Belt",
-        type: "result",
+        type: "select",
       },
       {
         name: "engineIntakeClamps",
         label: "Periksa Semua Clamp dan Hose Intake System (Clamp Kendor)",
-        type: "result",
+        type: "select",
       },
       {
         name: "engineExhaustLeakage",
         label: "Periksa Kebocoran pada Exhaust Manifold dan Mufler",
-        type: "result",
+        type: "select",
       },
       {
         name: "engineOperationalSound",
         label: "Periksa Operasional Mesin dari Kelainan Bunyi dan Daya Rendah",
-        type: "result",
+        type: "select",
       },
     ],
   },
@@ -93,32 +94,32 @@ export const trackFormSections = [
       {
         name: "powertrainTransmissionOil",
         label: "Periksa Level dan Kebocoran Oli Transmisi",
-        type: "result",
+        type: "select",
       },
       {
         name: "powertrainTorqueConverterOil",
         label: "Periksa Level dan Kebocoran Oli Torque Converter",
-        type: "result",
+        type: "select",
       },
       {
         name: "powertrainDifferentialOil",
         label: "Periksa Level dan Kebocoran Oli Differensial",
-        type: "result",
+        type: "select",
       },
       {
         name: "powertrainFinalDriveOil",
         label: "Periksa Level dan Kebocoran Final Drive",
-        type: "result",
+        type: "select",
       },
       {
         name: "powertrainBrakeOperation",
         label: "Periksa Pengoperasian dan Tekanan Rem (Brake Pressure)",
-        type: "result",
+        type: "select",
       },
       {
         name: "powertrainPropellerShaft",
         label: "Periksa Propeller Shaft Utama dan Tambahan",
-        type: "result",
+        type: "select",
       },
     ],
   },
@@ -128,46 +129,46 @@ export const trackFormSections = [
       {
         name: "hydraulicOilLevel",
         label: "Periksa Level Oli Hidraulik",
-        type: "result",
+        type: "select",
       },
       {
         name: "hydraulicSystemLeakage",
         label: "Periksa Kebocoran Sistem Hidraulik dan Control Valve",
-        type: "result",
+        type: "select",
       },
       {
         name: "hydraulicPumpLineLeakage",
         label: "Periksa Kebocoran Semua Saluran Pompa Hidraulik",
-        type: "result",
+        type: "select",
       },
       {
         name: "hydraulicHoseCondition",
         label: "Periksa Semua Kondisi Hose & Gesekan bila Ada yang Bergesekan",
-        type: "result",
+        type: "select",
       },
       {
         name: "hydraulicCylinderLiftBlade",
         label:
           "Periksa Kondisi Silinder Pengangkat Blade dari Kebocoran, Kerusakan, Keausan Pin & Bearing",
-        type: "result",
+        type: "select",
       },
       {
         name: "hydraulicCylinderTiltBlade",
         label:
           "Periksa Kondisi Silinder Pemiring Blade dari Kebocoran, Kerusakan, Keausan Pin & Bearing",
-        type: "result",
+        type: "select",
       },
       {
         name: "hydraulicCylinderLiftRipper",
         label:
           "Periksa Kondisi Silinder Pengangkat Ripper dari Kebocoran, Kerusakan, Keausan Pin & Bearing",
-        type: "result",
+        type: "select",
       },
       {
         name: "hydraulicCylinderTiltRipper",
         label:
           "Periksa Kondisi Silinder Pemiring Ripper dari Kebocoran, Kerusakan, Keausan Pin & Bearing",
-        type: "result",
+        type: "select",
       },
     ],
   },
@@ -177,87 +178,87 @@ export const trackFormSections = [
       {
         name: "structureAutolube",
         label: "Periksa Semua Kondisi Titik Grease pada Sistem Autolube",
-        type: "result",
+        type: "select",
       },
       {
         name: "structureEqualizerBarSeal",
         label: "Periksa Seal Equalizer Bar",
-        type: "result",
+        type: "select",
       },
       {
         name: "structurePivotShaftLeakage",
         label: "Periksa Kebocoran Oli Pivot Shaft",
-        type: "result",
+        type: "select",
       },
       {
         name: "structureFrameCracks",
         label: "Periksa Semua Bagian Rangka dari Keretakan",
-        type: "result",
+        type: "select",
       },
       {
         name: "structureTrackLinkBushing",
         label: "Periksa Bushing Track Link",
-        type: "result",
+        type: "select",
       },
       {
         name: "structureUndercarriageBolt",
         label: "Periksa Baut Undercarriage",
-        type: "result",
+        type: "select",
       },
       {
         name: "structureTrackTension",
         label: "Periksa Kekencangan Track",
-        type: "result",
+        type: "select",
       },
       {
         name: "structureRipperFrame",
         label: "Periksa Rangka dan Tempat Dudukan Ripper",
-        type: "result",
+        type: "select",
       },
       {
         name: "structureBogglePivot",
         label: "Periksa Boggle Pivot Pin dan Pads dari Kerusakan",
-        type: "result",
+        type: "select",
       },
       {
         name: "structureMasterLinkBolt",
         label: "Periksa Baut Master Link",
-        type: "result",
+        type: "select",
       },
       {
         name: "structureIdlerMountingBolt",
         label: "Periksa Baut Dudukan Idler",
-        type: "result",
+        type: "select",
       },
       {
         name: "structureEqualizerBarBearing",
         label: "Periksa Bearing Equalizer Bar",
-        type: "result",
+        type: "select",
       },
       {
         name: "structureBladeMountingPin",
         label: "Periksa Pin Pemasangan Blade dan Retainer",
-        type: "result",
+        type: "select",
       },
       {
         name: "structureCuttingEdge",
         label: "Periksa Kondisi Cutting Edge",
-        type: "result",
+        type: "select",
       },
       {
         name: "structureEndBit",
         label: "Periksa Kondisi End Bit",
-        type: "result",
+        type: "select",
       },
       {
         name: "structureCarrieRoller",
         label: "Periksa Carrie Roller",
-        type: "result",
+        type: "select",
       },
       {
         name: "structureRipperPoint",
         label: "Periksa Kondisi Point Ripper",
-        type: "result",
+        type: "select",
       },
     ],
   },
@@ -267,43 +268,43 @@ export const trackFormSections = [
       {
         name: "electricalBatteryMounting",
         label: "Periksa Pemasangan Baterai (Battery Mounting)",
-        type: "result",
+        type: "select",
       },
       {
         name: "electricalBatteryElectrolyte",
         label: "Periksa Level Air Elektrolit Baterai",
-        type: "result",
+        type: "select",
       },
       {
         name: "electricalTerminalCleaning",
         label: "Periksa & Bersihkan Terminal Baterai dengan Corrosion Remover",
-        type: "result",
+        type: "select",
       },
       {
         name: "electricalConnectorCleaning",
         label:
           "Periksa & Bersihkan Konektor Kabel Baterai dengan Corrosion Remover",
-        type: "result",
+        type: "select",
       },
       {
         name: "electricalLamps",
         label: "Periksa Semua Lampu Penerangan Berfungsi dengan Baik",
-        type: "result",
+        type: "select",
       },
       {
         name: "electricalIsolationSwitch",
         label: "Periksa Isolation Switch & Emergancy Stop",
-        type: "result",
+        type: "select",
       },
       {
         name: "electricalGaugePanel",
         label: "Periksa Semua Gauge dan Indikator Control Panel",
-        type: "result",
+        type: "select",
       },
       {
         name: "electricalBackupAlarm",
         label: "Periksa Alarm Mundur (Back Up Alarm)",
-        type: "result",
+        type: "select",
       },
     ],
   },
@@ -353,27 +354,24 @@ export function BullDozerInspectionForm({
   initialData,
   isSubmitting = false,
 }: TrackInspectionFormProps) {
+  const { user } = useAuth();
   const form = useForm<TrackInspection>({
-    resolver: zodResolver(trackInspectionSchema),
+    resolver: zodResolver(TrackInspectionSchema),
     defaultValues: {
       equipmentType: "track",
-      // Add 'Bulldozer' to match the new required schema field 'equipmentGeneralType'
+      // Add 'Big Digger' to match the new required schema field 'equipmentGeneralType'
       equipmentGeneralType: "Bulldozer",
       equipmentId: "",
       modelUnit: "",
       location: "",
-      operatorName: "john",
-      mechanicName: "john", // Added default value
+      workingHours: 0,
+      operatorName: user?.username || "",
+      mechanicName: user?.username || "",
       inspectionDate: new Date().toISOString().split("T")[0],
       inspectionTime: new Date().toTimeString().slice(0, 5),
-      workingHours: 0,
-      notes: "",
       findings: [{ description: "", status: "open" }],
-      // Add default values for new required fields
-      smr: 0,
       timeDown: new Date().toTimeString().slice(0, 5),
       timeOut: new Date().toTimeString().slice(0, 5),
-      shift: undefined,
       ...initialData,
     },
   });

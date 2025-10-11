@@ -78,9 +78,7 @@ interface Inspection {
   supportGeneralType?: string | null;
   // ... properti lainnya
 }
-export const getInspectionFormStructure = (
-  inspection: Inspection
-): FormSection[] => {
+const getInspectionFormStructure = (inspection: Inspection): FormSection[] => {
   let generalTypeKey: string | null | undefined = null;
 
   // 1. Tentukan *GeneralType mana yang akan digunakan berdasarkan equipmentType

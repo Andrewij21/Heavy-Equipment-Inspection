@@ -72,7 +72,7 @@ interface FilterableInspection extends ExportInspection {
 const mapApiToFilterStatus = (status: string) =>
   status.toLowerCase() as "approved" | "rejected" | "pending";
 
-export default function ReportsPage() {
+export default function ReportsPage({ role }: { role: string }) {
   const [isExporting, setIsExporting] = useState(false);
 
   // States untuk filtering API (Sumber Data)
@@ -325,104 +325,106 @@ export default function ReportsPage() {
         </h1>
 
         {/* Grafik dan Kartu Ringkasan */}
-        <div className="grid gap-6 lg:grid-cols-2 mb-8 max-w-screen">
-          {/* Distribusi Status */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Status Inspeksi</CardTitle>
-              <CardDescription>
-                Status saat ini dari semua inspeksi
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <ResponsiveContainer width="100%" height={300}>
-                <PieChart>
-                  <Pie
-                    data={statusData}
-                    cx="50%"
-                    cy="50%"
-                    labelLine={false}
-                    label={({ name, percent }) =>
-                      `${name} ${((percent as number) * 100).toFixed(0)}%`
-                    }
-                    outerRadius={80}
-                    fill="#8884d8"
-                    dataKey="value"
-                  >
-                    {statusData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={entry.color} />
-                    ))}
-                  </Pie>
-                  <Tooltip />
-                </PieChart>
-              </ResponsiveContainer>
-            </CardContent>
-          </Card>
+        {role === "admin" && (
+          <div className="grid gap-6 lg:grid-cols-2 mb-8 max-w-screen">
+            {/* Distribusi Status */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Status Inspeksi</CardTitle>
+                <CardDescription>
+                  Status saat ini dari semua inspeksi
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <ResponsiveContainer width="100%" height={300}>
+                  <PieChart>
+                    <Pie
+                      data={statusData}
+                      cx="50%"
+                      cy="50%"
+                      labelLine={false}
+                      label={({ name, percent }) =>
+                        `${name} ${((percent as number) * 100).toFixed(0)}%`
+                      }
+                      outerRadius={80}
+                      fill="#8884d8"
+                      dataKey="value"
+                    >
+                      {statusData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.color} />
+                      ))}
+                    </Pie>
+                    <Tooltip />
+                  </PieChart>
+                </ResponsiveContainer>
+              </CardContent>
+            </Card>
 
-          {/* Kartu Ringkasan */}
-          <div className="grid gap-4 lg:grid-cols-2 max-w-screen">
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">
-                  Total Inspeksi
-                </CardTitle>
-                <FileSpreadsheet className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{summary.total}</div>
-                <p className="text-xs text-muted-foreground">
-                  Total catatan ditemukan
-                </p>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">
-                  Tingkat Persetujuan
-                </CardTitle>
-                <TrendingUp className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">
-                  {summary.approvalRate}%
-                </div>
-                <p className="text-xs text-muted-foreground">
-                  {summary.approved} dari {summary.total} disetujui
-                </p>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">
-                  Pengguna Aktif
-                </CardTitle>
-                <Users className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">
-                  {Object.keys(summary.byMechanic).length}
-                </div>
-                <p className="text-xs text-muted-foreground">
-                  Mekanik yang berkontribusi
-                </p>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">
-                  Jumlah Menunggu
-                </CardTitle>
-                <Calendar className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{summary.pending}</div>
-                <p className="text-xs text-muted-foreground">
-                  Menunggu tinjauan leader
-                </p>
-              </CardContent>
-            </Card>
+            {/* Kartu Ringkasan */}
+            <div className="grid gap-4 lg:grid-cols-2 max-w-screen">
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium">
+                    Total Inspeksi
+                  </CardTitle>
+                  <FileSpreadsheet className="h-4 w-4 text-muted-foreground" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold">{summary.total}</div>
+                  <p className="text-xs text-muted-foreground">
+                    Total catatan ditemukan
+                  </p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium">
+                    Tingkat Persetujuan
+                  </CardTitle>
+                  <TrendingUp className="h-4 w-4 text-muted-foreground" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold">
+                    {summary.approvalRate}%
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    {summary.approved} dari {summary.total} disetujui
+                  </p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium">
+                    Pengguna Aktif
+                  </CardTitle>
+                  <Users className="h-4 w-4 text-muted-foreground" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold">
+                    {Object.keys(summary.byMechanic).length}
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    Mekanik yang berkontribusi
+                  </p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium">
+                    Jumlah Menunggu
+                  </CardTitle>
+                  <Calendar className="h-4 w-4 text-muted-foreground" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold">{summary.pending}</div>
+                  <p className="text-xs text-muted-foreground">
+                    Menunggu tinjauan leader
+                  </p>
+                </CardContent>
+              </Card>
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Tabel Data Inspeksi */}
         <Card className="mb-8 max-w-screen">
@@ -567,15 +569,17 @@ export default function ReportsPage() {
                               <FileText className="w-4 h-4 mr-2" />
                               Formulir Inspeksi (PDF)
                             </DropdownMenuItem>
-                            <DropdownMenuItem
-                              onClick={() =>
-                                handleExport([inspection], "excel")
-                              }
-                              disabled={isExporting}
-                            >
-                              <FileSpreadsheet className="w-4 h-4 mr-2" />
-                              Data Mentah (Excel)
-                            </DropdownMenuItem>
+                            {role === "admin" && (
+                              <DropdownMenuItem
+                                onClick={() =>
+                                  handleExport([inspection], "excel")
+                                }
+                                disabled={isExporting}
+                              >
+                                <FileSpreadsheet className="w-4 h-4 mr-2" />
+                                Data Mentah (Excel)
+                              </DropdownMenuItem>
+                            )}
                           </DropdownMenuContent>
                         </DropdownMenu>
                       </td>

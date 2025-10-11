@@ -47,8 +47,8 @@ export default function VerificationDetailPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <main className="max-w-4xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-        <div className="mb-6">
+      <main className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+        {/* <div className="mb-6">
           <Button
             variant="ghost"
             onClick={() => router.back()}
@@ -66,7 +66,7 @@ export default function VerificationDetailPage() {
               Review the inspection details and provide verification
             </p>
           </div>
-        </div>
+        </div> */}
         <VerificationDetailView
           id={params.id}
           handleStatusHandler={handleStatusHandler}

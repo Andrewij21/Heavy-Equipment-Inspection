@@ -74,8 +74,8 @@ export default function DashboardPage() {
         {/* Recent Activity */}
         <div className="grid gap-6 lg:grid-cols-3">
           <div className="lg:col-span-3">
-            {user.role === "admin" ? (
-              <ReportsPage />
+            {user.role === "admin" || user.role === "leader" ? (
+              <ReportsPage role={user.role} />
             ) : (
               <RecentInspections userRole={user.role} />
             )}

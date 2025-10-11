@@ -208,7 +208,7 @@ export default function InspectionsPage() {
                       <Eye className="w-4 h-4 mr-1" />
                       <span className="hidden sm:block">Lihat</span>
                     </Button>
-                    {inspection.status === "rejected" && (
+                    {/* {inspection.status === "rejected" && (
                       <Button
                         className="w-full sm:w-fit"
                         variant="outline"
@@ -220,7 +220,7 @@ export default function InspectionsPage() {
                         <Edit className="w-4 h-4 mr-1" />
                         <span className="hidden sm:block">Ubah</span>
                       </Button>
-                    )}
+                    )} */}
                   </div>
                 </div>
               </CardContent>

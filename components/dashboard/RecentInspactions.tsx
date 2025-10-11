@@ -185,7 +185,7 @@ export function RecentInspections({ userRole }: RecentInspectionsProps) {
                 </Button>
                 {/* Mechanic hanya bisa mengedit jika statusnya Ditolak atau Pending, 
                     tetapi kita hanya menampilkan tombol View di dashboard */}
-                {inspection.status === "REJECTED" &&
+                {/* {inspection.status === "REJECTED" &&
                   userRole === "mechanic" && (
                     <Button
                       variant="outline"
@@ -197,7 +197,7 @@ export function RecentInspections({ userRole }: RecentInspectionsProps) {
                       <Edit className="w-4 h-4 mr-1" />
                       Ubah
                     </Button>
-                  )}
+                  )} */}
               </div>
             </div>
           ))}

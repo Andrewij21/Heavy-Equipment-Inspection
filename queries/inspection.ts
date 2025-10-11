@@ -1,7 +1,7 @@
 // src/lib/api/inspection.ts
 import { apiClient } from "@/lib/api";
 import type { ApiResponse } from "@/lib/type";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 // Define the shape of the data returned by the general list API
 // This will include base fields + the nested approver details
@@ -19,7 +19,9 @@ interface InspectionListItem {
     id: string;
   };
 }
-
+interface StatusUpdatePayload {
+  status: "APPROVED" | "REJECTED";
+}
 // --- KEYS ---
 export const inspectionKeys = {
   all: ["inspections"] as const,
@@ -41,6 +43,16 @@ const getInspectionById = async (id: string): Promise<ApiResponse<any>> => {
   return await apiClient.get(`/inspections/${id}`);
 };
 
+const updateInspectionStatus = async ({
+  id,
+  statusData,
+}: {
+  id: string;
+  statusData: StatusUpdatePayload;
+}): Promise<ApiResponse<any>> => {
+  // Uses the dedicated status route: PATCH /tracks/:id/status
+  return await apiClient.patch(`/inspections/${id}/status`, statusData);
+};
 // --- REACT QUERY HOOK ---
 export const useGetGeneralInspections = (params: Record<string, any> = {}) => {
   return useQuery({
@@ -55,5 +67,36 @@ export const useGetInspection = (id: string) => {
     queryKey: inspectionKeys.detail(id),
     queryFn: () => getInspectionById(id),
     enabled: !!id, // Only run the query if the ID is available
+  });
+};
+
+export const useUpdateInspectionStatus = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: updateInspectionStatus,
+    onSuccess: (data, variables) => {
+      // 1. Invalidate the list query
+      queryClient.invalidateQueries({ queryKey: inspectionKeys.lists() });
+      queryClient.invalidateQueries({ queryKey: inspectionKeys.lists() });
+      // 2. Optimistically update the single detail view
+      queryClient.setQueryData(
+        inspectionKeys.detail(variables.id),
+        (oldData: any) => {
+          // Assuming 'data' contains the new approved status object from the API response
+          if (oldData) {
+            return {
+              ...oldData,
+              data: {
+                ...oldData.data,
+                status: data.data.status,
+                approverId: data.data.approverId,
+                approvalDate: data.data.approvalDate,
+              },
+            };
+          }
+          return oldData;
+        }
+      );
+    },
   });
 };

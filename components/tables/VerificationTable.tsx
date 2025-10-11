@@ -44,6 +44,7 @@ import {
 import Link from "next/link";
 // CRITICAL: Use the specific track mutation hook directly
 import { useUpdateTrackStatus } from "@/queries/track"; // Asumsi path query
+import { useUpdateInspectionStatus } from "@/queries/inspection";
 
 interface PendingInspection {
   id: string;
@@ -83,7 +84,7 @@ export function VerificationTable({
   const [sortDirection, setSortDirection] = useState<SortDirection>("desc");
 
   // BARU: Inisialisasi hook mutasi track spesifik
-  const updateStatusMutation = useUpdateTrackStatus();
+  const updateStatusMutation = useUpdateInspectionStatus();
 
   // Fungsi helper (normalizeStatus, getStatusIcon, getStatusColor, dll. tetap sama)
   const normalizeStatus = (
@@ -262,32 +263,22 @@ export function VerificationTable({
     equipmentType: "track" | "wheel" | "support" // Gunakan tipe secara eksplisit
   ) => {
     // PANGGIL API YANG TEPAT SECARA KONDISIONAL BERDASARKAN TIPE
-    if (equipmentType === "track") {
-      updateStatusMutation.mutate(
-        {
-          id: id,
-          statusData: { status },
+    updateStatusMutation.mutate(
+      {
+        id: id,
+        statusData: { status },
+      },
+      {
+        onSuccess: () => {
+          console.log(`Inspeksi ${id} berhasil diperbarui menjadi ${status}`);
+          // Invalisadi react-query ditangani oleh hook
         },
-        {
-          onSuccess: () => {
-            console.log(
-              `Inspeksi Track ${id} berhasil diperbarui menjadi ${status}`
-            );
-            // Invalisadi react-query ditangani oleh hook
-          },
-          onError: (error) => {
-            console.error(`Gagal memperbarui status track untuk ${id}:`, error);
-            // Tampilkan notifikasi error
-          },
-        }
-      );
-    } else {
-      // Placeholder untuk wheel dan support: log peringatan
-      console.warn(
-        `Pembaruan status untuk ${equipmentType} (ID: ${id}) belum diimplementasikan. Aksi diabaikan.`
-      );
-      // Anda dapat menampilkan peringatan/toast kepada pengguna di sini.
-    }
+        onError: (error) => {
+          console.error(`Gagal memperbarui status untuk ${id}:`, error);
+          // Tampilkan notifikasi error
+        },
+      }
+    );
   };
 
   return (

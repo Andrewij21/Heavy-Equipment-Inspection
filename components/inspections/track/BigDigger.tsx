@@ -49,326 +49,384 @@ import {
 
 export const trackFormSections = [
   {
-    title: "Pemeriksaan Area Rangka Bawah",
+    title: "Lower Frame Area Inspection",
     fields: [
       {
         name: "lowerLockOutSwitch",
-        label: "Periksa Saklar Lock Out",
+        label: "Check Lock Out Switch",
         type: "select",
       },
       {
         name: "lowerTrackLinkTension",
-        label: "Periksa Ketegangan Track Link Kanan & Kiri",
+        label: "Check Track Link Tension (RH & LH)",
         type: "select",
       },
       {
         name: "lowerTrackShoeBolt",
-        label: "Periksa Baut Track Shoe Kanan & Kiri",
+        label: "Check Track Shoe Bolt (RH & LH)",
         type: "select",
       },
       {
         name: "lowerIdlerRollerGuard",
-        label: "Periksa Kondisi Idler, Roller & Wear Guard",
+        label: "Check Condition of Idler, Roller & Wear Guard",
         type: "select",
       },
       {
         name: "lowerUnderGuard",
-        label: "Periksa kondisi under guard, cover & counter weight",
+        label: "Check condition of under guard, cover & counter weight",
         type: "select",
       },
       {
         name: "lowerFinalDriveSprocket",
-        label: "Periksa Kondisi Final Drive & Gigi Sprocket",
+        label: "Check Condition of Final Drive & Sprocket",
         type: "select",
       },
       {
         name: "lowerSwingCircle",
-        label: "Periksa Kondisi Swing Circle",
+        label: "Check Swing Circle Condition",
         type: "select",
       },
       {
         name: "lowerAttachmentCondition",
-        label: "Periksa Boom, Arm Stick, Link Bucket & Bucket",
+        label: "Check Boom, Arm Stick, Link Bucket & Bucket",
         type: "select",
       },
       {
         name: "lowerDrainWaterSediment",
-        label: "Kuras endapan air dari tangki bahan bakar & water separator",
+        label: "Drain water sediment from fuel tank & water separator",
         type: "select",
       },
       {
         name: "lowerHydraulicOilLevel",
-        label: "Periksa level oli Hidraulik (tambahkan jika perlu)",
+        label: "Check Hydraulic oil level (top up if needed)",
         type: "select",
       },
     ],
   },
   {
-    title: "Pemeriksaan Area Rangka Atas",
+    title: "Upper Frame Area Inspection",
     fields: [
       {
         name: "upperEngineOilLevel",
-        label: "Periksa level oli mesin (Tambahkan jika perlu)",
+        label: "Check engine oil level (Top up if needed)",
         type: "select",
       },
       {
         name: "upperEngineVisual",
         label:
-          "Pemeriksaan Visual kondisi mesin dari kebocoran, baut hilang, dll",
+          "Visual inspection of engine condition for leaks, missing bolts, etc.",
         type: "select",
       },
       {
         name: "upperCoolantLevel",
-        label: "Periksa Level Coolant",
+        label: "Check Coolant Level",
         type: "select",
       },
       {
         name: "upperRadiatorEtc",
-        label: "Periksa Radiator, Aftercooler, Hdy oil cooler & koneksi",
+        label: "Check Radiator, Aftercooler, Hyd oil cooler & connections",
         type: "select",
       },
       {
         name: "upperTurboInlet",
-        label: "Periksa Kondisi siku inlet turbo",
+        label: "Check Turbo inlet elbow condition",
         type: "select",
       },
       {
         name: "upperAirCleaner",
-        label: "Periksa Air Cleaner (Tambahkan jika perlu)",
+        label: "Check Air Cleaner (Top up if needed)",
         type: "select",
       },
       {
         name: "upperCompartmentLeaks",
         label:
-          "Periksa Kebocoran Oli, Kebocoran Coolant & Kebocoran Gas pada area kompartemen mesin atas",
+          "Check for Oil Leaks, Coolant Leaks & Gas Leaks in the upper engine compartment area",
         type: "select",
       },
       {
         name: "upperHydraulicPump",
-        label: "Periksa Kondisi Pompa Hidraulik & Saluran",
+        label: "Check Hydraulic Pump & Lines Condition",
         type: "select",
       },
       {
         name: "upperControlValve",
-        label: "Periksa Kondisi Control Valve & Saluran",
+        label: "Check Control Valve & Lines Condition",
         type: "select",
       },
       {
         name: "upperSwingMachineOil",
-        label: "Periksa level oli Swing Machine",
+        label: "Check Swing Machine oil level",
         type: "select",
       },
       {
         name: "upperElectricWiring",
-        label: "Periksa Pengkabelan Listrik",
+        label: "Check Electrical Wiring",
         type: "select",
       },
       {
         name: "upperBatteryElectrolyte",
-        label: "Periksa level Elektrolit Baterai",
+        label: "Check Battery Electrolyte level",
         type: "select",
       },
       {
         name: "upperFanBelts",
-        label: "Periksa Fan Belt, & AC Compresor Belt",
+        label: "Check Fan Belt & AC Compressor Belt",
         type: "select",
       },
       {
         name: "upperCylinderLeaks",
-        label: "Periksa Semua Silinder dari Kebocoran Oli",
+        label: "Check All Cylinders for Oil Leaks",
         type: "select",
       },
       {
         name: "upperCoverHandRail",
-        label: "Periksa Semua Cover & Hand Rail",
+        label: "Check All Covers & Hand Rail",
         type: "select",
       },
     ],
   },
   {
-    //ada penambahan pada bagian ini khisisnya di tipe select, ntar periksa lagi nanti lalu tambahkan ke zod dan be
-    title: "Pengukuran Temperatur Silinder",
+    title: "Cylinder Temperature Measurement",
     fields: [
       {
         name: "tempCylBoom",
-        label: "Silinder Boom",
+        label: "Cylinder Boom",
         type: "select",
       },
       {
         name: "tempCylBoomRh",
-        label: "Silinder Boom Kanan (RH)",
+        label: "Cylinder Boom Right (RH)",
         type: "temp",
       },
-      { name: "tempCylBoomLh", label: "Silinder Boom Kiri (LH)", type: "temp" },
+      {
+        name: "tempCylBoomLh",
+        label: "Cylinder Boom Left (LH)",
+        type: "temp",
+      },
       {
         name: "deltaTCylBoom",
-        label: "Perbedaan Suhu Silinder Boom (\u0394T)",
+        label: "Cylinder Boom Temperature Difference (ΔT)",
         type: "temp",
       },
-
-      { name: "tempCylArm", label: "Silinder Arm", type: "select" },
-      { name: "tempCylArmRh", label: "Silinder Arm Kanan (RH)", type: "temp" },
-      { name: "tempCylArmLh", label: "Silinder Arm Kiri (LH)", type: "temp" },
+      {
+        name: "tempCylArm",
+        label: "Cylinder Arm",
+        type: "select",
+      },
+      {
+        name: "tempCylArmRh",
+        label: "Cylinder Arm Right (RH)",
+        type: "temp",
+      },
+      {
+        name: "tempCylArmLh",
+        label: "Cylinder Arm Left (LH)",
+        type: "temp",
+      },
       {
         name: "deltaTCylArm",
-        label: "Perbedaan Suhu Silinder Arm (\u0394T)",
+        label: "Cylinder Arm Temperature Difference (ΔT)",
         type: "temp",
       },
       {
         name: "tempCylBucket",
-        label: "Silinder Bucket",
+        label: "Cylinder Bucket",
         type: "select",
       },
       {
         name: "tempCylBucketRh",
-        label: "Silinder Bucket Kanan (RH)",
+        label: "Cylinder Bucket Right (RH)",
         type: "temp",
       },
       {
         name: "tempCylBucketLh",
-        label: "Silinder Bucket Kiri (LH)",
+        label: "Cylinder Bucket Left (LH)",
         type: "temp",
       },
       {
         name: "deltaTCylBucket",
-        label: "Perbedaan Suhu Silinder Bucket (\u0394T)",
+        label: "Cylinder Bucket Temperature Difference (ΔT)",
         type: "temp",
       },
     ],
   },
   {
-    title: "Periksa Kondisi Grease Pada",
+    title: "Check Grease Condition On",
     fields: [
       {
         name: "greaseBoomCylFoot",
-        label: "Pin Kaki Silinder Boom (2 Titik)",
+        label: "Boom Cylinder Foot Pin (2 Points)",
         type: "select",
       },
       {
         name: "greaseBoomFootPin",
-        label: "Pin Kaki Boom (2 Titik)",
+        label: "Boom Foot Pin (2 Points)",
         type: "select",
       },
       {
         name: "greaseBoomCylRod",
-        label: "Ujung Rod Silinder Boom (2 Titik)",
+        label: "Boom Cylinder Rod End (2 Points)",
         type: "select",
       },
       {
         name: "greaseArmCylFoot",
-        label: "Pin Kaki Silinder Arm (1 Titik)",
+        label: "Arm Cylinder Foot Pin (1 Point)",
         type: "select",
       },
       {
         name: "greaseBoomArmCoupling",
-        label: "Pin Kopling Boom Arm (1 Titik)",
+        label: "Boom Arm Coupling Pin (1 Point)",
         type: "select",
       },
       {
         name: "greaseArmCylRod",
-        label: "Ujung Rod Silinder Arm (1 Titik)",
+        label: "Arm Cylinder Rod End (1 Point)",
         type: "select",
       },
       {
         name: "greaseBucketCylFoot",
-        label: "Pin Kaki Silinder Bucket (1 Titik)",
+        label: "Bucket Cylinder Foot Pin (1 Point)",
         type: "select",
       },
       {
         name: "greaseArmLinkCoupling",
-        label: "Pin Kopling Arm & Link (1 Titik)",
+        label: "Arm & Link Coupling Pin (1 Point)",
         type: "select",
       },
       {
         name: "greaseArmBucketCoupling",
-        label: "Pin Kopling Arm & Bucket (1 Titik)",
+        label: "Arm & Bucket Coupling Pin (1 Point)",
         type: "select",
       },
       {
         name: "greaseLinkCoupling",
-        label: "Pin Kopling Link (2 Titik)",
+        label: "Link Coupling Pin (2 Points)",
         type: "select",
       },
       {
         name: "greaseBucketCylRod",
-        label: "Ujung Rod Silinder Bucket (1 Titik)",
+        label: "Bucket Cylinder Rod End (1 Point)",
         type: "select",
       },
       {
         name: "greaseBucketLinkCoupling",
-        label: "Pin Kopling Bucket & Link (1 Titik)",
+        label: "Bucket & Link Coupling Pin (1 Point)",
         type: "select",
       },
     ],
   },
   {
-    title: "Pemeriksaan Cabin",
+    title: "Cabin Inspection",
     fields: [
-      { name: "cabinMonitorPanel", label: "Monitor Panel", type: "select" },
-      { name: "cabinSwitches", label: "Saklar", type: "select" },
-      { name: "cabinGauge", label: "Gauge (Pengukur)", type: "select" },
+      {
+        name: "cabinMonitorPanel",
+        label: "Monitor Panel",
+        type: "select",
+      },
+      {
+        name: "cabinSwitches",
+        label: "Switches",
+        type: "select",
+      },
+      {
+        name: "cabinGauge",
+        label: "Gauge",
+        type: "select",
+      },
       {
         name: "cabinControlLever",
-        label: "Tuas Kontrol & Pedal Kontrol",
+        label: "Control Lever & Control Pedal",
         type: "select",
       },
-      { name: "cabinRadioComm", label: "Radio Komunikasi", type: "select" },
-      { name: "cabinFmRadio", label: "Radio FM", type: "select" },
-      { name: "cabinWorkLamp", label: "Lampu Kerja", type: "select" },
-      { name: "cabinTravelAlarm", label: "Travel Alarm", type: "select" },
-      { name: "cabinHorn", label: "Klakson", type: "select" },
-      { name: "cabinMirror", label: "Cermin & Braket", type: "select" },
+      {
+        name: "cabinRadioComm",
+        label: "Radio Communication",
+        type: "select",
+      },
+      {
+        name: "cabinFmRadio",
+        label: "FM Radio",
+        type: "select",
+      },
+      {
+        name: "cabinWorkLamp",
+        label: "Work Lamp",
+        type: "select",
+      },
+      {
+        name: "cabinTravelAlarm",
+        label: "Travel Alarm",
+        type: "select",
+      },
+      {
+        name: "cabinHorn",
+        label: "Horn",
+        type: "select",
+      },
+      {
+        name: "cabinMirror",
+        label: "Mirror & Bracket",
+        type: "select",
+      },
       {
         name: "cabinRotaryLamp",
-        label: "Lampu Putar (Rotary Lamp)",
+        label: "Rotary Lamp",
         type: "select",
       },
-      { name: "cabinWiper", label: "Wiper & Bilah Kaca", type: "select" },
-      { name: "cabinWindowWasher", label: "Pencuci Jendela", type: "select" },
+      {
+        name: "cabinWiper",
+        label: "Wiper & Wiper Blade",
+        type: "select",
+      },
+      {
+        name: "cabinWindowWasher",
+        label: "Window Washer",
+        type: "select",
+      },
       {
         name: "cabinAcFunction",
-        label: "Fungsi AC & Level Gas",
+        label: "AC Function & Gas Level",
         type: "select",
       },
       {
         name: "cabinFuseRelay",
-        label: "Periksa Sekering, Relay & Level Gas",
+        label: "Check Fuse, Relay & Gas Level",
         type: "select",
       },
       {
         name: "cabinOperatorSeat",
-        label: "Periksa Kondisi Kursi Operator",
+        label: "Check Operator Seat Condition",
         type: "select",
       },
     ],
   },
   {
-    title: "Pemeriksaan Alat Keselamatan",
+    title: "Safety Equipment Inspection",
     fields: [
       {
         name: "safetyFireExtinguisher",
-        label: "Periksa Alat Pemadam Api Ringan (APAR)",
+        label: "Check Fire Extinguisher",
         type: "select",
       },
       {
         name: "safetyEmergencyStop",
-        label: "Periksa Fungsi Tombol Emergency Stop",
+        label: "Check Emergency Stop Button Function",
         type: "select",
       },
       {
         name: "safetyCabinRops",
-        label: "Periksa Kondisi Cabin & ROPS",
+        label: "Check Cabin & ROPS Condition",
         type: "select",
       },
       {
         name: "safetyBelt",
-        label: "Periksa Kondisi Safety Belt",
+        label: "Check Safety Belt Condition",
         type: "select",
       },
     ],
   },
   {
-    title: "Penambahan Oli",
+    title: "Add Oil",
     fields: [
       {
         name: "topUpCoolant",
@@ -377,17 +435,17 @@ export const trackFormSections = [
       },
       {
         name: "topUpEngine",
-        label: "Mesin (15W-40)",
+        label: "Engine (15W-40)",
         type: "qty",
       },
       {
         name: "topUpHydraulic",
-        label: "Hidraulik (TURALIX 46)",
+        label: "Hydraulic (TURALIK 46)",
         type: "qty",
       },
       {
         name: "topUpSwingMachinery",
-        label: "Mekanisme Putar (Swing Machinary) (HD 50 / HD 30)",
+        label: "Swing Machinery (HD 50 / HD 30)",
         type: "qty",
       },
       {
@@ -448,15 +506,14 @@ export function BigDiggerInspectionForm({
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              Informasi Header
-              <Badge variant="outline">Peralatan Track</Badge>
+              Header Information
+              <Badge variant="outline">Tracked Equipment</Badge>
             </CardTitle>
             <CardDescription>
-              Detail umum peralatan dan pemeriksaan
+              General equipment and inspection details.
             </CardDescription>
           </CardHeader>
           <CardContent>
-            {/* Ganti grid lama dengan yang ini */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               {/* Fields that were already here */}
               <FormField
@@ -464,7 +521,7 @@ export function BigDiggerInspectionForm({
                 name="inspectionDate"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Tanggal</FormLabel>
+                    <FormLabel>Date</FormLabel>
                     <FormControl>
                       <Input type="date" {...field} />
                     </FormControl>
@@ -477,9 +534,9 @@ export function BigDiggerInspectionForm({
                 name="equipmentId"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Nomor Unit</FormLabel>
+                    <FormLabel>Unit Number</FormLabel>
                     <FormControl>
-                      <Input placeholder="contoh: EXC-001" {...field} />
+                      <Input placeholder="e.g., EXC-001" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -487,27 +544,19 @@ export function BigDiggerInspectionForm({
               />
               <FormField
                 control={form.control}
-                name="smr" // Pastikan ini ditambahkan ke defaultValues
+                name="smr"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>SMR (Pembacaan Meter Servis)</FormLabel>
+                    <FormLabel>SMR (Service Meter Reading)</FormLabel>
                     <FormControl>
                       <Input
                         type="number"
                         placeholder="0"
                         {...field}
-                        // 1. KONTROL TAMPILAN:
-                        // Jika field.value adalah 0, tampilkan string kosong ("").
-                        // Jika tidak, tampilkan nilai sebenarnya.
                         value={field.value === 0 ? "" : field.value}
-                        // 2. KONTROL PERUBAHAN:
-                        // Jika input kosong (e.target.value === ""), kirim 0 ke useForm.
-                        // Jika ada nilai, kirim nilai numeriknya.
                         onChange={(e) => {
                           const rawValue = e.target.value;
                           const numericValue = Number.parseFloat(rawValue);
-
-                          // Kirim 0 jika string kosong, jika tidak kirim nilai numerik (atau NaN jika tidak valid)
                           field.onChange(rawValue === "" ? 0 : numericValue);
                         }}
                       />
@@ -521,23 +570,23 @@ export function BigDiggerInspectionForm({
                 name="location"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Lokasi</FormLabel>
+                    <FormLabel>Location</FormLabel>
                     <FormControl>
-                      <Input placeholder="contoh: Site A" {...field} />
+                      <Input placeholder="e.g., Site A" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
 
-              {/* ===== FIELD BARU DITAMBAHKAN DI SINI ===== */}
+              {/* ===== NEW FIELDS ADDED HERE ===== */}
 
               <FormField
                 control={form.control}
-                name="timeDown" // Pastikan ini ditambahkan ke defaultValues
+                name="timeDown"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Waktu Turun (Time Down)</FormLabel>
+                    <FormLabel>Time Down</FormLabel>
                     <FormControl>
                       <Input type="time" {...field} />
                     </FormControl>
@@ -547,10 +596,10 @@ export function BigDiggerInspectionForm({
               />
               <FormField
                 control={form.control}
-                name="timeOut" // Pastikan ini ditambahkan ke defaultValues
+                name="timeOut"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Waktu Keluar (Time Out)</FormLabel>
+                    <FormLabel>Time Out</FormLabel>
                     <FormControl>
                       <Input type="time" {...field} />
                     </FormControl>
@@ -560,7 +609,7 @@ export function BigDiggerInspectionForm({
               />
               <FormField
                 control={form.control}
-                name="shift" // Pastikan ini ditambahkan ke defaultValues
+                name="shift"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Shift</FormLabel>
@@ -570,32 +619,30 @@ export function BigDiggerInspectionForm({
                     >
                       <FormControl className="w-full">
                         <SelectTrigger>
-                          <SelectValue placeholder="Pilih Shift" />
+                          <SelectValue placeholder="Select Shift" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="day">Siang</SelectItem>
-                        <SelectItem value="night">Malam</SelectItem>
+                        <SelectItem value="day">Day</SelectItem>
+                        <SelectItem value="night">Night</SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-              {/* ===== FIELD MODEL UNIT YANG SUDAH DINAMIS ===== */}
+
+              {/* ===== DYNAMIC UNIT MODEL FIELD ===== */}
               <FormField
                 control={form.control}
                 name="modelUnit"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Model Unit</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      value={field.value} // Gunakan value agar bisa di-reset
-                    >
+                    <FormLabel>Unit Model</FormLabel>
+                    <Select onValueChange={field.onChange} value={field.value}>
                       <FormControl className="w-full">
                         <SelectTrigger>
-                          <SelectValue placeholder="Pilih Model" />
+                          <SelectValue placeholder="Select Model" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
@@ -611,7 +658,7 @@ export function BigDiggerInspectionForm({
                 )}
               />
 
-              {/* ... (Lanjutkan dengan field header lainnya: location, operatorName, dll.) ... */}
+              {/* ... (Continue with other header fields: location, operatorName, etc.) ... */}
             </div>
           </CardContent>
         </Card>
@@ -627,9 +674,9 @@ export function BigDiggerInspectionForm({
         {/* Tabel untuk Temuan Inspeksi */}
         <Card>
           <CardHeader>
-            <CardTitle>Finding Inspection Unit (Temuan Inspeksi)</CardTitle>
+            <CardTitle>Finding Inspection Unit</CardTitle>
             <CardDescription>
-              Catat kerusakan atau temuan lain di sini.
+              Record any damages or other findings here.
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -649,7 +696,10 @@ export function BigDiggerInspectionForm({
                         control={form.control}
                         name={`findings.${index}.description`}
                         render={({ field }) => (
-                          <Input placeholder="Deskripsi temuan..." {...field} />
+                          <Input
+                            placeholder="Finding description..."
+                            {...field}
+                          />
                         )}
                       />
                     </TableCell>

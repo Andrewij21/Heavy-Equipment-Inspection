@@ -56,111 +56,125 @@ interface SupportInspectionFormProps {
 // Gunakan konstanta ini untuk form inspeksi baru Anda
 export const formSections = [
   {
-    title: "A. Engine",
+    title: "Engine",
     fields: [
       {
         name: "engineOilLevel",
-        label: "Periksa level oil engine",
+        label: "Check engine oil level",
         type: "select",
       },
       {
         name: "engineCoolantLevel",
-        label: "Periksa level air pendingin",
+        label: "Check coolant level",
         type: "select",
       },
       {
         name: "engineVisual",
         label:
-          "Pengamatan secara visual area engine dari kebocoran, baut hilang dll",
+          "Visual inspection of engine area for leaks, missing bolts, etc.",
         type: "select",
       },
       {
         name: "engineAirFilter",
-        label: "Periksa kondisi filter udara",
+        label: "Check air filter condition",
         type: "select",
       },
       {
         name: "engineLeaks",
-        label: "Periksa kebocoron oil, kebocoran air pendingin",
+        label: "Check for oil leaks, coolant leaks",
         type: "select",
       },
       {
         name: "engineFanBelt",
-        label: "Periksa tegangan fan belt",
+        label: "Check fan belt tension",
         type: "select",
       },
       {
         name: "engineHose",
-        label: "Periksa hose dari kebocoran",
+        label: "Check hose for leaks",
         type: "select",
       },
     ],
   },
   {
-    title: "B. Ponton, Frame, & Pump",
+    title: "Pontoon, Frame, & Pump",
     fields: [
       {
         name: "pontonCondition",
-        label: "Periksa pontoon dari keretakan atau keasan",
+        label: "Check pontoon for cracks or wear",
         type: "select",
       },
       {
         name: "pumpCondition",
-        label: "Periksa pompa dari kerusakan",
+        label: "Check pump for damage",
         type: "select",
       },
       {
         name: "pumpMounting",
-        label: "Periksa mounting pompa dari kehilangan atau kerusakan",
+        label: "Check pump mounting for missing parts or damage",
         type: "select",
       },
       {
         name: "boltTightness",
-        label: "Periksa semua kekencangan baut",
+        label: "Check all bolt tightness",
         type: "select",
       },
       {
         name: "suctionDischargeHose",
-        label: "Periksa hose pengisap (suctions) hose keluran (discarge)",
+        label: "Check suction hose and discharge hose",
         type: "select",
       },
     ],
   },
   {
-    title: "C. Electric",
+    title: "Electric",
     fields: [
       {
         name: "electricTerminals",
-        label: "Periksa terminal atau kabel dari indikasi kerusakan",
+        label: "Check terminals or cables for signs of damage",
         type: "select",
       },
       {
         name: "electricBattery",
         label:
-          "Periksa level air battery, kutub positif atau negatif battery dan kabel battery",
+          "Check battery water level, positive and negative terminals, and battery cables",
         type: "select",
       },
       {
         name: "electricIndicators",
-        label: "Periksa semua indikator dan gauge pada konrol panel",
+        label: "Check all indicators and gauges on the control panel",
         type: "select",
       },
     ],
   },
   {
-    title: "D. Opsional",
-    fields: [{ name: "optionalApar", label: "Check APAR", type: "select" }],
+    title: "Optional",
+    fields: [
+      {
+        name: "optionalApar",
+        label: "Check Fire Extinguisher (APAR)",
+        type: "select",
+      },
+    ],
   },
   {
-    title: "E. Top Up Lubricant & Coolant",
+    title: "Add Oil",
     fields: [
-      { name: "topUpCoolant", label: "Coolant", type: "qty" },
       {
-        name: "topUpEngineOil",
-        label: "Engine Oil (SAE 15W-40)",
+        name: "topUpCoolant",
+        label: "Coolant",
         type: "qty",
       },
-      { name: "topUpHydraulic", label: "Hydraulic)", type: "qty" },
+      {
+        name: "topUpEngineOil",
+        label: "Engine Oil (15W-40)",
+        type: "qty",
+      },
+      {
+        name: "topUpHydraulic",
+        label: "Hydraulic",
+        type: "qty",
+      },
     ],
   },
 ];
@@ -201,21 +215,22 @@ export default function MultiFlowInspectionForm({
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              Informasi Header
-              <Badge variant="outline">Peralatan Roda</Badge>
+              Header Information
+              <Badge variant="outline">Support Equipment</Badge>
             </CardTitle>
             <CardDescription>
-              Unit CN, model, lokasi, personel, tanggal & HM
+              General equipment and inspection details.
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              {/* Fields that were already here */}
               <FormField
                 control={form.control}
                 name="inspectionDate"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Tanggal</FormLabel>
+                    <FormLabel>Date</FormLabel>
                     <FormControl>
                       <Input type="date" {...field} />
                     </FormControl>
@@ -228,9 +243,9 @@ export default function MultiFlowInspectionForm({
                 name="equipmentId"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Nomor Unit</FormLabel>
+                    <FormLabel>Unit Number</FormLabel>
                     <FormControl>
-                      <Input placeholder="Contoh: WHL-001" {...field} />
+                      <Input placeholder="e.g., EXC-001" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -238,40 +253,19 @@ export default function MultiFlowInspectionForm({
               />
               <FormField
                 control={form.control}
-                name="modelUnit"
+                name="smr"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Model Unit</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Contoh: CAT 950H" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="smr" // Pastikan ini ditambahkan ke defaultValues
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>SMR (Pembacaan Meter Servis)</FormLabel>
+                    <FormLabel>SMR (Service Meter Reading)</FormLabel>
                     <FormControl>
                       <Input
                         type="number"
                         placeholder="0"
                         {...field}
-                        // 1. KONTROL TAMPILAN:
-                        // Jika field.value adalah 0, tampilkan string kosong ("").
-                        // Jika tidak, tampilkan nilai sebenarnya.
                         value={field.value === 0 ? "" : field.value}
-                        // 2. KONTROL PERUBAHAN:
-                        // Jika input kosong (e.target.value === ""), kirim 0 ke useForm.
-                        // Jika ada nilai, kirim nilai numeriknya.
                         onChange={(e) => {
                           const rawValue = e.target.value;
                           const numericValue = Number.parseFloat(rawValue);
-
-                          // Kirim 0 jika string kosong, jika tidak kirim nilai numerik (atau NaN jika tidak valid)
                           field.onChange(rawValue === "" ? 0 : numericValue);
                         }}
                       />
@@ -280,24 +274,51 @@ export default function MultiFlowInspectionForm({
                   </FormItem>
                 )}
               />
-
               <FormField
                 control={form.control}
                 name="location"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Lokasi</FormLabel>
+                    <FormLabel>Location</FormLabel>
                     <FormControl>
-                      <Input placeholder="Contoh: Site B, Zona 2" {...field} />
+                      <Input placeholder="e.g., Site A" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
 
+              {/* ===== NEW FIELDS ADDED HERE ===== */}
+
               <FormField
                 control={form.control}
-                name="shift" // Pastikan ini ditambahkan ke defaultValues
+                name="timeDown"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Time Down</FormLabel>
+                    <FormControl>
+                      <Input type="time" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="timeOut"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Time Out</FormLabel>
+                    <FormControl>
+                      <Input type="time" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="shift"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Shift</FormLabel>
@@ -307,39 +328,27 @@ export default function MultiFlowInspectionForm({
                     >
                       <FormControl className="w-full">
                         <SelectTrigger>
-                          <SelectValue placeholder="Pilih Shift" />
+                          <SelectValue placeholder="Select Shift" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="day">Siang</SelectItem>
-                        <SelectItem value="night">Malam</SelectItem>
+                        <SelectItem value="day">Day</SelectItem>
+                        <SelectItem value="night">Night</SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />
                   </FormItem>
                 )}
               />
+
               <FormField
                 control={form.control}
-                name="timeDown" // Pastikan ini ditambahkan ke defaultValues
+                name="modelUnit"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Waktu Turun (Time Down)</FormLabel>
+                    <FormLabel>Unit Type</FormLabel>
                     <FormControl>
-                      <Input type="time" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="timeOut" // Pastikan ini ditambahkan ke defaultValues
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Waktu Keluar (Time Out)</FormLabel>
-                    <FormControl>
-                      <Input type="time" {...field} />
+                      <Input placeholder="CAT 950H" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -357,11 +366,12 @@ export default function MultiFlowInspectionForm({
             fields={section.fields}
           />
         ))}
+        {/* Tabel untuk Temuan Inspeksi */}
         <Card>
           <CardHeader>
-            <CardTitle>Finding Inspection Unit (Temuan Inspeksi)</CardTitle>
+            <CardTitle>Finding Inspection Unit</CardTitle>
             <CardDescription>
-              Catat kerusakan atau temuan lain di sini.
+              Record any damages or other findings here.
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -381,7 +391,10 @@ export default function MultiFlowInspectionForm({
                         control={form.control}
                         name={`findings.${index}.description`}
                         render={({ field }) => (
-                          <Input placeholder="Deskripsi temuan..." {...field} />
+                          <Input
+                            placeholder="Finding description..."
+                            {...field}
+                          />
                         )}
                       />
                     </TableCell>

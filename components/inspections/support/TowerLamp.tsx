@@ -53,125 +53,141 @@ interface SupportInspectionFormProps {
 // Gunakan konstanta ini untuk form inspeksi baru Anda
 export const formSections = [
   {
-    title: "A. Mesin",
+    title: "Engine",
     fields: [
       {
         name: "engineOilLevel",
-        label: "Periksa level oli mesin & kebocoran",
+        label: "Check engine oil level & leakage",
         type: "select",
       },
       {
         name: "engineMounting",
-        label: "Periksa dudukan mesin",
+        label: "Check engine mounting",
         type: "select",
       },
       {
         name: "engineCoolantLevel",
-        label: "Periksa level air coolant & kebocoran",
+        label: "Check coolant level & leakage",
         type: "select",
       },
       {
         name: "engineFuelSystem",
-        label: "Periksa sistem bahan bakar & kebocoran",
+        label: "Check fuel system & leakage",
         type: "select",
       },
       {
         name: "engineBeltTension",
-        label: "Periksa ketegangan belt & komponen terkait",
+        label: "Check belt tension & related components",
         type: "select",
       },
       {
         name: "engineAirIntake",
-        label: "Periksa saluran udara masuk & sambungan knalpot",
+        label: "Check air intake & exhaust connection",
         type: "select",
       },
     ],
   },
   {
-    title: "B. Hidrolik",
+    title: "Hydraulic",
     fields: [
       {
         name: "hydraulicOilLevel",
-        label: "Periksa level oli hidrolik",
+        label: "Check hydraulic oil level",
         type: "select",
       },
       {
         name: "hydraulicPumpLeakage",
-        label: "Periksa kebocoran pada pompa, motor, PTO, selang/pipa",
+        label: "Check for leaks on pump, motor, PTO, hose/pipe",
         type: "select",
       },
       {
         name: "hydraulicValveLeakage",
-        label: "Periksa kebocoran pada control valve",
+        label: "Check for leaks on control valve",
         type: "select",
       },
-      { name: "hydraulicWireRope", label: "Periksa wire rope", type: "select" },
+      {
+        name: "hydraulicWireRope",
+        label: "Check wire rope",
+        type: "select",
+      },
       {
         name: "hydraulicTelescopicTower",
-        label: "Periksa menara teleskopik",
+        label: "Check telescopic tower",
         type: "select",
       },
     ],
   },
   {
-    title: "C. Kelistrikan",
+    title: "Electric",
     fields: [
       {
         name: "electricWorkLamp",
-        label: "Periksa semua lampu kerja",
+        label: "Check all work lamps",
         type: "select",
       },
       {
         name: "electricSwitchLamp",
-        label: "Periksa semua saklar lampu",
+        label: "Check all lamp switches",
         type: "select",
       },
       {
         name: "electricPanelMonitor",
-        label: "Periksa fungsi panel monitor",
+        label: "Check monitor panel function",
         type: "select",
       },
       {
         name: "electricGeneratorConnection",
-        label: "Periksa koneksi generator",
+        label: "Check generator connection",
         type: "select",
       },
       {
         name: "electricBattery",
-        label: "Periksa aki & kondisi koneksi",
+        label: "Check battery & connection condition",
         type: "select",
       },
       {
         name: "electricGeneratorVoltage",
-        label: "Periksa tegangan output generator",
+        label: "Check generator output voltage",
         type: "select",
       },
       {
         name: "electricBreakerCurrent",
-        label: "Periksa arus output breaker",
+        label: "Check breaker output current",
         type: "select",
       },
-      { name: "electricFrequency", label: "Periksa frekuensi", type: "select" },
+      {
+        name: "electricFrequency",
+        label: "Check frequency",
+        type: "select",
+      },
     ],
   },
   {
-    title: "D. Opsional",
+    title: "Optional",
     fields: [
       {
         name: "optionalVisualSkidding",
-        label: "Periksa kondisi visual skidding",
+        label: "Check visual condition of skidding",
         type: "select",
       },
-      { name: "optionalApar", label: "Periksa APAR", type: "select" },
+      {
+        name: "optionalApar",
+        label: "Check Fire Extinguisher (APAR)",
+        type: "select",
+      },
     ],
   },
   {
-    title: "E. Penambahan Pelumas & Pendingin",
+    title: "Add Oil",
     fields: [
-      { name: "topUpCoolant", label: "Coolant", type: "qty" },
+      {
+        name: "topUpCoolant",
+        label: "Coolant",
+        type: "qty",
+      },
       {
         name: "topUpEngineOil",
-        label: "Oli Mesin (SAE 15W-40)",
+        label: "Engine Oil (15W-40)",
         type: "qty",
       },
     ],
@@ -215,21 +231,22 @@ export default function TowerLampInspectionForm({
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              Informasi Header
-              <Badge variant="outline">Peralatan Roda</Badge>
+              Header Information
+              <Badge variant="outline">Support Equipment</Badge>
             </CardTitle>
             <CardDescription>
-              Unit CN, model, lokasi, personel, tanggal & HM
+              General equipment and inspection details.
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              {/* Fields that were already here */}
               <FormField
                 control={form.control}
                 name="inspectionDate"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Tanggal</FormLabel>
+                    <FormLabel>Date</FormLabel>
                     <FormControl>
                       <Input type="date" {...field} />
                     </FormControl>
@@ -242,9 +259,9 @@ export default function TowerLampInspectionForm({
                 name="equipmentId"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Nomor Unit</FormLabel>
+                    <FormLabel>Unit Number</FormLabel>
                     <FormControl>
-                      <Input placeholder="Contoh: WHL-001" {...field} />
+                      <Input placeholder="e.g., EXC-001" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -252,40 +269,19 @@ export default function TowerLampInspectionForm({
               />
               <FormField
                 control={form.control}
-                name="modelUnit"
+                name="smr"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Model Unit</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Contoh: CAT 950H" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="smr" // Pastikan ini ditambahkan ke defaultValues
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>SMR (Pembacaan Meter Servis)</FormLabel>
+                    <FormLabel>SMR (Service Meter Reading)</FormLabel>
                     <FormControl>
                       <Input
                         type="number"
                         placeholder="0"
                         {...field}
-                        // 1. KONTROL TAMPILAN:
-                        // Jika field.value adalah 0, tampilkan string kosong ("").
-                        // Jika tidak, tampilkan nilai sebenarnya.
                         value={field.value === 0 ? "" : field.value}
-                        // 2. KONTROL PERUBAHAN:
-                        // Jika input kosong (e.target.value === ""), kirim 0 ke useForm.
-                        // Jika ada nilai, kirim nilai numeriknya.
                         onChange={(e) => {
                           const rawValue = e.target.value;
                           const numericValue = Number.parseFloat(rawValue);
-
-                          // Kirim 0 jika string kosong, jika tidak kirim nilai numerik (atau NaN jika tidak valid)
                           field.onChange(rawValue === "" ? 0 : numericValue);
                         }}
                       />
@@ -294,24 +290,51 @@ export default function TowerLampInspectionForm({
                   </FormItem>
                 )}
               />
-
               <FormField
                 control={form.control}
                 name="location"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Lokasi</FormLabel>
+                    <FormLabel>Location</FormLabel>
                     <FormControl>
-                      <Input placeholder="Contoh: Site B, Zona 2" {...field} />
+                      <Input placeholder="e.g., Site A" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
 
+              {/* ===== NEW FIELDS ADDED HERE ===== */}
+
               <FormField
                 control={form.control}
-                name="shift" // Pastikan ini ditambahkan ke defaultValues
+                name="timeDown"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Time Down</FormLabel>
+                    <FormControl>
+                      <Input type="time" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="timeOut"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Time Out</FormLabel>
+                    <FormControl>
+                      <Input type="time" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="shift"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Shift</FormLabel>
@@ -321,39 +344,27 @@ export default function TowerLampInspectionForm({
                     >
                       <FormControl className="w-full">
                         <SelectTrigger>
-                          <SelectValue placeholder="Pilih Shift" />
+                          <SelectValue placeholder="Select Shift" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="day">Siang</SelectItem>
-                        <SelectItem value="night">Malam</SelectItem>
+                        <SelectItem value="day">Day</SelectItem>
+                        <SelectItem value="night">Night</SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />
                   </FormItem>
                 )}
               />
+
               <FormField
                 control={form.control}
-                name="timeDown" // Pastikan ini ditambahkan ke defaultValues
+                name="modelUnit"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Waktu Turun (Time Down)</FormLabel>
+                    <FormLabel>Unit Type</FormLabel>
                     <FormControl>
-                      <Input type="time" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="timeOut" // Pastikan ini ditambahkan ke defaultValues
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Waktu Keluar (Time Out)</FormLabel>
-                    <FormControl>
-                      <Input type="time" {...field} />
+                      <Input placeholder="CAT 950H" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -371,11 +382,12 @@ export default function TowerLampInspectionForm({
             fields={section.fields}
           />
         ))}
+        {/* Tabel untuk Temuan Inspeksi */}
         <Card>
           <CardHeader>
-            <CardTitle>Finding Inspection Unit (Temuan Inspeksi)</CardTitle>
+            <CardTitle>Finding Inspection Unit</CardTitle>
             <CardDescription>
-              Catat kerusakan atau temuan lain di sini.
+              Record any damages or other findings here.
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -395,7 +407,10 @@ export default function TowerLampInspectionForm({
                         control={form.control}
                         name={`findings.${index}.description`}
                         render={({ field }) => (
-                          <Input placeholder="Deskripsi temuan..." {...field} />
+                          <Input
+                            placeholder="Finding description..."
+                            {...field}
+                          />
                         )}
                       />
                     </TableCell>

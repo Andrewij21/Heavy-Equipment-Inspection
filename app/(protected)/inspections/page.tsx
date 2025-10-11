@@ -19,50 +19,62 @@ import {
   Filter,
   FileText,
   ArrowLeft,
+  Clock,
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import BackButton from "@/components/BackButton";
-
+import { useAuth } from "@/context/AuthContext";
+import { useMemo } from "react";
+import { useGetGeneralInspections } from "@/queries/inspection";
+import clsx from "clsx";
+interface RecentInspectionsProps {
+  userRole: "mechanic" | "leader" | "admin"; // Admin seharusnya tidak masuk ke sini
+}
+interface Inspection {
+  id: string;
+  equipmentId: string;
+  equipmentType: "track" | "wheel" | "support";
+  mechanicName: string;
+  status: "PENDING" | "APPROVED" | "REJECTED"; // Gunakan status uppercase dari API
+  createdAt: string;
+  issues?: number; // Opsional
+}
 export default function InspectionsPage() {
   // Data contoh - ganti dengan data dari API
-  const mockInspections = [
-    {
-      id: "1",
-      equipmentId: "EXC-001",
-      equipmentType: "track",
-      status: "pending",
-      createdAt: "2024-01-15T10:30:00Z",
-      location: "Site A, Zone 1",
-      issues: 2,
-    },
-    {
-      id: "2",
-      equipmentId: "WHL-002",
-      equipmentType: "wheel",
-      status: "approved",
-      createdAt: "2024-01-15T09:15:00Z",
-      location: "Site B, Zone 2",
-      issues: 0,
-    },
-    {
-      id: "3",
-      equipmentId: "SUP-003",
-      equipmentType: "support",
-      status: "rejected",
-      createdAt: "2024-01-14T16:45:00Z",
-      location: "Site C, Zone 3",
-      issues: 5,
-    },
-  ];
+
+  const { user } = useAuth(); // Ambil user ID dan role dari AuthContext
+  const userRole = user?.role;
+  const currentUserId = user?.id;
+
+  // 1. Tentukan filter berdasarkan peran
+  const queryParams = useMemo(() => {
+    // Leader: Lihat semua inspeksi terbaru (dengan limit kecil, misalnya 5)
+    if (userRole === "leader") {
+      return { limit: 5, orderBy: "createdAt_desc" };
+    }
+    // Mechanic: Filter hanya inspeksi yang dibuat oleh user ini
+    if (userRole === "mechanic" && currentUserId) {
+      return { limit: 5, mechanicId: currentUserId, orderBy: "createdAt_desc" };
+    }
+    return { limit: 5, orderBy: "createdAt_desc" };
+  }, [userRole, currentUserId]);
+
+  // 2. Panggil hook API dengan filter yang sesuai
+  const {
+    data: apiResponse,
+    isLoading,
+    isError,
+  } = useGetGeneralInspections(queryParams);
+  const inspections: Inspection[] = apiResponse?.data || [];
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "approved":
+      case "APPROVED":
         return "bg-green-100 text-green-800";
-      case "rejected":
+      case "REJECTED":
         return "bg-red-100 text-red-800";
-      case "pending":
+      case "PENDING":
         return "bg-yellow-100 text-yellow-800";
       default:
         return "bg-gray-100 text-gray-800";
@@ -168,86 +180,75 @@ export default function InspectionsPage() {
 
         {/* Daftar Inspeksi */}
         <div className="space-y-4">
-          {mockInspections.map((inspection) => (
-            <Card key={inspection.id}>
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between">
-                  <div className="flex-1">
-                    <div className="flex items-center space-x-4">
-                      <div>
-                        <h3 className="text-lg font-semibold">
-                          {inspection.equipmentId}
-                        </h3>
-                        <p className="text-sm text-muted-foreground">
-                          {getEquipmentTypeLabel(inspection.equipmentType)}
-                        </p>
-                      </div>
-                      <Badge className={getStatusColor(inspection.status)}>
-                        {inspection.status === "pending"
-                          ? "Menunggu"
-                          : inspection.status === "approved"
-                          ? "Disetujui"
-                          : "Ditolak"}
-                      </Badge>
-                    </div>
-                    <div className="mt-2 flex items-center space-x-6 text-sm text-muted-foreground">
-                      <span>📅 {formatDate(inspection.createdAt)}</span>
-                    </div>
+          {inspections.map((inspection) => (
+            <div
+              key={inspection.id}
+              className="flex items-center justify-between p-4 border rounded-lg"
+            >
+              <div className="flex-1">
+                <div className="flex items-center space-x-3">
+                  <div>
+                    <p className="font-medium">{inspection.equipmentId}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {getEquipmentTypeLabel(inspection.equipmentType)}
+                    </p>
                   </div>
-
-                  {/* Tombol Aksi */}
-                  <div className="flex gap-2 flex-col sm:flex-row space-x-2">
+                  <Badge
+                    className={clsx(
+                      getStatusColor(inspection.status), // Kelas dinamis
+                      "self-start"
+                    )}
+                  >
+                    {inspection.status.charAt(0).toUpperCase() +
+                      inspection.status.slice(1)}
+                  </Badge>
+                </div>
+                <div className="mt-2 flex items-center space-x-4 text-sm text-muted-foreground">
+                  <span>📅 {formatDate(inspection.createdAt)}</span>
+                  <span className="ml-4">👤 {inspection.mechanicName}</span>
+                </div>
+              </div>
+              <div className="flex space-x-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  // Link Review/Lihat
+                  onClick={() =>
+                    router.push(
+                      userRole === "leader"
+                        ? `/verification/${inspection.id}`
+                        : `/inspections/${inspection.id}`
+                    )
+                  }
+                >
+                  <Eye className="w-4 h-4 mr-1" />
+                  {userRole === "leader" ? "Tinjau" : "Lihat"}
+                </Button>
+                {/* Mechanic hanya bisa mengedit jika statusnya Ditolak atau Pending, 
+                    tetapi kita hanya menampilkan tombol View di dashboard */}
+                {/* {inspection.status === "REJECTED" &&
+                  userRole === "mechanic" && (
                     <Button
-                      className="w-full sm:w-fit"
                       variant="outline"
                       size="sm"
                       onClick={() =>
-                        router.push(`/inspections/${inspection.id}`)
+                        router.push(`/inspections/${inspection.id}/edit`)
                       }
                     >
-                      <Eye className="w-4 h-4 mr-1" />
-                      <span className="hidden sm:block">Lihat</span>
+                      <Edit className="w-4 h-4 mr-1" />
+                      Ubah
                     </Button>
-                    {/* {inspection.status === "rejected" && (
-                      <Button
-                        className="w-full sm:w-fit"
-                        variant="outline"
-                        size="sm"
-                        onClick={() =>
-                          router.push(`/inspections/${inspection.id}/edit`)
-                        }
-                      >
-                        <Edit className="w-4 h-4 mr-1" />
-                        <span className="hidden sm:block">Ubah</span>
-                      </Button>
-                    )} */}
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-
-        {/* Jika Tidak Ada Data */}
-        {mockInspections.length === 0 && (
-          <Card>
-            <CardContent className="text-center py-12">
-              <div className="text-muted-foreground mb-4">
-                <FileText className="w-12 h-12 mx-auto mb-4" />
-                <h3 className="text-lg font-medium">Tidak ada inspeksi</h3>
-                <p className="text-sm">
-                  Mulailah dengan membuat inspeksi peralatan pertama Anda.
-                </p>
+                  )} */}
               </div>
-              <Link href="/inspections/new">
-                <Button>
-                  <Plus className="w-4 h-4 mr-2" />
-                  Buat Inspeksi Pertama
-                </Button>
-              </Link>
-            </CardContent>
-          </Card>
-        )}
+            </div>
+          ))}
+          {inspections.length === 0 && (
+            <div className="text-center py-6 text-muted-foreground">
+              <Clock className="w-6 h-6 mx-auto mb-2" />
+              Tidak ada inspeksi terbaru ditemukan.
+            </div>
+          )}
+        </div>
       </main>
     </div>
   );

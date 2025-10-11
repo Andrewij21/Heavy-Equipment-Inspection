@@ -25,6 +25,7 @@ export const inspectionKeys = {
   all: ["inspections"] as const,
   lists: (params: Record<string, any> = {}) =>
     [...inspectionKeys.all, "list", params] as const,
+  detail: (id: string) => [...inspectionKeys.all, "detail", id] as const,
 };
 
 // --- API FUNCTION ---
@@ -35,11 +36,24 @@ const getGeneralInspections = async (
   return await apiClient.get("/inspections");
 };
 
+const getInspectionById = async (id: string): Promise<ApiResponse<any>> => {
+  if (!id) throw new Error("Inspection ID is required");
+  return await apiClient.get(`/inspections/${id}`);
+};
+
 // --- REACT QUERY HOOK ---
 export const useGetGeneralInspections = (params: Record<string, any> = {}) => {
   return useQuery({
     queryKey: inspectionKeys.lists(params),
     queryFn: () => getGeneralInspections(params),
     placeholderData: (previousData) => previousData, // Keep previous data visible while fetching
+  });
+};
+
+export const useGetInspection = (id: string) => {
+  return useQuery({
+    queryKey: inspectionKeys.detail(id),
+    queryFn: () => getInspectionById(id),
+    enabled: !!id, // Only run the query if the ID is available
   });
 };

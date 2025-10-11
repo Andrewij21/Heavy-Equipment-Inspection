@@ -51,7 +51,7 @@ interface WheelInspectionFormProps {
   isSubmitting?: boolean;
 }
 
-const formSections = [
+export const formSections = [
   {
     title: "Engine",
     fields: [

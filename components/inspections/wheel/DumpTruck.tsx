@@ -53,7 +53,7 @@ interface WheelInspectionFormProps {
 
 const formSections = [
   {
-    title: "A. Engine System", // Item 1-6
+    title: "Engine",
     fields: [
       {
         name: "engineOilLevel",
@@ -88,7 +88,7 @@ const formSections = [
     ],
   },
   {
-    title: "B. Transmission & Clutch", // Item 7-9
+    title: "Transmission & Clutch",
     fields: [
       {
         name: "powertrainTransmissionOilLevel",
@@ -102,13 +102,13 @@ const formSections = [
       },
       {
         name: "powertrainUniversalJoint",
-        label: "Check Universal Joint & Lubricate",
+        label: "Check Universal Joint",
         type: "result",
       },
     ],
   },
   {
-    title: "C. Hydraulic System", // Item 10-14
+    title: "Hydraulic System",
     fields: [
       {
         name: "hydraulicOilLevel",
@@ -119,7 +119,7 @@ const formSections = [
         name: "hydraulicSystemLeakage",
         label: "Check hydraulic cylinder & connection condition",
         type: "result",
-      }, // Di sini diberi label umum
+      },
       {
         name: "hydraulicPumpLeakage",
         label:
@@ -134,141 +134,155 @@ const formSections = [
     ],
   },
   {
-    title: "D. Cabin & Electric", // Item 15-28
+    title: "Cabin & Electric",
     fields: [
       {
         name: "cabinCleaning",
         label: "Cleaning cabin & check panel Function",
         type: "result",
-      }, // 15
+      },
       {
         name: "cabinLock",
         label: "Check lock cabin & lock tilt cabin",
         type: "result",
-      }, // 16
+      },
       {
         name: "cabinSeatBelt",
         label: "Check Seat & Safety Belt",
         type: "result",
-      }, // 17
+      },
       {
         name: "cabinControlLever",
         label: "Check Transmissi & Steering/Travel Control Lever Function",
         type: "result",
-      }, // 18
+      },
       {
         name: "cabinAttachmentLever",
         label: "Check Attachment Control Lever",
         type: "result",
-      }, // 19
-      { name: "acBlower", label: "Check AC / Blower", type: "result" }, // 20
-      { name: "cabinMirror", label: "Check mirror condition", type: "result" }, // 20
+      },
+      {
+        name: "acBlower",
+        label: "Check AC / Blower",
+        type: "result",
+      },
+      {
+        name: "cabinMirror",
+        label: "Check mirror condition",
+        type: "result",
+      },
       {
         name: "cabinSwitchFunction",
         label: "Check switch function",
         type: "result",
-      }, // 21
-      { name: "cabinWiper", label: "Check wiper function", type: "result" }, // 22
-      { name: "cabinHorn", label: "Check horn function", type: "result" }, // 23
+      },
+      {
+        name: "cabinWiper",
+        label: "Check wiper function",
+        type: "result",
+      },
+      {
+        name: "cabinHorn",
+        label: "Check horn function",
+        type: "result",
+      },
       {
         name: "cabinLamps",
         label: "Check all lamp function & Rotary lamp",
         type: "result",
-      }, // 24
+      },
       {
         name: "cabinBatteryConnection",
         label: "Check Battery & connection condition",
         type: "result",
-      }, // 25
+      },
       {
         name: "cabinRadioComm",
         label: "Check Radio Communication",
         type: "result",
-      }, // 26
+      },
       {
         name: "cabinBrakeFunction",
         label: "Check all brake function",
         type: "result",
-      }, // 27
+      },
       {
         name: "cabinEmergencyStop",
         label: "Check Emergency Stop function",
         type: "result",
-      }, // 28
+      },
       {
         name: "reverseCamera",
         label: "Check Reverse Camera",
         type: "result",
-      }, // 28
+      },
       {
         name: "checkMDVR",
         label: "Check MDVR",
         type: "result",
-      }, // 28
+      },
       {
         name: "apar",
         label: "Check APAR",
         type: "result",
-      }, // 28
+      },
     ],
   },
   {
-    title: "E. Front Axle, Rear Axle & Brakes", // Item 29-37
+    title: "Front Axle, Rear Axle & Brakes",
     fields: [
       {
         name: "structureDriveAxleOilLevel",
         label: "Check oil level in the drive axle and any leak",
         type: "result",
-      }, // 29
+      },
       {
-        name: "structurePinSpringSteeringTrunion", // Diambil dari label: Pin Spring, Steering linkage & Trunion
+        name: "structurePinSpringSteeringTrunion",
         label: "Check & lubricate Pin Spring, Steering likage & Trunion",
         type: "result",
-      }, // 30
+      },
       {
-        name: "structureMountingRubberTorqueRod", // Diambil dari label: Mounting & Rubber Torque Rod
+        name: "structureMountingRubberTorqueRod",
         label: "Check Mounting & Rubber Torque Rod",
         type: "result",
-      }, // 31
+      },
       {
-        name: "structureSpringUBolt", // Diambil dari label: Spring & U Bolt
+        name: "structureSpringUBolt",
         label: "Check Spring & U Bolt",
         type: "result",
-      }, // 32
+      },
       {
         name: "structureVStayFrontRear",
         label: "Check V Stay Front & Rear",
         type: "result",
-      }, // 33
+      },
       {
-        name: "structureBallJointTieRod", // Diambil dari label: ball joint tie rod
+        name: "structureBallJointTieRod",
         label: "Check ball joint tie rod",
         type: "result",
-      }, // 34
+      },
       {
-        name: "structureBallJointDragLink", // Diambil dari label: ball joint drag link
+        name: "structureBallJointDragLink",
         label: "Check ball joint drag link",
         type: "result",
-      }, // 35
+      },
       {
-        name: "structureShockAbsorber", // Diambil dari label: Shock Absorber
+        name: "structureShockAbsorber",
         label: "Check Shock Absorber",
         type: "result",
-      }, // 36
+      },
       {
-        name: "structureTyreBoltPressure", // Diambil dari label: Tyre, Bolt Tyre & Tyre Pressure
+        name: "structureTyreBoltPressure",
         label: "Check Tyre, Bolt Tyre & Tyre Pressure",
         type: "result",
-      }, // 37
+      },
       {
-        name: "structureRubberHollowspring", // Diambil dari label: Rubber Hollowspring
+        name: "structureRubberHollowspring",
         label: "Check Rubber Hollowspring",
         type: "result",
       },
-      // NOTE: Item berikut adalah bagian dari Attachment, Cabin, atau Grease.
-      // Field names yang baru dibuat agar tidak tumpang tindih.
       {
-        name: "electricalBackupAlarm", // Check Back Up Alarm (Lebih baik ada di Electrical)
+        name: "electricalBackupAlarm",
         label: "Check Back Up Alarm",
         type: "result",
       },
@@ -278,33 +292,45 @@ const formSections = [
     title: "Attachment",
     fields: [
       {
-        name: "attachmentDumpBodyVessel", // Check Dump Body, Pin, Pad, Stabilizer, tail gate & vesel
+        name: "attachmentDumpBodyVessel",
         label: "Check Dump Body, Pin, Pad, Stabilizer, tail gate & vesel",
         type: "result",
       },
       {
-        name: "attachmentSafetyDumpFunction", // Check Safety Dump Function
+        name: "attachmentSafetyDumpFunction",
         label: "Check Safety Dump Function",
         type: "result",
       },
       {
-        name: "greaseCentralGrease", // Check Cental Grease
+        name: "greaseCentralGrease",
         label: "Check Cental Grease",
         type: "result",
       },
       {
-        name: "greaseAllPointsArea", // Check All Greasing Point Area
+        name: "greaseAllPointsArea",
         label: "Check All Greasing Point Area",
         type: "result",
       },
     ],
   },
   {
-    title: "F. Top-Up Lubricant & Coolant", // Item Add Oil
+    title: "Add Oil",
     fields: [
-      { name: "coolant", label: "coolant", type: "qty" },
-      { name: "topUpEngine", label: "Engine (15W-40)", type: "qty" },
-      { name: "topUpHydraulic", label: "Hydraulic (TURALIX 46)", type: "qty" },
+      {
+        name: "coolant",
+        label: "coolant",
+        type: "qty",
+      },
+      {
+        name: "topUpEngine",
+        label: "Engine (15W-40)",
+        type: "qty",
+      },
+      {
+        name: "topUpHydraulic",
+        label: "Hydraulic (TURALIX 46)",
+        type: "qty",
+      },
       {
         name: "topUpTransmission",
         label: "Transmission (85W-140)",
@@ -358,21 +384,22 @@ export default function DumpTruckInspectionForm({
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              Informasi Header
-              <Badge variant="outline">Peralatan Roda</Badge>
+              Header Information
+              <Badge variant="outline">Wheel Equipment</Badge>
             </CardTitle>
             <CardDescription>
-              Unit CN, model, lokasi, personel, tanggal & HM
+              General equipment and inspection details.
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              {/* Fields that were already here */}
               <FormField
                 control={form.control}
                 name="inspectionDate"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Tanggal</FormLabel>
+                    <FormLabel>Date</FormLabel>
                     <FormControl>
                       <Input type="date" {...field} />
                     </FormControl>
@@ -385,9 +412,9 @@ export default function DumpTruckInspectionForm({
                 name="equipmentId"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Nomor Unit</FormLabel>
+                    <FormLabel>Unit Number</FormLabel>
                     <FormControl>
-                      <Input placeholder="Contoh: WHL-001" {...field} />
+                      <Input placeholder="e.g., EXC-001" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -395,40 +422,19 @@ export default function DumpTruckInspectionForm({
               />
               <FormField
                 control={form.control}
-                name="modelUnit"
+                name="smr"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Model Unit</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Contoh: CAT 950H" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="smr" // Pastikan ini ditambahkan ke defaultValues
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>SMR (Pembacaan Meter Servis)</FormLabel>
+                    <FormLabel>SMR (Service Meter Reading)</FormLabel>
                     <FormControl>
                       <Input
                         type="number"
                         placeholder="0"
                         {...field}
-                        // 1. KONTROL TAMPILAN:
-                        // Jika field.value adalah 0, tampilkan string kosong ("").
-                        // Jika tidak, tampilkan nilai sebenarnya.
                         value={field.value === 0 ? "" : field.value}
-                        // 2. KONTROL PERUBAHAN:
-                        // Jika input kosong (e.target.value === ""), kirim 0 ke useForm.
-                        // Jika ada nilai, kirim nilai numeriknya.
                         onChange={(e) => {
                           const rawValue = e.target.value;
                           const numericValue = Number.parseFloat(rawValue);
-
-                          // Kirim 0 jika string kosong, jika tidak kirim nilai numerik (atau NaN jika tidak valid)
                           field.onChange(rawValue === "" ? 0 : numericValue);
                         }}
                       />
@@ -437,24 +443,51 @@ export default function DumpTruckInspectionForm({
                   </FormItem>
                 )}
               />
-
               <FormField
                 control={form.control}
                 name="location"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Lokasi</FormLabel>
+                    <FormLabel>Location</FormLabel>
                     <FormControl>
-                      <Input placeholder="Contoh: Site B, Zona 2" {...field} />
+                      <Input placeholder="e.g., Site A" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
 
+              {/* ===== NEW FIELDS ADDED HERE ===== */}
+
               <FormField
                 control={form.control}
-                name="shift" // Pastikan ini ditambahkan ke defaultValues
+                name="timeDown"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Time Down</FormLabel>
+                    <FormControl>
+                      <Input type="time" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="timeOut"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Time Out</FormLabel>
+                    <FormControl>
+                      <Input type="time" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="shift"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Shift</FormLabel>
@@ -464,39 +497,27 @@ export default function DumpTruckInspectionForm({
                     >
                       <FormControl className="w-full">
                         <SelectTrigger>
-                          <SelectValue placeholder="Pilih Shift" />
+                          <SelectValue placeholder="Select Shift" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="day">Siang</SelectItem>
-                        <SelectItem value="night">Malam</SelectItem>
+                        <SelectItem value="day">Day</SelectItem>
+                        <SelectItem value="night">Night</SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />
                   </FormItem>
                 )}
               />
+
               <FormField
                 control={form.control}
-                name="timeDown" // Pastikan ini ditambahkan ke defaultValues
+                name="modelUnit"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Waktu Turun (Time Down)</FormLabel>
+                    <FormLabel>Unit Type</FormLabel>
                     <FormControl>
-                      <Input type="time" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="timeOut" // Pastikan ini ditambahkan ke defaultValues
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Waktu Keluar (Time Out)</FormLabel>
-                    <FormControl>
-                      <Input type="time" {...field} />
+                      <Input placeholder="CAT 950H" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -514,11 +535,12 @@ export default function DumpTruckInspectionForm({
             fields={section.fields}
           />
         ))}
+        {/* Tabel untuk Temuan Inspeksi */}
         <Card>
           <CardHeader>
-            <CardTitle>Finding Inspection Unit (Temuan Inspeksi)</CardTitle>
+            <CardTitle>Finding Inspection Unit</CardTitle>
             <CardDescription>
-              Catat kerusakan atau temuan lain di sini.
+              Record any damages or other findings here.
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -538,7 +560,10 @@ export default function DumpTruckInspectionForm({
                         control={form.control}
                         name={`findings.${index}.description`}
                         render={({ field }) => (
-                          <Input placeholder="Deskripsi temuan..." {...field} />
+                          <Input
+                            placeholder="Finding description..."
+                            {...field}
+                          />
                         )}
                       />
                     </TableCell>

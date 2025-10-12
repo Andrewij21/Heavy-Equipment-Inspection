@@ -290,7 +290,7 @@ export default function InspectionDetailPage() {
             />
 
             {/* --- Data Waktu --- */}
-            <InfoItem
+            {/* <InfoItem
               icon={<Clock />}
               label="Time Down"
               value={inspection.timeDown}
@@ -298,6 +298,16 @@ export default function InspectionDetailPage() {
             <InfoItem
               icon={<Clock />}
               label="Time Out"
+              value={inspection.timeOut}
+            /> */}
+            <InfoItem
+              icon={<GaugeCircle />}
+              label="HM DOWN"
+              value={inspection.timeDown}
+            />
+            <InfoItem
+              icon={<GaugeCircle />}
+              label="HM RFU"
               value={inspection.timeOut}
             />
 
@@ -312,11 +322,7 @@ export default function InspectionDetailPage() {
               label="Unit Model"
               value={inspection.modelUnit}
             />
-            <InfoItem
-              icon={<GaugeCircle />}
-              label="SMR (Service Meter Reading)"
-              value={inspection.smr}
-            />
+            <InfoItem icon={<Clock />} label="TIME" value={inspection.smr} />
           </div>
         </CardContent>
       </Card>

@@ -284,13 +284,13 @@ export function VerificationDetailView({
               }
             />
             <InfoItem
-              icon={<Clock />}
-              label="Time Down"
+              icon={<GaugeCircle />}
+              label="HM DOWN"
               value={inspection.timeDown}
             />
             <InfoItem
-              icon={<Clock />}
-              label="Time Out"
+              icon={<GaugeCircle />}
+              label="HM RFU"
               value={inspection.timeOut}
             />
             <InfoItem
@@ -303,11 +303,7 @@ export function VerificationDetailView({
               label="Unit Model"
               value={inspection.modelUnit}
             />
-            <InfoItem
-              icon={<GaugeCircle />}
-              label="SMR (Service Meter Reading)"
-              value={inspection.smr}
-            />
+            <InfoItem icon={<Clock />} label="TIME" value={inspection.smr} />
           </div>
         </CardContent>
       </Card>

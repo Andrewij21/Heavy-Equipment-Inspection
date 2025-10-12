@@ -9,8 +9,6 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
 import {
   CheckCircle,
   XCircle,
@@ -18,9 +16,7 @@ import {
   User,
   MapPin,
   Calendar,
-  Timer,
   ArrowLeft,
-  Edit,
   FileText,
   AlertCircle,
   GaugeCircle,
@@ -46,20 +42,18 @@ import { formSections as CompressorForm } from "@/components/inspections/support
 import { formSections as MultiFlowForm } from "@/components/inspections/support/MultiFlow";
 import { formSections as TyreHandlerForm } from "@/components/inspections/support/TyreHandler";
 import { useRouter } from "next/navigation";
-import { useAuth } from "@/context/AuthContext";
 
+// Interface dan helper tetap sama
 export interface FormField {
   name: string;
   label: string;
-  type: "select" | "qty" | "temp"; // Tambahkan tipe lain jika ada
+  type: "select" | "qty" | "temp";
 }
-
 export interface FormSection {
   title: string;
   fields: FormField[];
 }
 const inspectionFormMap: Record<string, any[]> = {
-  // Track Types
   BigDigger: BigDiggerForm,
   SmallPC: SmallPCForm,
   Bulldozer: BulldozerForm,
@@ -81,14 +75,11 @@ interface Inspection {
   equipmentGeneralType?: string | null;
   wheelGeneralType?: string | null;
   supportGeneralType?: string | null;
-  // ... properti lainnya
 }
 export const getInspectionFormStructure = (
   inspection: Inspection
 ): FormSection[] => {
   let generalTypeKey: string | null | undefined = null;
-
-  // 1. Tentukan *GeneralType mana yang akan digunakan berdasarkan equipmentType
   switch (inspection.equipmentType) {
     case "track":
       generalTypeKey = inspection.equipmentGeneralType;
@@ -100,15 +91,11 @@ export const getInspectionFormStructure = (
       generalTypeKey = inspection.supportGeneralType;
       break;
     default:
-      return []; // Kembalikan array kosong jika tipe tidak dikenali
+      return [];
   }
-
-  // 2. Jika key valid, cari di map. Jika tidak, kembalikan array kosong.
   if (generalTypeKey && inspectionFormMap[generalTypeKey]) {
     return inspectionFormMap[generalTypeKey];
   }
-
-  // Fallback jika general type tidak ada di map
   return [];
 };
 const InfoItem = ({
@@ -138,17 +125,12 @@ interface InspectionDetailViewProps {
 export function VerificationDetailView({
   id,
   handleStatusHandler,
-  onReject,
   showActions = false,
 }: InspectionDetailViewProps) {
   const router = useRouter();
-  const { user } = useAuth();
-  const [comments, setComments] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  // 2. Gunakan hook untuk fetch data, gantikan useState dan useEffect
   const { data, isLoading, isError, error } = useGetInspection(id);
 
-  // 3. Handle loading state dari React Query
   if (isLoading) {
     return (
       <div className="container mx-auto p-6">
@@ -160,7 +142,6 @@ export function VerificationDetailView({
     );
   }
 
-  // 4. Handle error state dari React Query (termasuk jika data tidak ditemukan)
   if (isError) {
     return (
       <div className="container mx-auto p-6">
@@ -181,6 +162,20 @@ export function VerificationDetailView({
     );
   }
 
+  const inspection = data?.data;
+
+  if (!inspection) {
+    return (
+      <div className="container mx-auto p-6">
+        <Card>
+          <CardContent className="p-6 text-center">
+            <p className="text-gray-500">Inspection not found</p>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
   const getStatusColor = (status: string) => {
     switch (status) {
       case "APPROVED":
@@ -188,9 +183,8 @@ export function VerificationDetailView({
       case "REJECTED":
         return "bg-red-100 text-red-800";
       case "PENDING":
-        return "bg-yellow-100 text-yellow-800";
       default:
-        return "bg-gray-100 text-gray-800";
+        return "bg-yellow-100 text-yellow-800";
     }
   };
 
@@ -204,29 +198,15 @@ export function VerificationDetailView({
     }
   };
 
-  const inspection = data?.data;
-  let inspectionDetails = [];
-  if (inspection.equipmentType === "track") {
-    inspectionDetails = inspection.trackDetails;
-  } else if (inspection.equipmentType === "wheel") {
-    inspectionDetails = inspection.wheelDetails;
-  } else if (inspection.equipmentType === "support") {
-    inspectionDetails = inspection.supportDetails;
-  }
-  console.log({ data, inspection });
+  // Logika untuk mendapatkan detail inspeksi yang benar
+  const inspectionDetails =
+    inspection.equipmentType === "track"
+      ? inspection.trackDetails
+      : inspection.equipmentType === "wheel"
+      ? inspection.wheelDetails
+      : inspection.supportDetails;
+
   const formStructure = getInspectionFormStructure(inspection);
-  // Jika loading selesai dan tidak error, tapi data tidak ada (kasus jarang terjadi jika API konsisten)
-  if (!inspection) {
-    return (
-      <div className="container mx-auto p-6">
-        <Card>
-          <CardContent className="p-6 text-center">
-            <p className="text-gray-500">Inspection not found</p>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
 
   return (
     <div className="space-y-6">
@@ -249,8 +229,7 @@ export function VerificationDetailView({
         </div>
         <div className="flex items-center space-x-2">
           <Badge className={getStatusColor(inspection.status)}>
-            {inspection.status.charAt(0).toUpperCase() +
-              inspection.status.slice(1)}
+            {inspection.status}
           </Badge>
         </div>
       </div>
@@ -268,7 +247,6 @@ export function VerificationDetailView({
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-4 gap-y-6">
-            {/* --- Data dari Inspection --- */}
             <InfoItem
               icon={<Calendar />}
               label="Inspection Date"
@@ -305,8 +283,6 @@ export function VerificationDetailView({
                   : "N/A"
               }
             />
-
-            {/* --- Data Waktu --- */}
             <InfoItem
               icon={<Clock />}
               label="Time Down"
@@ -317,8 +293,6 @@ export function VerificationDetailView({
               label="Time Out"
               value={inspection.timeOut}
             />
-
-            {/* --- Data Peralatan --- */}
             <InfoItem
               icon={<Truck />}
               label="Unit Number"
@@ -337,32 +311,14 @@ export function VerificationDetailView({
           </div>
         </CardContent>
       </Card>
-      {/* Equipment Information */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Equipment Information</CardTitle>
-        </CardHeader>
-        <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <p className="text-sm text-gray-500">Equipment Type</p>
-            <p className="font-medium">{inspection.equipmentType}</p>
-          </div>
-          <div>
-            <p className="text-sm text-gray-500">Equipment ID</p>
-            <p className="font-medium">{inspection.equipmentId}</p>
-          </div>
-        </CardContent>
-      </Card>
 
-      {/* Inspection Data - INI BAGIAN YANG DIUBAH */}
+      {/* Inspection Results */}
       <Card>
         <CardHeader>
-          <CardTitle>Inspection Results</CardTitle>
+          <CardTitle>Inspection Checklist Results</CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
-          {/* Cek jika struktur ditemukan */}
           {formStructure.length > 0 ? (
-            // 1. Loop pertama untuk setiap SEKSI (e.g., "Lower Frame Area Inspection")
             formStructure.map((section, sectionIndex) => (
               <div
                 key={sectionIndex}
@@ -372,13 +328,11 @@ export function VerificationDetailView({
                   {section.title}
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-4">
-                  {/* 2. Loop kedua untuk setiap FIELD di dalam seksi tersebut */}
                   {section.fields.map((field) => (
                     <div key={field.name}>
                       <p className="text-sm text-gray-500">{field.label}</p>
-                      <p className="font-medium">
-                        {/* Ambil data dari inspection.data menggunakan 'name' dari field */}
-                        {inspectionDetails[field.name] || (
+                      <p className="font-medium capitalize">
+                        {inspectionDetails?.[field.name] || (
                           <span className="text-gray-400">N/A</span>
                         )}
                       </p>
@@ -388,14 +342,48 @@ export function VerificationDetailView({
               </div>
             ))
           ) : (
-            // Tampilkan pesan jika tidak ada struktur form yang cocok
             <p className="text-gray-500">
-              No inspection form structure found for this equipment type (
-              {inspection.equipmentGeneralType || "N/A"}).
+              No inspection form structure found for this equipment type.
             </p>
           )}
         </CardContent>
       </Card>
+
+      {/* ========================================================== */}
+      {/* BAGIAN BARU UNTUK FINDINGS                  */}
+      {/* ========================================================== */}
+      {inspectionDetails?.findings && inspectionDetails.findings.length > 0 && (
+        <Card>
+          <CardHeader>
+            <CardTitle>Findings</CardTitle>
+            <CardDescription>
+              Items that need attention identified during the inspection.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-3">
+              {inspectionDetails.findings.map((finding: any, index: number) => (
+                <div
+                  key={index}
+                  className="flex items-center justify-between rounded-md border p-3"
+                >
+                  <p className="text-sm text-foreground">
+                    {finding.description}
+                  </p>
+                  <Badge
+                    variant={
+                      finding.status === "open" ? "destructive" : "secondary"
+                    }
+                  >
+                    {finding.status.charAt(0).toUpperCase() +
+                      finding.status.slice(1)}
+                  </Badge>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Notes */}
       {inspection.notes && (
@@ -415,20 +403,10 @@ export function VerificationDetailView({
           <CardHeader>
             <CardTitle>Verification</CardTitle>
             <CardDescription>
-              Review and approve or reject this inspection
+              Review and approve or reject this inspection.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            {/* <div>
-              <Label htmlFor="comments">Comments</Label>
-              <Textarea
-                id="comments"
-                placeholder="Add your review comments..."
-                value={comments}
-                onChange={(e) => setComments(e.target.value)}
-                className="min-h-[100px]"
-              />
-            </div> */}
             <div className="flex space-x-4">
               <Button
                 onClick={() => handleApprove("APPROVED")}

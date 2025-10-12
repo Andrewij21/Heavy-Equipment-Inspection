@@ -58,12 +58,21 @@ export default function Navigation() {
         Dashboard
       </Link>
       {user.role === "mechanic" && (
-        <Link
-          href="/inspections"
-          className="text-gray-900 hover:text-primary px-3 py-2 rounded-md text-sm font-medium"
-        >
-          Inspeksi Saya
-        </Link>
+        <>
+          <Link
+            href="/inspections"
+            className="text-gray-900 hover:text-primary px-3 py-2 rounded-md text-sm font-medium"
+          >
+            Inspeksi Saya
+          </Link>
+
+          <Link
+            href="/schedule"
+            className="text-gray-900 hover:text-primary px-3 py-2 rounded-md text-sm font-medium"
+          >
+            Jadwal
+          </Link>
+        </>
       )}
       {(user.role === "leader" || user.role === "admin") && (
         <Link
@@ -143,6 +152,17 @@ export default function Navigation() {
                       </SheetClose>
                     )}
 
+                    {user.role === "mechanic" && (
+                      <SheetClose asChild>
+                        <Link
+                          href="/schedule"
+                          className="text-lg font-medium text-gray-700 py-2 px-3 rounded-md transition duration-150 ease-in-out hover:bg-gray-50 hover:text-primary"
+                        >
+                          Jadwal
+                        </Link>
+                      </SheetClose>
+                    )}
+
                     {(user.role === "leader" || user.role === "admin") && (
                       <SheetClose asChild>
                         <Link
@@ -183,6 +203,14 @@ export default function Navigation() {
                   className="text-gray-900 hover:text-primary px-3 py-2 rounded-md text-sm font-medium"
                 >
                   My Inspections
+                </Link>
+              )}
+              {user.role === "mechanic" && (
+                <Link
+                  href="/schedule"
+                  className="text-gray-900 hover:text-primary px-3 py-2 rounded-md text-sm font-medium"
+                >
+                  Schedule
                 </Link>
               )}
 

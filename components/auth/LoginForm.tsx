@@ -34,7 +34,7 @@ export default function LoginForm() {
   const form = useForm<LoginSchema>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      email: "",
+      nrp: "",
       password: "",
     },
   });
@@ -91,14 +91,13 @@ export default function LoginForm() {
               {/* 4. Use FormField for each input to connect it to react-hook-form state */}
               <FormField
                 control={form.control}
-                name="email"
+                name="nrp"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Email</FormLabel>
+                    <FormLabel>NRP</FormLabel>
                     <FormControl>
                       <Input
-                        type="email"
-                        placeholder="Masukkan Email Anda"
+                        placeholder="Masukkan Nomor Registrasi Pokok"
                         {...field}
                       />
                     </FormControl>
@@ -143,13 +142,13 @@ export default function LoginForm() {
             <p className="font-medium mb-2">Demo Accounts:</p>
             <div className="space-y-1">
               <p>
-                <strong>Mechanic:</strong> mechanic@gmail.com / password
+                <strong>Mechanic:</strong> MEC-2510-001 / password
               </p>
               <p>
-                <strong>Leader:</strong> leader@gmail.com / password
+                <strong>Leader:</strong> LDR-2508-002 / password
               </p>
               <p>
-                <strong>Admin:</strong> admin@gmail.com / password
+                <strong>Admin:</strong> ADM-2405-003 / password
               </p>
             </div>
           </div>

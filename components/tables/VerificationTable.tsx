@@ -293,7 +293,7 @@ export function VerificationTable({
             <div className="relative flex-1 min-w-[200px]">
               <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
               <Input
-                placeholder="Cari ID peralatan, mekanik, lokasi..."
+                placeholder="Search Equipment ID, mechanic, location..."
                 className="pl-10"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -304,18 +304,18 @@ export function VerificationTable({
               onValueChange={setEquipmentTypeFilter}
             >
               <SelectTrigger className="w-full sm:w-[180px]">
-                <SelectValue placeholder="Tipe Peralatan" />
+                <SelectValue placeholder="Equipment Type" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">Semua Tipe</SelectItem>
-                <SelectItem value="track">Peralatan Track</SelectItem>
-                <SelectItem value="wheel">Peralatan Roda</SelectItem>
-                <SelectItem value="support">Peralatan Pendukung</SelectItem>
+                <SelectItem value="all">All Types</SelectItem>
+                <SelectItem value="track">Track Equipment</SelectItem>
+                <SelectItem value="wheel">Wheel Equipment</SelectItem>
+                <SelectItem value="support">Support Equipment</SelectItem>
               </SelectContent>
             </Select>
             <Button variant="outline" onClick={clearFilters}>
               <Filter className="w-4 h-4 mr-2" />
-              Bersihkan Filter
+              Clear Filters
             </Button>
           </div>
         </CardContent>

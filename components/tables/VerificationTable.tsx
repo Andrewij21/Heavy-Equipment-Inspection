@@ -401,7 +401,7 @@ export function VerificationTable({
 
                 // Tentukan apakah tombol persetujuan harus diaktifkan (hanya untuk Track)
                 const isTrack = inspection.equipmentType === "track";
-                const canFinalize = isPending && isTrack;
+                const canFinalize = isPending;
 
                 return (
                   <TableRow key={inspection.id} className="hover:bg-muted/50">

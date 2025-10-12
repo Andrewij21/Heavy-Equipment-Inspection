@@ -111,6 +111,11 @@ export default function NewInspectionPage() {
         // --- AKHIR LOGIC WHEEL INSPECTION ---
       } else if (data.equipmentType === "support") {
         await supportMutation.mutateAsync(payload as any);
+        toast.success("Pemeriksaan Berhasil Dibuat", {
+          description:
+            "Pemeriksaan support telah berhasil diserahkan dan menunggu tinjauan.",
+          duration: 3000,
+        });
         router.push("/inspections");
       }
     } catch (error) {

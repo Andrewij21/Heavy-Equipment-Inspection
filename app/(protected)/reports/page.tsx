@@ -436,47 +436,47 @@ export default function ReportsPage({ role }: { role: string }) {
           </CardHeader>
           <CardContent>
             {/* Filter */}
-            <div className="flex items-center sm:justify-between gap-4 mb-6 flex-wrap">
-              <div className="relative w-full sm:w-fit">
+            <div className="flex items-center flex-col sm:flex-row sm:justify-between gap-4 mb-6">
+              <div className="relative w-full">
                 <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                 <Input
-                  placeholder="Cari inspeksi..."
+                  placeholder="Search inspections..."
                   className="pl-10"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
               </div>
               <Select value={typeFilter} onValueChange={setTypeFilter}>
-                <SelectTrigger className="w-full sm:w-fit">
-                  <SelectValue placeholder="Tipe Peralatan" />
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Equipment Type" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">Semua Tipe</SelectItem>
+                  <SelectItem value="all">All Types</SelectItem>
                   <SelectItem value="track">Track</SelectItem>
-                  <SelectItem value="wheel">Roda</SelectItem>
-                  <SelectItem value="support">Pendukung</SelectItem>
+                  <SelectItem value="wheel">Wheel</SelectItem>
+                  <SelectItem value="support">Support</SelectItem>
                 </SelectContent>
               </Select>
               <Select value={statusFilter} onValueChange={setStatusFilter}>
-                <SelectTrigger className="w-full sm:w-fit">
+                <SelectTrigger className="w-full">
                   <SelectValue placeholder="Status" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">Semua Status</SelectItem>
-                  <SelectItem value="approved">Disetujui</SelectItem>
-                  <SelectItem value="rejected">Ditolak</SelectItem>
-                  <SelectItem value="pending">Menunggu</SelectItem>
+                  <SelectItem value="all">All Statuses</SelectItem>
+                  <SelectItem value="approved">Approved</SelectItem>
+                  <SelectItem value="rejected">Rejected</SelectItem>
+                  <SelectItem value="pending">Pending</SelectItem>
                 </SelectContent>
               </Select>
               <Select value={dateFilter} onValueChange={setDateFilter}>
-                <SelectTrigger className="w-full sm:w-fit">
-                  <SelectValue placeholder="Filter Cepat Tanggal" />
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Quick Date Filter" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">Sepanjang Waktu</SelectItem>
-                  <SelectItem value="today">Hari Ini</SelectItem>
-                  <SelectItem value="week">7 Hari Terakhir</SelectItem>
-                  <SelectItem value="month">30 Hari Terakhir</SelectItem>
+                  <SelectItem value="all">All Time</SelectItem>
+                  <SelectItem value="today">Today</SelectItem>
+                  <SelectItem value="week">Last 7 Days</SelectItem>
+                  <SelectItem value="month">Last 30 Days</SelectItem>
                 </SelectContent>
               </Select>
               <Input
@@ -488,23 +488,21 @@ export default function ReportsPage({ role }: { role: string }) {
                     dateFrom: e.target.value,
                   }))
                 }
-                aria-label="Dari tanggal"
-                className="w-full sm:w-fit"
+                aria-label="From date"
+                className=""
               />
-              <div className="flex items-center gap-2">
-                <Input
-                  type="date"
-                  value={dateTo}
-                  onChange={(e) =>
-                    setApiFilters((prev) => ({
-                      ...prev,
-                      dateTo: e.target.value,
-                    }))
-                  }
-                  className="w-full sm:w-fit"
-                  aria-label="Sampai tanggal"
-                />
-              </div>
+              <Input
+                type="date"
+                value={dateTo}
+                onChange={(e) =>
+                  setApiFilters((prev) => ({
+                    ...prev,
+                    dateTo: e.target.value,
+                  }))
+                }
+                className=""
+                aria-label="To date"
+              />
             </div>
 
             {/* Tabel */}

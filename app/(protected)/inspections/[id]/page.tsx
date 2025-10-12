@@ -380,6 +380,39 @@ export default function InspectionDetailPage() {
         </CardContent>
       </Card>
 
+      {inspectionDetails?.findings && inspectionDetails.findings.length > 0 && (
+        <Card>
+          <CardHeader>
+            <CardTitle>Findings</CardTitle>
+            <CardDescription>
+              Items that need attention identified during the inspection.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-3">
+              {inspectionDetails.findings.map((finding: any, index: number) => (
+                <div
+                  key={index}
+                  className="flex items-center justify-between rounded-md border p-3"
+                >
+                  <p className="text-sm text-foreground">
+                    {finding.description}
+                  </p>
+                  <Badge
+                    variant={
+                      finding.status === "open" ? "destructive" : "secondary"
+                    }
+                  >
+                    {finding.status.charAt(0).toUpperCase() +
+                      finding.status.slice(1)}
+                  </Badge>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
       {/* Comments */}
       {inspection.comments && (
         <Card>

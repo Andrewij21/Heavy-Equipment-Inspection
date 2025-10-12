@@ -542,7 +542,7 @@ export function BigDiggerInspectionForm({
                   </FormItem>
                 )}
               />
-              <FormField
+              {/* <FormField
                 control={form.control}
                 name="smr"
                 render={({ field }) => (
@@ -560,6 +560,20 @@ export function BigDiggerInspectionForm({
                           field.onChange(rawValue === "" ? 0 : numericValue);
                         }}
                       />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              /> */}
+              <FormField
+                control={form.control}
+                name="smr"
+                render={({ field }) => (
+                  <FormItem>
+                    {/* <FormLabel>Time Down</FormLabel> */}
+                    <FormLabel>TIME</FormLabel>
+                    <FormControl>
+                      <Input type="time" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

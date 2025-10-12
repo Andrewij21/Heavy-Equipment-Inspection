@@ -426,19 +426,10 @@ export function BullDozerInspectionForm({
                 name="smr"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>SMR (Service Meter Reading)</FormLabel>
+                    {/* <FormLabel>Time Down</FormLabel> */}
+                    <FormLabel>TIME</FormLabel>
                     <FormControl>
-                      <Input
-                        type="number"
-                        placeholder="0"
-                        {...field}
-                        value={field.value === 0 ? "" : field.value}
-                        onChange={(e) => {
-                          const rawValue = e.target.value;
-                          const numericValue = Number.parseFloat(rawValue);
-                          field.onChange(rawValue === "" ? 0 : numericValue);
-                        }}
-                      />
+                      <Input type="time" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

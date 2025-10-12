@@ -2,11 +2,11 @@
 
 import { DashboardStats } from "@/components/dashboard/DashboardStats";
 import { RecentInspections } from "@/components/dashboard/RecentInspactions";
+import ReportsPage from "@/components/dashboard/ReportSection";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/AuthContext";
 import { Plus, FileText, Users } from "lucide-react";
 import Link from "next/link";
-import ReportsPage from "../reports/page";
 
 export default function DashboardPage() {
   const { user } = useAuth();

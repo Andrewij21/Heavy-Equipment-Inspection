@@ -72,8 +72,7 @@ interface FilterableInspection extends ExportInspection {
 const mapApiToFilterStatus = (status: string) =>
   status.toLowerCase() as "approved" | "rejected" | "pending";
 
-export default function ReportsPage() {
-  const role = "admin";
+export default function ReportsPage({ role }: { role: string }) {
   const [isExporting, setIsExporting] = useState(false);
 
   // States untuk filtering API (Sumber Data)

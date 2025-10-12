@@ -35,7 +35,7 @@ const getGeneralInspections = async (
   params: Record<string, any>
 ): Promise<ApiResponse<InspectionListItem[]>> => {
   // Calls the new general API endpoint for all inspection types
-  return await apiClient.get("/inspections");
+  return await apiClient.get("/inspections", params);
 };
 
 const getInspectionById = async (id: string): Promise<ApiResponse<any>> => {

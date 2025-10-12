@@ -32,13 +32,42 @@ export const apiClient = {
   },
 
   // Method to make a GET request
-  get: async function <T>(endpoint: string): Promise<T> {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}${endpoint}`, {
+  // get: async function <T>(endpoint: string): Promise<T> {
+  //   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}${endpoint}`, {
+  //     headers: this._getHeaders(),
+  //   });
+  //   return this._handleResponse(res);
+  // },
+  get: async function <T>(
+    endpoint: string,
+    params?: Record<string, any>
+  ): Promise<T> {
+    // Start with the base URL
+    let url = `${process.env.NEXT_PUBLIC_API_URL}${endpoint}`;
+
+    // Check if params are provided and have keys
+    if (params && Object.keys(params).length > 0) {
+      // Filter out any null or undefined values from the params
+      const filteredParams = Object.fromEntries(
+        Object.entries(params).filter(
+          ([_, value]) => value != null && value !== ""
+        )
+      );
+
+      // Create the query string if there are any valid params left
+      if (Object.keys(filteredParams).length > 0) {
+        const queryString = new URLSearchParams(filteredParams).toString();
+        url += `?${queryString}`;
+      }
+    }
+
+    // Make the fetch request with the final URL
+    const res = await fetch(url, {
       headers: this._getHeaders(),
     });
+
     return this._handleResponse(res);
   },
-
   // Method to make a POST request with a body
   post: async function <T>(endpoint: string, body: any): Promise<T> {
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}${endpoint}`, {

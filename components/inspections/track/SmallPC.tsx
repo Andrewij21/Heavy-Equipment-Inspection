@@ -447,8 +447,8 @@ export function SmallPCInspectionForm({
       inspectionDate: new Date().toISOString().split("T")[0],
       inspectionTime: new Date().toTimeString().slice(0, 5),
       findings: [{ description: "", status: "open" }],
-      timeDown: new Date().toTimeString().slice(0, 5),
-      timeOut: new Date().toTimeString().slice(0, 5),
+      timeDown: "",
+      timeOut: "",
       ...initialData,
     },
   });

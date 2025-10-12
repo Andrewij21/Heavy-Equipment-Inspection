@@ -415,7 +415,8 @@ export default function GraderInspectionForm({
       inspectionTime: new Date().toTimeString().slice(0, 5),
       workingHours: 0,
       notes: "",
-      // Booleans default to false
+      timeDown: "",
+      timeOut: "",
       findings: [{ description: "", status: "open" }],
       ...initialData,
     },

@@ -478,7 +478,8 @@ export default function HeavyDumpTruckInspectionForm({
       workingHours: 0,
       notes: "",
       findings: [{ description: "", status: "open" }],
-      // Booleans default to false
+      timeDown: "",
+      timeOut: "",
       ...initialData,
     },
   });

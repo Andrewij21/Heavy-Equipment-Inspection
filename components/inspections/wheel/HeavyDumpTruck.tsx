@@ -576,7 +576,7 @@ export default function HeavyDumpTruckInspectionForm({
                 name="timeDown"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Time Down</FormLabel>
+                    <FormLabel>HM DOWN</FormLabel>
                     <FormControl>
                       <Input type="time" {...field} />
                     </FormControl>
@@ -589,7 +589,8 @@ export default function HeavyDumpTruckInspectionForm({
                 name="timeOut"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Time Out</FormLabel>
+                    <FormLabel>HM RFU</FormLabel>
+
                     <FormControl>
                       <Input type="time" {...field} />
                     </FormControl>

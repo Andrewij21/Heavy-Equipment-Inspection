@@ -6,10 +6,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Clock, CheckCircle, XCircle, Loader2 } from "lucide-react";
 import { VerificationTable } from "@/components/tables/VerificationTable";
-// NEW IMPORT: Import the general inspection hook
 import { useGetGeneralInspections } from "@/queries/inspection";
 
-// Definisikan bentuk data yang berasal dari API (model Inspeksi + approver)
+// ... (Interface tidak berubah)
 interface InspectionListItem {
   id: string;
   equipmentId: string;
@@ -21,73 +20,77 @@ interface InspectionListItem {
   location: string;
 }
 
-// Interface untuk format data yang dibutuhkan oleh VerificationTable
 interface TableData extends InspectionListItem {
   leaderName: string;
-  priority: "low" | "medium" | "high"; // Placeholder yang dibutuhkan oleh tabel
-  issues: number; // Placeholder yang dibutuhkan oleh tabel
-  status: "PENDING" | "APPROVED" | "REJECTED"; // Tabel menggunakan huruf kecil
+  priority: "low" | "medium" | "high";
+  issues: number;
+  status: "PENDING" | "APPROVED" | "REJECTED";
 }
 
 export default function VerificationPage() {
-  // Gunakan nilai status Prisma (huruf besar) untuk filter API dan state tab
   const [activeTab, setActiveTab] = useState<
     "PENDING" | "APPROVED" | "REJECTED" | "ALL"
   >("PENDING");
 
-  // Definisikan parameter filter/paginasi dasar
   const [filters, setFilters] = useState({
     page: 1,
-    limit: 50,
+    limit: 100, // Ambil lebih banyak data sekaligus untuk di-filter di klien
     q: "",
   });
 
-  // Ambil data berdasarkan filter status saat ini
-  const apiFilters = {
-    ...filters,
-    // Teruskan filter status ke API kecuali jika tab adalah 'ALL'
-    status: activeTab !== "ALL" ? activeTab : undefined,
-  };
+  // 1. Ambil SEMUA data inspeksi tanpa filter status.
+  // Ini akan menjadi sumber data utama kita.
+  const {
+    data: allInspectionsResponse,
+    isLoading,
+    isError,
+  } = useGetGeneralInspections(filters);
 
-  const { data, isLoading, isError } = useGetGeneralInspections(apiFilters);
-
-  // Petakan data API ke struktur yang dibutuhkan tabel dan hitung jumlahnya
-  const { tableData, counts } = useMemo(() => {
-    const rawData = data?.data || [];
-    const mappedData: TableData[] = [];
+  // 2. Hitung total (counts) dari SEMUA data yang diambil.
+  // useMemo ini hanya akan berjalan ulang jika data dari API berubah.
+  const counts = useMemo(() => {
+    const rawData = allInspectionsResponse?.data || [];
     let pendingCount = 0;
     let approvedCount = 0;
     let rejectedCount = 0;
 
     rawData.forEach((item: any) => {
       const status = item.status as "PENDING" | "APPROVED" | "REJECTED";
-
-      // Hitung jumlah
       if (status === "PENDING") pendingCount++;
       else if (status === "APPROVED") approvedCount++;
       else if (status === "REJECTED") rejectedCount++;
+    });
 
-      // Petakan ke format TableData
-      mappedData.push({
+    return { pendingCount, approvedCount, rejectedCount };
+  }, [allInspectionsResponse]);
+
+  // 3. Filter dan petakan data untuk tabel berdasarkan TAB AKTIF.
+  // useMemo ini akan berjalan ulang jika data API atau activeTab berubah.
+  const tableData = useMemo(() => {
+    const rawData = allInspectionsResponse?.data || [];
+
+    // Filter data berdasarkan tab yang aktif
+    const filteredData =
+      activeTab === "ALL"
+        ? rawData
+        : rawData.filter((item: any) => item.status === activeTab);
+
+    // Petakan data yang sudah difilter ke format yang dibutuhkan tabel
+    return filteredData.map(
+      (item: any): TableData => ({
         id: item.id,
         equipmentId: item.equipmentId,
         equipmentType: item.equipmentType.toLowerCase(),
         mechanicName: item.mechanicName,
         leaderName: item.approver?.username || "N/A",
-        status: status.toLowerCase() as "PENDING" | "APPROVED" | "REJECTED", // Konversi untuk tabel
+        status: item.status.toLowerCase(), // Konversi untuk tabel
         createdAt: item.createdAt,
         location: item.location,
-        // Bidang mock yang diharapkan tabel
-        priority: "medium",
-        issues: 0,
-      });
-    });
-
-    return {
-      tableData: mappedData,
-      counts: { pendingCount, approvedCount, rejectedCount },
-    };
-  }, [data]);
+        priority: "medium", // Bidang mock
+        issues: 0, // Bidang mock
+      })
+    );
+  }, [allInspectionsResponse, activeTab]);
 
   if (isLoading) {
     return (
@@ -122,7 +125,7 @@ export default function VerificationPage() {
           </p>
         </div>
 
-        {/* Kartu Statistik */}
+        {/* Kartu Statistik - sekarang nilainya konsisten */}
         <div className="grid gap-4 md:grid-cols-3 mb-6">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -181,13 +184,18 @@ export default function VerificationPage() {
             <TabsTrigger value="ALL">Semua ({totalCount})</TabsTrigger>
           </TabsList>
 
-          <TabsContent value={activeTab} className="mt-6">
-            <VerificationTable
-              // Teruskan data yang diterima dari endpoint API
-              data={tableData}
-              // Teruskan status filter aktif (huruf kecil) untuk filtering/tampilan internal
-              statusFilter={activeTab.toLowerCase()}
-            />
+          {/* Gunakan TabsContent yang berbeda untuk setiap tab agar React dapat mengelolanya dengan benar */}
+          <TabsContent value="PENDING">
+            <VerificationTable data={tableData} />
+          </TabsContent>
+          <TabsContent value="APPROVED">
+            <VerificationTable data={tableData} />
+          </TabsContent>
+          <TabsContent value="REJECTED">
+            <VerificationTable data={tableData} />
+          </TabsContent>
+          <TabsContent value="ALL">
+            <VerificationTable data={tableData} />
           </TabsContent>
         </Tabs>
       </main>

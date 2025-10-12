@@ -288,7 +288,23 @@ export default function MultiFlowInspectionForm({
                   <FormItem>
                     <FormLabel>HM DOWN</FormLabel>
                     <FormControl>
-                      <Input type="time" {...field} />
+                      <Input
+                        type="text" // 1. Ubah tipe menjadi "text"
+                        inputMode="numeric" // 2. Tampilkan keyboard numerik di perangkat mobile
+                        placeholder="0"
+                        {...field} // Sebarkan properti field dari react-hook-form
+                        onChange={(e) => {
+                          // 3. Handler untuk memvalidasi input
+                          const inputValue = e.target.value;
+                          // Hanya izinkan string kosong atau string yang berisi angka
+                          if (
+                            inputValue === "" ||
+                            /^[0-9]+$/.test(inputValue)
+                          ) {
+                            field.onChange(inputValue); // Perbarui nilai form jika valid
+                          }
+                        }}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -300,9 +316,23 @@ export default function MultiFlowInspectionForm({
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>HM RFU</FormLabel>
-
                     <FormControl>
-                      <Input type="time" {...field} />
+                      <Input
+                        type="text" // 1. Ubah tipe menjadi "text"
+                        inputMode="numeric" // 2. Tampilkan keyboard numerik di perangkat mobile
+                        placeholder="0"
+                        {...field}
+                        onChange={(e) => {
+                          // 3. Handler yang sama untuk validasi
+                          const inputValue = e.target.value;
+                          if (
+                            inputValue === "" ||
+                            /^[0-9]+$/.test(inputValue)
+                          ) {
+                            field.onChange(inputValue);
+                          }
+                        }}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

@@ -463,9 +463,6 @@ export default function TowerLampInspectionForm({
         </Card>
         {/* Tombol Submit tetap di akhir */}
         <div className="flex justify-end space-x-4">
-          <Button type="button" variant="outline">
-            Save as Draft
-          </Button>
           <Button type="submit" disabled={isSubmitting}>
             {isSubmitting ? "Submitting..." : "Submit Inspection"}
           </Button>

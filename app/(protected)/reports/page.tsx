@@ -320,7 +320,7 @@ export default function ReportsPage({ role }: { role: string }) {
     <div className="min-h-screen bg-gray-50">
       <main className="max-w-7xl mx-auto pb-6">
         {/* Judul Halaman - Tambahkan di sini jika diperlukan, tapi mengasumsikan komponen utama */}
-        <h1 className="text-3xl font-bold text-gray-900 mb-6">
+        <h1 className="text-xl font-bold text-gray-900 mb-6">
           Laporan & Analitik Inspeksi
         </h1>
 

@@ -16,33 +16,37 @@ export default function VerificationDetailPage() {
     id: string,
     status: "APPROVED" | "REJECTED"
   ) => {
-    const toastId = toast.loading("Approving inspection...");
-    try {
-      updateStatusMutation.mutate(
-        {
-          id: id,
-          statusData: { status },
-        },
-        {
-          onSuccess: () => {
-            console.log(`Inspeksi ${id} berhasil diperbarui menjadi ${status}`);
-            // Invalisadi react-query ditangani oleh hook
-          },
-          onError: (error) => {
-            console.error(`Gagal memperbarui status track untuk ${id}:`, error);
-            // Tampilkan notifikasi error
-          },
-        }
-      );
+    // 1. Buat pesan dinamis berdasarkan aksi
+    const actionText = status === "APPROVED" ? "Approving" : "Rejecting";
+    const toastId = toast.loading(`${actionText} inspection...`);
 
-      router.push("/verification");
-    } catch (error) {
-      console.error("Failed to approve inspection:", error);
-      toast.error("Approval Failed", {
-        id: toastId,
-        description: "Failed to approve the inspection. Please try again.",
-      });
-    }
+    updateStatusMutation.mutate(
+      {
+        id: id,
+        statusData: { status },
+      },
+      {
+        onSuccess: () => {
+          // 2. Tampilkan toast SUKSES di sini
+          toast.success(`Inspection has been ${status.toLowerCase()}!`, {
+            id: toastId,
+          });
+          console.log(`Inspeksi ${id} berhasil diperbarui menjadi ${status}`);
+
+          // 3. Pindahkan navigasi ke sini agar hanya terjadi setelah sukses
+          router.push("/verification");
+        },
+        onError: (error) => {
+          // 4. Tampilkan toast ERROR di sini
+          toast.error("Update Failed", {
+            id: toastId,
+            description:
+              "Could not update the inspection status. Please try again.",
+          });
+          console.error(`Gagal memperbarui status untuk ${id}:`, error);
+        },
+      }
+    );
   };
 
   return (

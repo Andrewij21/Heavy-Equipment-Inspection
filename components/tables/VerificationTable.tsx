@@ -140,9 +140,9 @@ export function VerificationTable({
       case "track":
         return "Track";
       case "wheel":
-        return "Roda";
+        return "Wheel";
       case "support":
-        return "Pendukung";
+        return "Support";
       default:
         return type;
     }

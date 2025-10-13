@@ -308,7 +308,7 @@ export function VerificationTable({
                   <Button
                     variant="ghost"
                     onClick={() => handleSort("equipmentId")}
-                    className="h-auto p-0 font-semibold"
+                    className="h-auto font-semibold"
                   >
                     ID Peralatan
                     {getSortIcon("equipmentId")}
@@ -318,7 +318,7 @@ export function VerificationTable({
                   <Button
                     variant="ghost"
                     onClick={() => handleSort("equipmentType")}
-                    className="h-auto p-0 font-semibold"
+                    className="h-auto font-semibold"
                   >
                     Tipe
                     {getSortIcon("equipmentType")}
@@ -328,7 +328,7 @@ export function VerificationTable({
                   <Button
                     variant="ghost"
                     onClick={() => handleSort("mechanicName")}
-                    className="h-auto p-0 font-semibold"
+                    className="h-auto font-semibold"
                   >
                     Mekanik
                     {getSortIcon("mechanicName")}
@@ -338,7 +338,7 @@ export function VerificationTable({
                   <Button
                     variant="ghost"
                     onClick={() => handleSort("leaderName")}
-                    className="h-auto p-0 font-semibold"
+                    className="h-auto font-semibold"
                   >
                     Leader
                     {getSortIcon("leaderName")}
@@ -348,7 +348,7 @@ export function VerificationTable({
                   <Button
                     variant="ghost"
                     onClick={() => handleSort("status")}
-                    className="h-auto p-0 font-semibold"
+                    className="h-auto font-semibold"
                   >
                     Status
                     {getSortIcon("status")}
@@ -358,13 +358,13 @@ export function VerificationTable({
                   <Button
                     variant="ghost"
                     onClick={() => handleSort("createdAt")}
-                    className="h-auto p-0 font-semibold"
+                    className="h-auto font-semibold"
                   >
                     Dibuat
                     {getSortIcon("createdAt")}
                   </Button>
                 </TableHead>
-                <TableHead className="text-right">Aksi</TableHead>
+                <TableHead className="">Aksi</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -382,17 +382,21 @@ export function VerificationTable({
 
                 return (
                   <TableRow key={inspection.id} className="hover:bg-muted/50">
-                    <TableCell className="font-medium">
+                    <TableCell className="font-medium px-5">
                       {inspection.equipmentId}
                     </TableCell>
-                    <TableCell>
+                    <TableCell className="px-5">
                       <Badge variant="outline">
                         {getEquipmentTypeLabel(inspection.equipmentType)}
                       </Badge>
                     </TableCell>
-                    <TableCell>{inspection.mechanicName}</TableCell>
-                    <TableCell>{inspection.leaderName}</TableCell>
-                    <TableCell>
+                    <TableCell className="px-5">
+                      {inspection.mechanicName}
+                    </TableCell>
+                    <TableCell className="px-5">
+                      {inspection.leaderName}
+                    </TableCell>
+                    <TableCell className="px-5">
                       <Badge className={getStatusColor(inspection.status)}>
                         {isMutating ? (
                           <Loader2 className="w-4 h-4 animate-spin" />
@@ -411,7 +415,7 @@ export function VerificationTable({
                     <TableCell className="text-sm text-muted-foreground">
                       {formatDate(inspection.createdAt)}
                     </TableCell>
-                    <TableCell className="text-right">
+                    <TableCell className="">
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                           <Button

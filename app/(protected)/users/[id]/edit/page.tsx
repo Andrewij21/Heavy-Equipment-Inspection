@@ -359,6 +359,7 @@ export default function EditUserPage() {
                     variant="outline"
                     onClick={() => router.push("/users")}
                     disabled={isSaving}
+                    type="button"
                   >
                     Batal
                   </Button>

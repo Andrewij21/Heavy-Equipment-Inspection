@@ -9,6 +9,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -62,7 +69,16 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useDashboardSummary } from "@/queries/dashboard";
 
+function useDebounce(value: string, delay: number) {
+  const [debouncedValue, setDebouncedValue] = useState(value);
+  useEffect(() => {
+    const handler = setTimeout(() => setDebouncedValue(value), delay);
+    return () => clearTimeout(handler);
+  }, [value, delay]);
+  return debouncedValue;
+}
 // Struktur Data Mock (seperti yang didefinisikan sebelumnya)
 interface FilterableInspection extends ExportInspection {
   equipmentType: "track" | "wheel" | "support";
@@ -87,23 +103,80 @@ export default function ReportsPage({ role }: { role: string }) {
   const [typeFilter, setTypeFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
   const [dateFilter, setDateFilter] = useState("all");
-
-  // Sinkronkan variabel state untuk akses mudah di input dan filter
+  const [currentPage, setCurrentPage] = useState(1);
+  const ITEMS_PER_PAGE = 10;
   const dateFrom = apiFilters.dateFrom;
   const dateTo = apiFilters.dateTo;
+  const debouncedSearchTerm = useDebounce(searchTerm, 500);
 
-  // Ambil data menggunakan hook
-  const { data, isLoading, isError } = useGetGeneralInspections({
-    status: apiFilters.status === "ALL" ? undefined : apiFilters.status,
-    dateFrom: apiFilters.dateFrom,
-    dateTo: apiFilters.dateTo,
-  });
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [
+    debouncedSearchTerm,
+    typeFilter,
+    statusFilter,
+    dateFilter,
+    dateFrom,
+    dateTo,
+  ]);
+
+  // 1. Gabungkan SEMUA filter menjadi satu objek untuk dikirim ke API
+  const queryParams = useMemo(() => {
+    const params: Record<string, any> = {
+      page: currentPage,
+      limit: ITEMS_PER_PAGE,
+    };
+
+    if (debouncedSearchTerm) params.q = debouncedSearchTerm;
+    if (typeFilter !== "all") params.equipmentType = typeFilter;
+    if (statusFilter !== "all") params.status = statusFilter.toUpperCase();
+
+    // Logika untuk filter tanggal
+    let finalDateFrom = dateFrom;
+    let finalDateTo = dateTo;
+
+    if (dateFilter !== "all") {
+      const now = new Date();
+      let startDate: Date | null = null;
+      if (dateFilter === "today") {
+        startDate = new Date(now.setHours(0, 0, 0, 0));
+      } else if (dateFilter === "week") {
+        startDate = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+      } else if (dateFilter === "month") {
+        startDate = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+      }
+      if (startDate) {
+        finalDateFrom = startDate.toISOString().split("T")[0];
+        finalDateTo = new Date().toISOString().split("T")[0];
+      }
+    }
+
+    if (finalDateFrom) params.dateFrom = finalDateFrom;
+    if (finalDateTo) params.dateTo = finalDateTo;
+
+    return params;
+  }, [
+    currentPage,
+    debouncedSearchTerm,
+    typeFilter,
+    statusFilter,
+    dateFilter,
+    dateFrom,
+    dateTo,
+  ]);
+  const {
+    data: apiResponse,
+    isLoading,
+    isError,
+  } = useGetGeneralInspections(queryParams);
+  const { data: dashboardSummary, isLoading: dashboardSummaryLoading } =
+    useDashboardSummary(queryParams);
 
   // Petakan dan normalisasi data API sekali (useMemo tetap sama)
-  const allInspections: FilterableInspection[] = useMemo(() => {
-    if (!data?.data) return [];
-
-    return data.data.map((item: any) => ({
+  const inspections: FilterableInspection[] = useMemo(() => {
+    if (!apiResponse?.data) return [];
+    // Mapping tetap diperlukan untuk normalisasi data di frontend
+    return apiResponse.data.map((item: any) => ({
       id: item.id,
       equipmentId: item.equipmentId,
       equipmentType: item.equipmentType.toLowerCase(),
@@ -113,21 +186,15 @@ export default function ReportsPage({ role }: { role: string }) {
       location: item.location,
       verifiedBy: item.approver?.username || "N/A",
       verifiedAt: item.approvalDate,
-      trackCondition: item.trackCondition || "N/A",
-      trackTension: item.trackTension || "N/A",
-      sprocketWear: item.sprocketWear || "N/A",
-      trackPadWear: item.trackPadWear || 0,
-      hydraulicLeaks: item.hydraulicLeaks || false,
-      greaseLevels: item.greaseLevels || "N/A",
-      notes: item.notes || "",
-      tireCondition: item.tireCondition || "N/A",
-      structuralIntegrity: item.structuralIntegrity || "N/A",
     })) as FilterableInspection[];
-  }, [data]);
+  }, [apiResponse?.data]);
+
+  const totalCount = apiResponse?.count || 0;
+  const totalPages = Math.ceil(totalCount / ITEMS_PER_PAGE);
 
   // Data yang Difilter Sisi Klien (untuk tabel yang terlihat)
   const filteredInspections = useMemo(() => {
-    const filtered = allInspections.filter((inspection) => {
+    const filtered = inspections.filter((inspection) => {
       const matchesSearch =
         inspection.equipmentId
           .toLowerCase()
@@ -181,7 +248,7 @@ export default function ReportsPage({ role }: { role: string }) {
     });
     return filtered;
   }, [
-    allInspections,
+    inspections,
     searchTerm,
     typeFilter,
     statusFilter,
@@ -189,8 +256,6 @@ export default function ReportsPage({ role }: { role: string }) {
     dateFrom,
     dateTo,
   ]);
-
-  const summary = generateReportSummary(allInspections);
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -286,34 +351,31 @@ export default function ReportsPage({ role }: { role: string }) {
     }
   };
 
-  const handleInlineDownload = (inspection: FilterableInspection) => {
-    // Unduh satu inspeksi sebagai PDF/Formulir
-    // Catatan: Backend hanya membutuhkan satu ID untuk pembuatan formulir PDF
-    handleExport([inspection], "pdf");
-  };
-
-  const handleDialogExport = (
-    filters: ExportFilters,
-    format: "csv" | "excel" | "pdf"
-  ) => {
-    // Untuk ekspor massal dari dialog, gunakan data yang sedang difilter
-    handleExport(filteredInspections, format);
-  };
-
   // Jika memuat, tampilkan spinner
-  if (isLoading) {
+  if (isLoading || dashboardSummaryLoading) {
     return (
       <div className="flex justify-center items-center h-[80vh]">
         <Loader2 className="h-10 w-10 animate-spin text-blue-600" />
       </div>
     );
   }
-
   // Pengaturan data grafik
   const statusData = [
-    { name: "Disetujui", value: summary.approved, color: "#10b981" },
-    { name: "Ditolak", value: summary.rejected, color: "#ef4444" },
-    { name: "Menunggu", value: summary.pending, color: "#f59e0b" },
+    {
+      name: "Disetujui",
+      value: dashboardSummary?.data.approved,
+      color: "#10b981",
+    },
+    {
+      name: "Ditolak",
+      value: dashboardSummary?.data.rejected,
+      color: "#ef4444",
+    },
+    {
+      name: "Menunggu",
+      value: dashboardSummary?.data.pending,
+      color: "#f59e0b",
+    },
   ];
 
   return (
@@ -370,7 +432,9 @@ export default function ReportsPage({ role }: { role: string }) {
                   <FileSpreadsheet className="h-4 w-4 text-muted-foreground" />
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold">{summary.total}</div>
+                  <div className="text-2xl font-bold">
+                    {dashboardSummary?.data.total}
+                  </div>
                   <p className="text-xs text-muted-foreground">
                     Total catatan ditemukan
                   </p>
@@ -385,10 +449,11 @@ export default function ReportsPage({ role }: { role: string }) {
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold">
-                    {summary.approvalRate}%
+                    {dashboardSummary?.data.approvalRate}%
                   </div>
                   <p className="text-xs text-muted-foreground">
-                    {summary.approved} dari {summary.total} disetujui
+                    {dashboardSummary?.data.approved} dari{" "}
+                    {dashboardSummary?.data.total} disetujui
                   </p>
                 </CardContent>
               </Card>
@@ -401,7 +466,7 @@ export default function ReportsPage({ role }: { role: string }) {
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold">
-                    {Object.keys(summary.byMechanic).length}
+                    {dashboardSummary?.data.user}
                   </div>
                   <p className="text-xs text-muted-foreground">
                     Mekanik yang berkontribusi
@@ -416,7 +481,9 @@ export default function ReportsPage({ role }: { role: string }) {
                   <Calendar className="h-4 w-4 text-muted-foreground" />
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold">{summary.pending}</div>
+                  <div className="text-2xl font-bold">
+                    {dashboardSummary?.data.pending}
+                  </div>
                   <p className="text-xs text-muted-foreground">
                     Menunggu tinjauan leader
                   </p>
@@ -520,7 +587,7 @@ export default function ReportsPage({ role }: { role: string }) {
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredInspections.map((inspection) => (
+                  {inspections.map((inspection) => (
                     <tr
                       key={inspection.id}
                       className="border-b hover:bg-gray-50"
@@ -596,9 +663,54 @@ export default function ReportsPage({ role }: { role: string }) {
               )}
             </div>
 
-            <div className="mt-4 text-sm text-muted-foreground">
-              Menampilkan {filteredInspections.length} dari{" "}
-              {allInspections.length} inspeksi
+            <div className="flex items-center justify-between">
+              <div className="mt-4 text-sm text-muted-foreground w-full">
+                Menampilkan {filteredInspections.length} dari{" "}
+                {inspections.length} inspeksi
+              </div>
+              {totalPages > 1 && (
+                <Pagination className="mt-2 justify-end">
+                  <PaginationContent>
+                    <PaginationItem>
+                      <PaginationPrevious
+                        href="#"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setCurrentPage((prev) => Math.max(1, prev - 1));
+                        }}
+                        aria-disabled={currentPage === 1}
+                        className={
+                          currentPage === 1
+                            ? "pointer-events-none opacity-50"
+                            : undefined
+                        }
+                      />
+                    </PaginationItem>
+                    <PaginationItem>
+                      <span className="px-4 text-sm">
+                        {currentPage} / {totalPages}
+                      </span>
+                    </PaginationItem>
+                    <PaginationItem>
+                      <PaginationNext
+                        href="#"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setCurrentPage((prev) =>
+                            Math.min(totalPages, prev + 1)
+                          );
+                        }}
+                        aria-disabled={currentPage === totalPages}
+                        className={
+                          currentPage === totalPages
+                            ? "pointer-events-none opacity-50"
+                            : undefined
+                        }
+                      />
+                    </PaginationItem>
+                  </PaginationContent>
+                </Pagination>
+              )}
             </div>
           </CardContent>
         </Card>

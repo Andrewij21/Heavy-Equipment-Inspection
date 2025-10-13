@@ -49,9 +49,14 @@ import {
   Loader2,
 } from "lucide-react";
 import Link from "next/link";
-// CRITICAL: Use the specific track mutation hook directly
-import { useUpdateTrackStatus } from "@/queries/track"; // Asumsi path query
 import { useUpdateInspectionStatus } from "@/queries/inspection";
+import { toast } from "sonner";
+import {
+  formatDate,
+  getEquipmentTypeLabel,
+  getStatusColor,
+  normalizeStatus,
+} from "@/lib/utils";
 
 interface PendingInspection {
   id: string;
@@ -103,18 +108,7 @@ export function VerificationTable({
     sortDirection,
     statusFilter,
   ]);
-  // Fungsi helper (normalizeStatus, getStatusIcon, getStatusColor, dll. tetap sama)
-  const normalizeStatus = (
-    status: string
-  ): "PENDING" | "APPROVED" | "REJECTED" => {
-    const upper = status.toUpperCase();
-    if (upper === "PENDING" || upper === "APPROVED" || upper === "REJECTED") {
-      return upper as "PENDING" | "APPROVED" | "REJECTED";
-    }
-    return "PENDING";
-  };
-
-  const getStatusIcon = (status: string) => {
+  const getStatusIcon = (status: string): React.ReactNode => {
     switch (normalizeStatus(status)) {
       case "APPROVED":
         return <CheckCircle className="w-4 h-4 text-green-600" />;
@@ -125,43 +119,6 @@ export function VerificationTable({
         return <Clock className="w-4 h-4 text-yellow-600" />;
     }
   };
-
-  const getStatusColor = (status: string) => {
-    switch (normalizeStatus(status)) {
-      case "APPROVED":
-        return "bg-green-100 text-green-800 hover:bg-green-200";
-      case "REJECTED":
-        return "bg-red-100 text-red-800 hover:bg-red-200";
-      case "PENDING":
-        return "bg-yellow-100 text-yellow-800 hover:bg-yellow-200";
-      default:
-        return "bg-gray-100 text-gray-800 hover:bg-gray-200";
-    }
-  };
-
-  const getEquipmentTypeLabel = (type: string) => {
-    switch (type) {
-      case "track":
-        return "Track";
-      case "wheel":
-        return "Wheel";
-      case "support":
-        return "Support";
-      default:
-        return type;
-    }
-  };
-
-  const formatDate = (dateString: string) => {
-    // Format tanggal ke format Indonesia
-    return new Date(dateString).toLocaleDateString("id-ID", {
-      month: "short",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-  };
-
   const handleSort = (field: SortField) => {
     if (sortField === field) {
       setSortDirection(sortDirection === "asc" ? "desc" : "asc");
@@ -272,6 +229,8 @@ export function VerificationTable({
     status: "APPROVED" | "REJECTED",
     equipmentType: "track" | "wheel" | "support" // Gunakan tipe secara eksplisit
   ) => {
+    const actionText = status === "APPROVED" ? "Approving" : "Rejecting";
+    const toastId = toast.loading(`${actionText} inspection...`);
     // PANGGIL API YANG TEPAT SECARA KONDISIONAL BERDASARKAN TIPE
     updateStatusMutation.mutate(
       {
@@ -280,10 +239,18 @@ export function VerificationTable({
       },
       {
         onSuccess: () => {
+          toast.success("Status updated successfully!", {
+            id: toastId,
+          });
           console.log(`Inspeksi ${id} berhasil diperbarui menjadi ${status}`);
           // Invalisadi react-query ditangani oleh hook
         },
         onError: (error) => {
+          toast.error("Update Failed", {
+            id: toastId,
+            description:
+              "Could not update the inspection status. Please try again.",
+          });
           console.error(`Gagal memperbarui status untuk ${id}:`, error);
           // Tampilkan notifikasi error
         },

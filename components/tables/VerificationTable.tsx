@@ -1,6 +1,5 @@
 "use client";
-
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react"; // 1. Impor useEffect
 import {
   Table,
   TableBody,
@@ -19,6 +18,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+// 2. Impor komponen Paginasi
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -82,10 +89,20 @@ export function VerificationTable({
   const [priorityFilter, setPriorityFilter] = useState("all");
   const [sortField, setSortField] = useState<SortField>("createdAt");
   const [sortDirection, setSortDirection] = useState<SortDirection>("desc");
-
+  const [currentPage, setCurrentPage] = useState(1);
+  const ITEMS_PER_PAGE = 10; // Tentukan jumlah item per halaman
   // BARU: Inisialisasi hook mutasi track spesifik
   const updateStatusMutation = useUpdateInspectionStatus();
-
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [
+    searchTerm,
+    equipmentTypeFilter,
+    priorityFilter,
+    sortField,
+    sortDirection,
+    statusFilter,
+  ]);
   // Fungsi helper (normalizeStatus, getStatusIcon, getStatusColor, dll. tetap sama)
   const normalizeStatus = (
     status: string
@@ -117,19 +134,6 @@ export function VerificationTable({
         return "bg-red-100 text-red-800 hover:bg-red-200";
       case "PENDING":
         return "bg-yellow-100 text-yellow-800 hover:bg-yellow-200";
-      default:
-        return "bg-gray-100 text-gray-800 hover:bg-gray-200";
-    }
-  };
-
-  const getPriorityColor = (priority: string) => {
-    switch (priority) {
-      case "high":
-        return "bg-red-100 text-red-800 hover:bg-red-200";
-      case "medium":
-        return "bg-yellow-100 text-yellow-800 hover:bg-yellow-200";
-      case "low":
-        return "bg-green-100 text-green-800 hover:bg-green-200";
       default:
         return "bg-gray-100 text-gray-800 hover:bg-gray-200";
     }
@@ -249,6 +253,12 @@ export function VerificationTable({
     sortField,
     sortDirection,
   ]);
+
+  const totalPages = Math.ceil(filteredAndSortedData.length / ITEMS_PER_PAGE);
+  const paginatedData = useMemo(() => {
+    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+    return filteredAndSortedData.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+  }, [filteredAndSortedData, currentPage]);
 
   const clearFilters = () => {
     setSearchTerm("");
@@ -391,7 +401,7 @@ export function VerificationTable({
               </TableRow>
             </TableHeader>
             <TableBody>
-              {filteredAndSortedData.map((inspection) => {
+              {paginatedData.map((inspection) => {
                 const isPending =
                   normalizeStatus(inspection.status) === "PENDING";
                 // Periksa apakah baris spesifik ini sedang dimutasi
@@ -521,6 +531,47 @@ export function VerificationTable({
           )}
         </CardContent>
       </Card>
+      {totalPages > 1 && (
+        <div className="flex items-center justify-between">
+          <p className="text-sm text-muted-foreground w-full">
+            Page {currentPage} of {totalPages}
+          </p>
+          <Pagination className="justify-end">
+            <PaginationContent>
+              <PaginationItem>
+                <PaginationPrevious
+                  href="#"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setCurrentPage((prev) => Math.max(1, prev - 1));
+                  }}
+                  aria-disabled={currentPage === 1}
+                  className={
+                    currentPage === 1
+                      ? "pointer-events-none opacity-50"
+                      : undefined
+                  }
+                />
+              </PaginationItem>
+              <PaginationItem>
+                <PaginationNext
+                  href="#"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setCurrentPage((prev) => Math.min(totalPages, prev + 1));
+                  }}
+                  aria-disabled={currentPage === totalPages}
+                  className={
+                    currentPage === totalPages
+                      ? "pointer-events-none opacity-50"
+                      : undefined
+                  }
+                />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
+        </div>
+      )}
     </div>
   );
 }

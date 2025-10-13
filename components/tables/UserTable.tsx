@@ -42,6 +42,8 @@ import {
   UserX,
 } from "lucide-react";
 import type { User } from "@/schemas/userSchema";
+import { formatDate, getRoleColor } from "@/lib/utils";
+import clsx from "clsx";
 
 interface UsersTableProps {
   data: User[];
@@ -64,49 +66,6 @@ export function UsersTable({
   const [statusFilter, setStatusFilter] = useState("all");
   const [sortField, setSortField] = useState<SortField>("createdAt");
   const [sortDirection, setSortDirection] = useState<SortDirection>("desc");
-
-  const getRoleColor = (role: string) => {
-    switch (role) {
-      case "admin":
-        return "bg-red-100 text-red-800 hover:bg-red-200";
-      case "leader":
-        return "bg-blue-100 text-blue-800 hover:bg-blue-200";
-      case "mechanic":
-        return "bg-green-100 text-green-800 hover:bg-green-200";
-      default:
-        return "bg-gray-100 text-gray-800 hover:bg-gray-200";
-    }
-  };
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "active":
-        return "bg-green-100 text-green-800 hover:bg-green-200";
-      case "inactive":
-        return "bg-gray-100 text-gray-800 hover:bg-gray-200";
-      default:
-        return "bg-gray-100 text-gray-800 hover:bg-gray-200";
-    }
-  };
-
-  const formatDate = (dateString: string) => {
-    // Format tanggal ke format Indonesia
-    return new Date(dateString).toLocaleDateString("id-ID", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-    });
-  };
-
-  const formatDateTime = (dateString: string) => {
-    // Format tanggal dan waktu ke format Indonesia
-    return new Date(dateString).toLocaleDateString("id-ID", {
-      month: "short",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-  };
 
   const handleSort = (field: SortField) => {
     if (sortField === field) {
@@ -282,7 +241,7 @@ export function UsersTable({
                   <Button
                     variant="ghost"
                     onClick={() => handleSort("username")}
-                    className="h-auto p-0 font-semibold"
+                    className="h-auto font-semibold"
                   >
                     Nama
                     {getSortIcon("username")}
@@ -292,7 +251,7 @@ export function UsersTable({
                   <Button
                     variant="ghost"
                     onClick={() => handleSort("email")}
-                    className="h-auto p-0 font-semibold"
+                    className="h-auto font-semibold"
                   >
                     Email
                     {getSortIcon("email")}
@@ -302,7 +261,7 @@ export function UsersTable({
                   <Button
                     variant="ghost"
                     onClick={() => handleSort("role")}
-                    className="h-auto p-0 font-semibold"
+                    className="h-auto font-semibold"
                   >
                     Peran
                     {getSortIcon("role")}
@@ -312,7 +271,7 @@ export function UsersTable({
                   <Button
                     variant="ghost"
                     onClick={() => handleSort("status")}
-                    className="h-auto p-0 font-semibold"
+                    className="h-auto font-semibold"
                   >
                     Status
                     {getSortIcon("status")}
@@ -322,24 +281,26 @@ export function UsersTable({
                   <Button
                     variant="ghost"
                     onClick={() => handleSort("createdAt")}
-                    className="h-auto p-0 font-semibold"
+                    className="h-auto font-semibold"
                   >
                     Bergabung
                     {getSortIcon("createdAt")}
                   </Button>
                 </TableHead>
-                <TableHead className="text-right">Aksi</TableHead>
+                <TableHead className="">Aksi</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {filteredAndSortedData.map((user) => (
                 <TableRow key={user.id} className="hover:bg-muted/50">
-                  <TableCell className="font-medium">{user.username}</TableCell>
-                  <TableCell className="text-muted-foreground">
+                  <TableCell className="font-medium px-5">
+                    {user.username}
+                  </TableCell>
+                  <TableCell className="text-muted-foreground px-5">
                     {user.email}
                   </TableCell>
                   <TableCell>
-                    <Badge className={getRoleColor(user.role)}>
+                    <Badge className={clsx(getRoleColor(user.role), "px-5")}>
                       {/* Kapitalisasi huruf pertama */}
                       {user.role.charAt(0).toUpperCase() + user.role.slice(1)}
                     </Badge>
@@ -350,10 +311,10 @@ export function UsersTable({
                         user.status.slice(1)}
                     </Badge>
                   </TableCell> */}
-                  <TableCell className="text-sm text-muted-foreground">
+                  <TableCell className="text-sm text-muted-foreground px-5">
                     {formatDate(user.createdAt)}
                   </TableCell>
-                  <TableCell className="text-right">
+                  <TableCell className="">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <Button

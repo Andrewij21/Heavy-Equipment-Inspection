@@ -1,4 +1,3 @@
-// "use client" since we're using client-side hooks and navigation
 "use client";
 
 import { useState } from "react";
@@ -9,24 +8,14 @@ import { UsersTable } from "@/components/tables/UserTable";
 import BackButton from "@/components/BackButton";
 import { toast } from "sonner"; // Tambahkan import toast
 
-// NEW IMPORT: Import the useGetUsers hook
 import { useDeleteUser, useGetUsers } from "@/queries/user";
 
 export default function UsersPage() {
   const router = useRouter();
-
-  // 1. Ganti state mock data dengan useGetUsers
   const { data, isLoading, isError, refetch } = useGetUsers();
   const deleteMutation = useDeleteUser();
   const isDeleting = deleteMutation.isPending;
-
-  // 2. Gunakan data yang diambil dari API, atau array kosong jika masih memuat
   const users = data?.data || [];
-
-  // *CATATAN*: Dalam implementasi nyata, hook useDeleteUser akan
-  // menangani penghapusan dan invalidasi cache. Karena kita hanya
-  // menggunakan mock data di sini, saya akan meninggalkan logic mock
-  // delete, tetapi Anda harus menggantinya dengan useDeleteUser.
 
   const handleDeleteUser = (userId: string) => {
     const toastId = toast.loading("Menghapus pengguna...");

@@ -3,6 +3,7 @@ import type { User } from "@/schemas/userSchema";
 export interface ApiResponse<T> {
   success: boolean;
   message: string;
+  count: number;
   data: T;
 }
 

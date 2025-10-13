@@ -11,6 +11,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+  PaginationEllipsis,
+} from "@/components/ui/pagination";
 import { Plus, Search, Eye, Clock } from "lucide-react"; // Tombol Filter dihapus
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -60,13 +69,21 @@ export default function InspectionsPage() {
 
   // Debounce search term untuk performa
   const debouncedSearchTerm = useDebounce(searchTerm, 500); // Tunggu 500ms setelah user berhenti mengetik
+  // 2. State untuk Paginasi
+  const [page, setPage] = useState(1);
+  const LIMIT = 10; // Jumlah item per halaman
 
-  // Hapus 'activeFilters' dan 'handleApplyFilters'
+  // 3. UX Tambahan: Reset ke halaman 1 setiap kali filter berubah
+  useEffect(() => {
+    setPage(1);
+  }, [debouncedSearchTerm, selectedType, selectedStatus]);
 
-  // 'queryParams' sekarang langsung bergantung pada state filter
+  // 4. Tambahkan `page` dan `limit` ke parameter API
   const queryParams = useMemo(() => {
     const params: Record<string, any> = {
       orderBy: "createdAt_desc",
+      page: page,
+      limit: LIMIT,
     };
 
     if (userRole === "mechanic" && currentUserId) {
@@ -90,15 +107,19 @@ export default function InspectionsPage() {
     debouncedSearchTerm,
     selectedType,
     selectedStatus,
-  ]); // Bergantung langsung pada state filter
+    page, // Tambahkan `page` sebagai dependency
+  ]);
 
   const {
     data: apiResponse,
     isLoading,
     isError,
   } = useGetGeneralInspections(queryParams);
-
+  // 5. Ekstrak data dan total hitungan dari respons API
   const inspections: Inspection[] = apiResponse?.data || [];
+  const totalCount = apiResponse?.count || 0;
+  const totalPages = Math.ceil(totalCount / LIMIT);
+  // const inspections: Inspection[] = apiResponse?.data || [];
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -261,6 +282,59 @@ export default function InspectionsPage() {
                 </div>
               </div>
             ))}
+          {/* 6. Tambahkan Komponen Paginasi di bagian bawah */}
+          {totalPages > 1 && (
+            <div className="mt-8">
+              <Pagination>
+                <PaginationContent>
+                  <PaginationItem>
+                    <PaginationPrevious
+                      href="#"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setPage((prev) => Math.max(1, prev - 1));
+                      }}
+                      aria-disabled={page === 1}
+                      className={
+                        page === 1 ? "pointer-events-none opacity-50" : ""
+                      }
+                    />
+                  </PaginationItem>
+
+                  {/* Logika sederhana untuk menampilkan nomor halaman */}
+                  <PaginationItem>
+                    <PaginationLink href="#" isActive>
+                      {page}
+                    </PaginationLink>
+                  </PaginationItem>
+                  {page < totalPages && (
+                    <PaginationItem>
+                      <PaginationEllipsis />
+                    </PaginationItem>
+                  )}
+
+                  <PaginationItem>
+                    <PaginationNext
+                      href="#"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setPage((prev) => Math.min(totalPages, prev + 1));
+                      }}
+                      aria-disabled={page === totalPages}
+                      className={
+                        page === totalPages
+                          ? "pointer-events-none opacity-50"
+                          : ""
+                      }
+                    />
+                  </PaginationItem>
+                </PaginationContent>
+              </Pagination>
+              <p className="text-center text-sm text-muted-foreground mt-2">
+                Page {page} of {totalPages}
+              </p>
+            </div>
+          )}
         </div>
       </main>
     </div>

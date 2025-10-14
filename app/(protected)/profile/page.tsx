@@ -30,6 +30,7 @@ import {
   ProfileFormSchema,
   type ProfileFormData,
 } from "@/schemas/profileSchema";
+import { getRoleColor } from "@/lib/utils";
 
 export default function ProfilePage() {
   const { user: authUser } = useAuth(); // Data user dari auth (untuk role/id)
@@ -106,19 +107,6 @@ export default function ProfilePage() {
     });
   };
 
-  const getRoleColor = (role: string) => {
-    switch (role) {
-      case "admin":
-        return "bg-purple-100 text-purple-800";
-      case "leader":
-        return "bg-blue-100 text-blue-800";
-      case "mechanic":
-        return "bg-green-100 text-green-800";
-      default:
-        return "bg-gray-100 text-gray-800";
-    }
-  };
-
   // Tampilan Loading/Error
   if (isLoading || !authUser) {
     return (
@@ -138,7 +126,7 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
+    <div className="px-4 sm:px-0 py-6 space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold">Profile</h1>
@@ -154,6 +142,7 @@ export default function ProfilePage() {
                 }}
                 className="flex items-center space-x-2"
                 disabled={isSaving}
+                type="button"
               >
                 <X className="h-4 w-4" />
                 <span>Cancel</span>

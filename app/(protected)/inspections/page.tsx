@@ -20,41 +20,16 @@ import {
   PaginationPrevious,
   PaginationEllipsis,
 } from "@/components/ui/pagination";
-import { Plus, Search, Eye, Clock } from "lucide-react"; // Tombol Filter dihapus
+import { Plus, Search, Eye, Clock } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import BackButton from "@/components/BackButton";
 import { useAuth } from "@/context/AuthContext";
-import { useMemo, useState, useEffect } from "react"; // Impor useEffect
+import { useMemo, useState, useEffect } from "react";
 import { useGetGeneralInspections } from "@/queries/inspection";
 import clsx from "clsx";
-
-// Hook sederhana untuk debounce
-function useDebounce(value: string, delay: number) {
-  const [debouncedValue, setDebouncedValue] = useState(value);
-
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      setDebouncedValue(value);
-    }, delay);
-
-    return () => {
-      clearTimeout(handler);
-    };
-  }, [value, delay]);
-
-  return debouncedValue;
-}
-
-interface Inspection {
-  id: string;
-  equipmentId: string;
-  equipmentType: "track" | "wheel" | "support";
-  mechanicName: string;
-  status: "PENDING" | "APPROVED" | "REJECTED";
-  createdAt: string;
-  issues?: number;
-}
+import { formatDate, getEquipmentTypeLabel, getStatusColor } from "@/lib/utils";
+import { useDebounce } from "@/hooks/useDebounce";
 
 export default function InspectionsPage() {
   const { user } = useAuth();
@@ -115,47 +90,9 @@ export default function InspectionsPage() {
     isLoading,
     isError,
   } = useGetGeneralInspections(queryParams);
-  // 5. Ekstrak data dan total hitungan dari respons API
-  const inspections: Inspection[] = apiResponse?.data || [];
+  const inspections = apiResponse?.data || [];
   const totalCount = apiResponse?.count || 0;
   const totalPages = Math.ceil(totalCount / LIMIT);
-  // const inspections: Inspection[] = apiResponse?.data || [];
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "APPROVED":
-        return "bg-green-100 text-green-800";
-      case "REJECTED":
-        return "bg-red-100 text-red-800";
-      case "PENDING":
-        return "bg-yellow-100 text-yellow-800";
-      default:
-        return "bg-gray-100 text-gray-800";
-    }
-  };
-
-  const getEquipmentTypeLabel = (type: string) => {
-    switch (type) {
-      case "track":
-        return "Peralatan Track";
-      case "wheel":
-        return "Peralatan Roda";
-      case "support":
-        return "Peralatan Pendukung";
-      default:
-        return type;
-    }
-  };
-
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("id-ID", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -219,13 +156,9 @@ export default function InspectionsPage() {
                   <SelectItem value="REJECTED">Rejected</SelectItem>
                 </SelectContent>
               </Select>
-
-              {/* Tombol Apply Filters dihapus */}
             </div>
           </CardContent>
         </Card>
-
-        {/* ... sisa kode JSX ... */}
         <div className="space-y-4">
           {isLoading && <p>Loading inspections...</p>}
           {isError && <p>Failed to load inspections.</p>}
@@ -282,7 +215,6 @@ export default function InspectionsPage() {
                 </div>
               </div>
             ))}
-          {/* 6. Tambahkan Komponen Paginasi di bagian bawah */}
           {totalPages > 1 && (
             <div className="mt-8 flex items-center justify-between">
               <p className="text-sm text-muted-foreground mt-2 w-full">
@@ -303,8 +235,6 @@ export default function InspectionsPage() {
                       }
                     />
                   </PaginationItem>
-
-                  {/* Logika sederhana untuk menampilkan nomor halaman */}
                   <PaginationItem>
                     <PaginationLink href="#" isActive>
                       {page}

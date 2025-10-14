@@ -42,6 +42,7 @@ import { formSections as WeldingMachineForm } from "@/components/inspections/sup
 import { formSections as CompressorForm } from "@/components/inspections/support/Compressor";
 import { formSections as MultiFlowForm } from "@/components/inspections/support/MultiFlow";
 import { formSections as TyreHandlerForm } from "@/components/inspections/support/TyreHandler";
+import { getStatusColor } from "@/lib/utils";
 
 export interface FormField {
   name: string;
@@ -127,13 +128,9 @@ export default function InspectionDetailPage() {
   const router = useRouter();
   const { user } = useAuth();
 
-  // Pastikan ID adalah string, jika tidak, jangan jalankan query
   const id = typeof params.id === "string" ? params.id : "";
-  console.log({ id });
-  // 2. Gunakan hook untuk fetch data, gantikan useState dan useEffect
   const { data, isLoading, isError, error } = useGetInspection(id);
 
-  // 3. Handle loading state dari React Query
   if (isLoading) {
     return (
       <div className="container mx-auto p-6">
@@ -144,8 +141,6 @@ export default function InspectionDetailPage() {
       </div>
     );
   }
-
-  // 4. Handle error state dari React Query (termasuk jika data tidak ditemukan)
   if (isError) {
     return (
       <div className="container mx-auto p-6">
@@ -189,25 +184,12 @@ export default function InspectionDetailPage() {
     );
   }
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "APPROVED":
-        return "bg-green-100 text-green-800";
-      case "REJECTED":
-        return "bg-red-100 text-red-800";
-      case "PENDING":
-        return "bg-yellow-100 text-yellow-800";
-      default:
-        return "bg-gray-100 text-gray-800";
-    }
-  };
-
   return (
-    <div className="container mx-auto p-6 space-y-6 max-w-7xl">
+    <div className="p-6 space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-4">
-          <Button
+          {/* <Button
             variant="ghost"
             size="sm"
             onClick={() => router.back()}
@@ -215,7 +197,7 @@ export default function InspectionDetailPage() {
           >
             <ArrowLeft className="h-4 w-4" />
             <span>Back</span>
-          </Button>
+          </Button> */}
           <div>
             <h1 className="text-2xl font-bold">Inspection Details</h1>
             <p className="text-gray-600">ID: {inspection.id}</p>
@@ -343,7 +325,6 @@ export default function InspectionDetailPage() {
         </CardContent>
       </Card>
 
-      {/* Inspection Data - INI BAGIAN YANG DIUBAH */}
       <Card>
         <CardHeader>
           <CardTitle>Inspection Results</CardTitle>
@@ -351,7 +332,6 @@ export default function InspectionDetailPage() {
         <CardContent className="space-y-6">
           {/* Cek jika struktur ditemukan */}
           {formStructure.length > 0 ? (
-            // 1. Loop pertama untuk setiap SEKSI (e.g., "Lower Frame Area Inspection")
             formStructure.map((section, sectionIndex) => (
               <div
                 key={sectionIndex}
@@ -415,18 +395,6 @@ export default function InspectionDetailPage() {
                 </div>
               ))}
             </div>
-          </CardContent>
-        </Card>
-      )}
-
-      {/* Comments */}
-      {inspection.comments && (
-        <Card>
-          <CardHeader>
-            <CardTitle>Comments</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-gray-700">{inspection.comments}</p>
           </CardContent>
         </Card>
       )}

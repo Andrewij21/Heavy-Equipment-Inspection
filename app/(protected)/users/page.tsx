@@ -1,29 +1,46 @@
 "use client";
 
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Plus, Loader2 } from "lucide-react"; // Tambahkan Loader2
+import { Button, buttonVariants } from "@/components/ui/button"; // 1. Impor buttonVariants
+import { Plus, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { UsersTable } from "@/components/tables/UserTable";
 import BackButton from "@/components/BackButton";
-import { toast } from "sonner"; // Tambahkan import toast
+import { toast } from "sonner";
+
+// 2. Impor komponen AlertDialog
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 import { useDeleteUser, useGetUsers } from "@/queries/user";
 
 export default function UsersPage() {
   const router = useRouter();
-  const { data, isLoading, isError, refetch } = useGetUsers();
+  const { data, isLoading, isError } = useGetUsers();
   const deleteMutation = useDeleteUser();
   const isDeleting = deleteMutation.isPending;
   const users = data?.data || [];
 
-  const handleDeleteUser = (userId: string) => {
+  // 3. State untuk mengontrol dialog dan menyimpan ID pengguna yang akan dihapus
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
+  const [userToDeleteId, setUserToDeleteId] = useState<string | null>(null);
+
+  // 4. Modifikasi handler untuk HANYA MENGGUNAKAN ID dari state
+  const handleDeleteUser = () => {
+    if (!userToDeleteId) return; // Pengaman jika ID tidak ada
+
     const toastId = toast.loading("Menghapus pengguna...");
 
-    // Panggil mutasi
-    deleteMutation.mutate(userId, {
+    deleteMutation.mutate(userToDeleteId, {
       onSuccess: () => {
-        // queryClient.invalidateQueries sudah ditangani di hook useDeleteUser
         toast.success("Pengguna berhasil dihapus", { id: toastId });
       },
       onError: (error) => {
@@ -33,7 +50,18 @@ export default function UsersPage() {
           description: "Terjadi kesalahan saat menghapus data.",
         });
       },
+      // 5. Tutup dialog setelah selesai, baik sukses maupun gagal
+      onSettled: () => {
+        setIsAlertOpen(false);
+        setUserToDeleteId(null); // Bersihkan ID setelah selesai
+      },
     });
+  };
+
+  // 6. Buat fungsi baru untuk MEMICU dialog
+  const promptDeleteUser = (userId: string) => {
+    setUserToDeleteId(userId); // Simpan ID pengguna yang akan dihapus
+    setIsAlertOpen(true); // Buka dialog
   };
 
   const handleEditUser = (userId: string) => {
@@ -44,7 +72,6 @@ export default function UsersPage() {
     router.push("/users/create");
   };
 
-  // --- Tampilan Loading dan Error ---
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-[80vh]">
@@ -61,7 +88,6 @@ export default function UsersPage() {
       </div>
     );
   }
-  // ---------------------------------
 
   return (
     <div className="min-h-screen py-6">
@@ -80,13 +106,37 @@ export default function UsersPage() {
         </Button>
       </div>
 
-      {/* 3. Gunakan data yang sudah dimuat */}
+      {/* 7. Kirim fungsi `promptDeleteUser` ke tabel */}
       <UsersTable
         data={users}
         onEditUser={handleEditUser}
-        onDeleteUser={handleDeleteUser}
+        onDeleteUser={promptDeleteUser}
         isDeleting={isDeleting}
       />
+
+      {/* 8. Tambahkan komponen AlertDialog di sini */}
+      <AlertDialog open={isAlertOpen} onOpenChange={setIsAlertOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Anda yakin ingin melanjutkan?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Tindakan ini akan menandai pengguna sebagai **nonaktif**. Mereka
+              tidak akan bisa login kembali, namun data historis seperti
+              inspeksi akan tetap tersimpan.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={isDeleting}>Batal</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleDeleteUser}
+              disabled={isDeleting}
+              className={buttonVariants({ variant: "destructive" })}
+            >
+              {isDeleting ? "Menghapus..." : "Ya, Hapus Pengguna"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

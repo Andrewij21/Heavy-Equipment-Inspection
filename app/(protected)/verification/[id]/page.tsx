@@ -50,39 +50,12 @@ export default function VerificationDetailPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <main className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-        {/* <div className="mb-6">
-          <Button
-            variant="ghost"
-            onClick={() => router.back()}
-            className="mb-4"
-          >
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Back to Verification
-          </Button>
-
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900">
-              Inspection Review
-            </h1>
-            <p className="mt-1 text-sm text-gray-600">
-              Review the inspection details and provide verification
-            </p>
-          </div>
-        </div> */}
-        <VerificationDetailView
-          id={params.id}
-          handleStatusHandler={handleStatusHandler}
-          showActions={true}
-        />
-        {/* <InspectionDetailView
-          inspection={mockInspection}
-          onApprove={handleApprove}
-          onReject={handleReject}
-          showActions={true}
-        /> */}
-      </main>
+    <div className="min-h-screen py-6">
+      <VerificationDetailView
+        id={params.id}
+        handleStatusHandler={handleStatusHandler}
+        showActions={true}
+      />
     </div>
   );
 }

@@ -177,9 +177,9 @@ export default function ProfilePage() {
             <div className="lg:col-span-2 space-y-6">
               {/* Basic Info */}
               <Card>
-                <CardHeader>
+                {/* <CardHeader>
                   <CardTitle>Basic Information</CardTitle>
-                </CardHeader>
+                </CardHeader> */}
                 <CardContent className="space-y-4">
                   <div className="flex items-center space-x-4">
                     <div className="flex-grow space-y-2">

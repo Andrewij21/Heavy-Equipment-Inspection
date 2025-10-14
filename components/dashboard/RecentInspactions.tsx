@@ -13,11 +13,10 @@ import { Button } from "@/components/ui/button";
 import { Eye, Edit, Loader2, Clock } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-
-// ASUMSI: Import hook dan interface dari file API Anda
 import { useGetGeneralInspections } from "@/queries/inspection"; // Ganti dengan path hook Anda
 import { useAuth } from "@/context/AuthContext"; // ASUMSI: Import AuthContext untuk mendapatkan userId
 import clsx from "clsx";
+import { formatDate, getStatusColor } from "@/lib/utils";
 
 interface Inspection {
   id: string;
@@ -38,20 +37,16 @@ export function RecentInspections({ userRole }: RecentInspectionsProps) {
   const { user } = useAuth(); // Ambil user ID dan role dari AuthContext
   const currentUserId = user?.id;
 
-  // 1. Tentukan filter berdasarkan peran
   const queryParams = useMemo(() => {
-    // Leader: Lihat semua inspeksi terbaru (dengan limit kecil, misalnya 5)
     if (userRole === "leader") {
       return { limit: 5, orderBy: "createdAt_desc" };
     }
-    // Mechanic: Filter hanya inspeksi yang dibuat oleh user ini
     if (userRole === "mechanic" && currentUserId) {
       return { limit: 5, mechanicId: currentUserId, orderBy: "createdAt_desc" };
     }
     return { limit: 5, orderBy: "createdAt_desc" };
   }, [userRole, currentUserId]);
 
-  // 2. Panggil hook API dengan filter yang sesuai
   const {
     data: apiResponse,
     isLoading,
@@ -59,20 +54,6 @@ export function RecentInspections({ userRole }: RecentInspectionsProps) {
   } = useGetGeneralInspections(queryParams);
 
   const inspections: Inspection[] = apiResponse?.data || [];
-
-  // 3. Logic helper tetap sama
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "APPROVED":
-        return "bg-green-100 text-green-800";
-      case "REJECTED":
-        return "bg-red-100 text-red-800";
-      case "PENDING":
-        return "bg-yellow-100 text-yellow-800";
-      default:
-        return "bg-gray-100 text-gray-800";
-    }
-  };
 
   const getEquipmentTypeLabel = (type: string) => {
     switch (type) {
@@ -85,15 +66,6 @@ export function RecentInspections({ userRole }: RecentInspectionsProps) {
       default:
         return type;
     }
-  };
-
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("id-ID", {
-      month: "short",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
   };
 
   // Tampilan Loading
@@ -126,7 +98,6 @@ export function RecentInspections({ userRole }: RecentInspectionsProps) {
     );
   }
 
-  // 4. Render Hasil
   return (
     <Card>
       <CardHeader>
@@ -183,21 +154,6 @@ export function RecentInspections({ userRole }: RecentInspectionsProps) {
                   <Eye className="w-4 h-4 mr-1" />
                   {userRole === "leader" ? "Tinjau" : "Lihat"}
                 </Button>
-                {/* Mechanic hanya bisa mengedit jika statusnya Ditolak atau Pending, 
-                    tetapi kita hanya menampilkan tombol View di dashboard */}
-                {/* {inspection.status === "REJECTED" &&
-                  userRole === "mechanic" && (
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() =>
-                        router.push(`/inspections/${inspection.id}/edit`)
-                      }
-                    >
-                      <Edit className="w-4 h-4 mr-1" />
-                      Ubah
-                    </Button>
-                  )} */}
               </div>
             </div>
           ))}
@@ -208,15 +164,17 @@ export function RecentInspections({ userRole }: RecentInspectionsProps) {
             </div>
           )}
         </div>
-        <div className="mt-4 text-center">
-          <Link
-            href={`${
-              userRole === "mechanic" ? "/inspections" : "/verification"
-            }`}
-          >
-            <Button variant="outline">Lihat Semua Inspeksi</Button>
-          </Link>
-        </div>
+        {inspections.length != 0 && (
+          <div className="mt-4 text-center">
+            <Link
+              href={`${
+                userRole === "mechanic" ? "/inspections" : "/verification"
+              }`}
+            >
+              <Button variant="outline">Lihat Semua Inspeksi</Button>
+            </Link>
+          </div>
+        )}
       </CardContent>
     </Card>
   );

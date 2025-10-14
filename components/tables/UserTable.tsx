@@ -207,25 +207,15 @@ export function UsersTable({
                 <SelectValue placeholder="Peran" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">Semua Peran</SelectItem>
+                <SelectItem value="all">All Roles</SelectItem>
                 <SelectItem value="admin">Admin</SelectItem>
                 <SelectItem value="leader">Leader</SelectItem>
-                <SelectItem value="mechanic">Mekanik</SelectItem>
+                <SelectItem value="mechanic">Mechanic</SelectItem>
               </SelectContent>
             </Select>
-            {/* <Select value={statusFilter} onValueChange={setStatusFilter}>
-              <SelectTrigger className="w-full sm:w-[140px]">
-                <SelectValue placeholder="Status" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">Semua Status</SelectItem>
-                <SelectItem value="active">Aktif</SelectItem>
-                <SelectItem value="inactive">Nonaktif</SelectItem>
-              </SelectContent>
-            </Select> */}
             <Button variant="outline" onClick={clearFilters}>
               <Filter className="w-4 h-4 mr-2" />
-              Bersihkan Filter
+              Clear Filter
             </Button>
           </div>
         </CardContent>

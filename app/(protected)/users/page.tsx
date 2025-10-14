@@ -64,32 +64,29 @@ export default function UsersPage() {
   // ---------------------------------
 
   return (
-    <div className="min-h-screen bg-background">
-      <main className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-        <BackButton />
-        <div className="flex justify-between items-start sm:items-center mb-8 flex-col gap-4 sm:flex-row">
-          <div>
-            <h1 className="text-3xl font-bold text-foreground">
-              Manajemen Pengguna
-            </h1>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Kelola pengguna sistem dan hak akses mereka
-            </p>
-          </div>
-          <Button onClick={handleCreateUser} className="self-end">
-            <Plus className="w-4 h-4 mr-2" />
-            Tambah Pengguna
-          </Button>
+    <div className="min-h-screen py-6">
+      <div className="flex justify-between items-start sm:items-center mb-8 flex-col gap-4 sm:flex-row">
+        <div>
+          <h1 className="text-3xl font-bold text-foreground">
+            Manajemen Pengguna
+          </h1>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Kelola pengguna sistem dan hak akses mereka
+          </p>
         </div>
+        <Button onClick={handleCreateUser} className="self-end">
+          <Plus className="w-4 h-4 mr-2" />
+          Tambah Pengguna
+        </Button>
+      </div>
 
-        {/* 3. Gunakan data yang sudah dimuat */}
-        <UsersTable
-          data={users}
-          onEditUser={handleEditUser}
-          onDeleteUser={handleDeleteUser}
-          isDeleting={isDeleting}
-        />
-      </main>
+      {/* 3. Gunakan data yang sudah dimuat */}
+      <UsersTable
+        data={users}
+        onEditUser={handleEditUser}
+        onDeleteUser={handleDeleteUser}
+        isDeleting={isDeleting}
+      />
     </div>
   );
 }

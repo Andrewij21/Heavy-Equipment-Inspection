@@ -284,8 +284,11 @@ export default function InspectionsPage() {
             ))}
           {/* 6. Tambahkan Komponen Paginasi di bagian bawah */}
           {totalPages > 1 && (
-            <div className="mt-8">
-              <Pagination>
+            <div className="mt-8 flex items-center justify-between">
+              <p className="text-sm text-muted-foreground mt-2 w-full">
+                Page {page} of {totalPages}
+              </p>
+              <Pagination className="justify-end">
                 <PaginationContent>
                   <PaginationItem>
                     <PaginationPrevious
@@ -330,9 +333,6 @@ export default function InspectionsPage() {
                   </PaginationItem>
                 </PaginationContent>
               </Pagination>
-              <p className="text-center text-sm text-muted-foreground mt-2">
-                Page {page} of {totalPages}
-              </p>
             </div>
           )}
         </div>

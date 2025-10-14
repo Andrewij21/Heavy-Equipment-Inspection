@@ -40,7 +40,7 @@ export default function Navigation() {
 
   return (
     <nav className="border-b bg-white">
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-7xl mx-auto px-4 sm:px-0">
         <div className="flex justify-between h-16">
           <div className="flex items-center">
             {/* START: BRANDING - Mengganti 'Equipment Inspector' dengan nama perusahaan */}

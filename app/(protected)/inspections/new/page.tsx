@@ -203,19 +203,7 @@ export default function NewInspectionPage() {
             ))}
           </div>
         ) : (
-          <div>
-            <div className="mb-4">
-              <Button
-                variant="ghost"
-                onClick={() => setSelectedType(null)}
-                className="text-gray-600 hover:text-gray-900"
-              >
-                <ArrowLeft className="w-4 h-4 mr-2" />
-                Kembali ke Pilihan Tipe {/* Diubah ke Bahasa Indonesia */}
-              </Button>
-            </div>
-            {renderForm()}
-          </div>
+          <div>{renderForm()}</div>
         )}
       </main>
     </div>

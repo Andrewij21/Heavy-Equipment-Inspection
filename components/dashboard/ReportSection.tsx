@@ -12,7 +12,9 @@ import {
 import {
   Pagination,
   PaginationContent,
+  PaginationEllipsis,
   PaginationItem,
+  PaginationLink,
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
@@ -70,6 +72,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useDashboardSummary } from "@/queries/dashboard";
+import { formatDate, getStatusColor } from "@/lib/utils";
 
 function useDebounce(value: string, delay: number) {
   const [debouncedValue, setDebouncedValue] = useState(value);
@@ -257,30 +260,6 @@ export default function ReportsPage({ role }: { role: string }) {
     dateTo,
   ]);
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "approved":
-        return "bg-green-100 text-green-800";
-      case "rejected":
-        return "bg-red-100 text-red-800";
-      case "pending":
-        return "bg-yellow-100 text-yellow-800";
-      default:
-        return "bg-gray-100 text-gray-800";
-    }
-  };
-
-  const formatDate = (dateString: string) => {
-    // Format tanggal ke format Indonesia
-    return new Date(dateString).toLocaleDateString("id-ID", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-  };
-
   // BARU: Handler Ekspor INTI diperbarui untuk memanggil API backend untuk PDF/Excel
   const handleExport = async (
     inspectionsToExport: FilterableInspection[],
@@ -379,342 +358,342 @@ export default function ReportsPage({ role }: { role: string }) {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <main className="max-w-7xl mx-auto pb-6">
-        {/* Judul Halaman - Tambahkan di sini jika diperlukan, tapi mengasumsikan komponen utama */}
-        <h1 className="text-xl font-bold text-gray-900 mb-6">
-          Laporan & Analitik Inspeksi
-        </h1>
+    <div className="min-h-screen pb-6 max-w-sm sm:max-w-none">
+      {/* Judul Halaman - Tambahkan di sini jika diperlukan, tapi mengasumsikan komponen utama */}
+      <h1 className="text-xl font-bold text-gray-900 mb-6">
+        Laporan & Analitik Inspeksi
+      </h1>
 
-        {/* Grafik dan Kartu Ringkasan */}
-        {role === "admin" && (
-          <div className="grid gap-6 lg:grid-cols-2 mb-8 max-w-screen">
-            {/* Distribusi Status */}
+      {/* Grafik dan Kartu Ringkasan */}
+      {role === "admin" && (
+        <div className="grid gap-6 lg:grid-cols-2 mb-8 max-w-screen">
+          {/* Distribusi Status */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Status Inspeksi</CardTitle>
+              <CardDescription>
+                Status saat ini dari semua inspeksi
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <ResponsiveContainer width="100%" height={300}>
+                <PieChart>
+                  <Pie
+                    data={statusData}
+                    cx="50%"
+                    cy="50%"
+                    labelLine={false}
+                    label={({ name, percent }) =>
+                      `${name} ${((percent as number) * 100).toFixed(0)}%`
+                    }
+                    outerRadius={80}
+                    fill="#8884d8"
+                    dataKey="value"
+                  >
+                    {statusData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.color} />
+                    ))}
+                  </Pie>
+                  <Tooltip />
+                </PieChart>
+              </ResponsiveContainer>
+            </CardContent>
+          </Card>
+
+          {/* Kartu Ringkasan */}
+          <div className="grid gap-4 lg:grid-cols-2 max-w-screen">
             <Card>
-              <CardHeader>
-                <CardTitle>Status Inspeksi</CardTitle>
-                <CardDescription>
-                  Status saat ini dari semua inspeksi
-                </CardDescription>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">
+                  Total Inspeksi
+                </CardTitle>
+                <FileSpreadsheet className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <ResponsiveContainer width="100%" height={300}>
-                  <PieChart>
-                    <Pie
-                      data={statusData}
-                      cx="50%"
-                      cy="50%"
-                      labelLine={false}
-                      label={({ name, percent }) =>
-                        `${name} ${((percent as number) * 100).toFixed(0)}%`
-                      }
-                      outerRadius={80}
-                      fill="#8884d8"
-                      dataKey="value"
-                    >
-                      {statusData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={entry.color} />
-                      ))}
-                    </Pie>
-                    <Tooltip />
-                  </PieChart>
-                </ResponsiveContainer>
+                <div className="text-2xl font-bold">
+                  {dashboardSummary?.data.total}
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  Total catatan ditemukan
+                </p>
               </CardContent>
             </Card>
-
-            {/* Kartu Ringkasan */}
-            <div className="grid gap-4 lg:grid-cols-2 max-w-screen">
-              <Card>
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">
-                    Total Inspeksi
-                  </CardTitle>
-                  <FileSpreadsheet className="h-4 w-4 text-muted-foreground" />
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">
-                    {dashboardSummary?.data.total}
-                  </div>
-                  <p className="text-xs text-muted-foreground">
-                    Total catatan ditemukan
-                  </p>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">
-                    Tingkat Persetujuan
-                  </CardTitle>
-                  <TrendingUp className="h-4 w-4 text-muted-foreground" />
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">
-                    {dashboardSummary?.data.approvalRate}%
-                  </div>
-                  <p className="text-xs text-muted-foreground">
-                    {dashboardSummary?.data.approved} dari{" "}
-                    {dashboardSummary?.data.total} disetujui
-                  </p>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">
-                    Pengguna Aktif
-                  </CardTitle>
-                  <Users className="h-4 w-4 text-muted-foreground" />
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">
-                    {dashboardSummary?.data.user}
-                  </div>
-                  <p className="text-xs text-muted-foreground">
-                    Mekanik yang berkontribusi
-                  </p>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">
-                    Jumlah Menunggu
-                  </CardTitle>
-                  <Calendar className="h-4 w-4 text-muted-foreground" />
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">
-                    {dashboardSummary?.data.pending}
-                  </div>
-                  <p className="text-xs text-muted-foreground">
-                    Menunggu tinjauan leader
-                  </p>
-                </CardContent>
-              </Card>
-            </div>
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">
+                  Tingkat Persetujuan
+                </CardTitle>
+                <TrendingUp className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">
+                  {dashboardSummary?.data.approvalRate}%
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  {dashboardSummary?.data.approved} dari{" "}
+                  {dashboardSummary?.data.total} disetujui
+                </p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">
+                  Pengguna Aktif
+                </CardTitle>
+                <Users className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">
+                  {dashboardSummary?.data.user}
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  Mekanik yang berkontribusi
+                </p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">
+                  Jumlah Menunggu
+                </CardTitle>
+                <Calendar className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">
+                  {dashboardSummary?.data.pending}
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  Menunggu tinjauan leader
+                </p>
+              </CardContent>
+            </Card>
           </div>
-        )}
+        </div>
+      )}
 
-        {/* Tabel Data Inspeksi */}
-        <Card className="mb-8 max-w-screen">
-          <CardHeader>
-            <CardTitle>Data Inspeksi</CardTitle>
-            <CardDescription>
-              Tampilan detail semua inspeksi dengan kemampuan filter
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            {/* Filter */}
-            <div className="flex items-center flex-col sm:flex-row sm:justify-between gap-4 mb-6">
-              <div className="relative w-full">
-                <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                <Input
-                  placeholder="Search inspections..."
-                  className="pl-10"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                />
-              </div>
-              <Select value={typeFilter} onValueChange={setTypeFilter}>
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Equipment Type" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Types</SelectItem>
-                  <SelectItem value="track">Track</SelectItem>
-                  <SelectItem value="wheel">Wheel</SelectItem>
-                  <SelectItem value="support">Support</SelectItem>
-                </SelectContent>
-              </Select>
-              <Select value={statusFilter} onValueChange={setStatusFilter}>
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Status" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Statuses</SelectItem>
-                  <SelectItem value="approved">Approved</SelectItem>
-                  <SelectItem value="rejected">Rejected</SelectItem>
-                  <SelectItem value="pending">Pending</SelectItem>
-                </SelectContent>
-              </Select>
-              <Select value={dateFilter} onValueChange={setDateFilter}>
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Quick Date Filter" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Time</SelectItem>
-                  <SelectItem value="today">Today</SelectItem>
-                  <SelectItem value="week">Last 7 Days</SelectItem>
-                  <SelectItem value="month">Last 30 Days</SelectItem>
-                </SelectContent>
-              </Select>
+      {/* Tabel Data Inspeksi */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Data Inspeksi</CardTitle>
+          <CardDescription>
+            Tampilan detail semua inspeksi dengan kemampuan filter
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          {/* Filter */}
+          <div className="flex items-center flex-col sm:flex-row sm:justify-between gap-4 mb-6">
+            <div className="relative w-full">
+              <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
               <Input
-                type="date"
-                value={dateFrom}
-                onChange={(e) =>
-                  setApiFilters((prev) => ({
-                    ...prev,
-                    dateFrom: e.target.value,
-                  }))
-                }
-                aria-label="From date"
-                className=""
-              />
-              <Input
-                type="date"
-                value={dateTo}
-                onChange={(e) =>
-                  setApiFilters((prev) => ({
-                    ...prev,
-                    dateTo: e.target.value,
-                  }))
-                }
-                className=""
-                aria-label="To date"
+                placeholder="Search inspections..."
+                className="pl-10"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
+            <Select value={typeFilter} onValueChange={setTypeFilter}>
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Equipment Type" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Types</SelectItem>
+                <SelectItem value="track">Track</SelectItem>
+                <SelectItem value="wheel">Wheel</SelectItem>
+                <SelectItem value="support">Support</SelectItem>
+              </SelectContent>
+            </Select>
+            <Select value={statusFilter} onValueChange={setStatusFilter}>
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Status" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Statuses</SelectItem>
+                <SelectItem value="approved">Approved</SelectItem>
+                <SelectItem value="rejected">Rejected</SelectItem>
+                <SelectItem value="pending">Pending</SelectItem>
+              </SelectContent>
+            </Select>
+            <Select value={dateFilter} onValueChange={setDateFilter}>
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Quick Date Filter" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Time</SelectItem>
+                <SelectItem value="today">Today</SelectItem>
+                <SelectItem value="week">Last 7 Days</SelectItem>
+                <SelectItem value="month">Last 30 Days</SelectItem>
+              </SelectContent>
+            </Select>
+            <Input
+              type="date"
+              value={dateFrom}
+              onChange={(e) =>
+                setApiFilters((prev) => ({
+                  ...prev,
+                  dateFrom: e.target.value,
+                }))
+              }
+              aria-label="From date"
+              className=""
+            />
+            <Input
+              type="date"
+              value={dateTo}
+              onChange={(e) =>
+                setApiFilters((prev) => ({
+                  ...prev,
+                  dateTo: e.target.value,
+                }))
+              }
+              className=""
+              aria-label="To date"
+            />
+          </div>
 
-            {/* Tabel */}
-            <div className="overflow-x-auto">
-              <table className="w-full border-collapse">
-                <thead>
-                  <tr className="border-b">
-                    <th className="text-left p-3 font-medium">ID Peralatan</th>
-                    <th className="text-left p-3 font-medium">Tipe</th>
-                    <th className="text-left p-3 font-medium">Mekanik</th>
-                    <th className="text-left p-3 font-medium">Status</th>
-                    <th className="text-left p-3 font-medium">Lokasi</th>
-                    <th className="text-left p-3 font-medium">Tanggal</th>
-                    <th className="text-left p-3 font-medium">Unduh</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {inspections.map((inspection) => (
-                    <tr
-                      key={inspection.id}
-                      className="border-b hover:bg-gray-50"
-                    >
-                      <td className="p-3 font-medium">
-                        {inspection.equipmentId}
-                      </td>
-                      <td className="p-3">
-                        <Badge variant="outline">
-                          {/* Kapitalisasi huruf pertama */}
-                          {inspection.equipmentType.charAt(0).toUpperCase() +
-                            inspection.equipmentType.slice(1)}
-                        </Badge>
-                      </td>
-                      <td className="p-3">{inspection.mechanicName}</td>
-                      <td className="p-3">
-                        <Badge className={getStatusColor(inspection.status)}>
-                          {/* Kapitalisasi huruf pertama */}
-                          {inspection.status.charAt(0).toUpperCase() +
-                            inspection.status.slice(1)}
-                        </Badge>
-                      </td>
-                      <td className="p-3 text-sm text-muted-foreground">
-                        {inspection.location}
-                      </td>
-                      <td className="p-3 text-sm text-muted-foreground">
-                        {formatDate(inspection.createdAt)}
-                      </td>
-                      <td className="p-3 text-sm">
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button variant="default" disabled={isExporting}>
-                              <Download className="w-4 h-4 mr-2" />
-                              Unduh
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuLabel>Pilih Format</DropdownMenuLabel>
-                            <DropdownMenuSeparator />
+          {/* Tabel */}
+          <div className="overflow-x-auto">
+            <table className="w-full border-collapse">
+              <thead>
+                <tr className="border-b">
+                  <th className="text-left p-3 font-medium">ID Peralatan</th>
+                  <th className="text-left p-3 font-medium">Tipe</th>
+                  <th className="text-left p-3 font-medium">Mekanik</th>
+                  <th className="text-left p-3 font-medium">Status</th>
+                  <th className="text-left p-3 font-medium">Lokasi</th>
+                  <th className="text-left p-3 font-medium">Tanggal</th>
+                  <th className="text-left p-3 font-medium">Unduh</th>
+                </tr>
+              </thead>
+              <tbody>
+                {inspections.map((inspection) => (
+                  <tr key={inspection.id} className="border-b hover:bg-gray-50">
+                    <td className="p-3 font-medium">
+                      {inspection.equipmentId}
+                    </td>
+                    <td className="p-3">
+                      <Badge variant="outline">
+                        {/* Kapitalisasi huruf pertama */}
+                        {inspection.equipmentType.charAt(0).toUpperCase() +
+                          inspection.equipmentType.slice(1)}
+                      </Badge>
+                    </td>
+                    <td className="p-3">{inspection.mechanicName}</td>
+                    <td className="p-3">
+                      <Badge className={getStatusColor(inspection.status)}>
+                        {/* Kapitalisasi huruf pertama */}
+                        {inspection.status.charAt(0).toUpperCase() +
+                          inspection.status.slice(1)}
+                      </Badge>
+                    </td>
+                    <td className="p-3 text-sm text-muted-foreground">
+                      {inspection.location}
+                    </td>
+                    <td className="p-3 text-sm text-muted-foreground">
+                      {formatDate(inspection.createdAt)}
+                    </td>
+                    <td className="p-3 text-sm">
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="default" disabled={isExporting}>
+                            <Download className="w-4 h-4 mr-2" />
+                            Unduh
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuLabel>Pilih Format</DropdownMenuLabel>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem
+                            onClick={() => handleExport([inspection], "pdf")}
+                            disabled={isExporting}
+                          >
+                            <FileText className="w-4 h-4 mr-2" />
+                            Formulir Inspeksi (PDF)
+                          </DropdownMenuItem>
+                          {role === "admin" && (
                             <DropdownMenuItem
-                              onClick={() => handleExport([inspection], "pdf")}
+                              onClick={() =>
+                                handleExport([inspection], "excel")
+                              }
                               disabled={isExporting}
                             >
-                              <FileText className="w-4 h-4 mr-2" />
-                              Formulir Inspeksi (PDF)
+                              <FileSpreadsheet className="w-4 h-4 mr-2" />
+                              Data Mentah (Excel)
                             </DropdownMenuItem>
-                            {role === "admin" && (
-                              <DropdownMenuItem
-                                onClick={() =>
-                                  handleExport([inspection], "excel")
-                                }
-                                disabled={isExporting}
-                              >
-                                <FileSpreadsheet className="w-4 h-4 mr-2" />
-                                Data Mentah (Excel)
-                              </DropdownMenuItem>
-                            )}
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+                          )}
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
 
-              {filteredInspections.length === 0 && (
-                <div className="text-center py-8 text-muted-foreground">
-                  <FileSpreadsheet className="w-12 h-12 mx-auto mb-4 opacity-50" />
-                  <p>
-                    Tidak ada inspeksi yang cocok dengan filter Anda saat ini.
-                  </p>
-                </div>
-              )}
-            </div>
-
-            <div className="flex items-center justify-between">
-              <div className="mt-4 text-sm text-muted-foreground w-full">
-                Menampilkan {filteredInspections.length} dari{" "}
-                {inspections.length} inspeksi
+            {filteredInspections.length === 0 && (
+              <div className="text-center py-8 text-muted-foreground">
+                <FileSpreadsheet className="w-12 h-12 mx-auto mb-4 opacity-50" />
+                <p>
+                  Tidak ada inspeksi yang cocok dengan filter Anda saat ini.
+                </p>
               </div>
-              {totalPages > 1 && (
-                <Pagination className="mt-2 justify-end">
-                  <PaginationContent>
-                    <PaginationItem>
-                      <PaginationPrevious
-                        href="#"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          setCurrentPage((prev) => Math.max(1, prev - 1));
-                        }}
-                        aria-disabled={currentPage === 1}
-                        className={
-                          currentPage === 1
-                            ? "pointer-events-none opacity-50"
-                            : undefined
-                        }
-                      />
-                    </PaginationItem>
-                    <PaginationItem>
-                      <span className="px-4 text-sm">
-                        {currentPage} / {totalPages}
-                      </span>
-                    </PaginationItem>
-                    <PaginationItem>
-                      <PaginationNext
-                        href="#"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          setCurrentPage((prev) =>
-                            Math.min(totalPages, prev + 1)
-                          );
-                        }}
-                        aria-disabled={currentPage === totalPages}
-                        className={
-                          currentPage === totalPages
-                            ? "pointer-events-none opacity-50"
-                            : undefined
-                        }
-                      />
-                    </PaginationItem>
-                  </PaginationContent>
-                </Pagination>
-              )}
+            )}
+          </div>
+
+          <div className="flex items-center justify-between">
+            <div className="mt-4 text-sm text-muted-foreground w-full">
+              Menampilkan {filteredInspections.length} dari {inspections.length}{" "}
+              inspeksi
             </div>
-          </CardContent>
-        </Card>
-      </main>
+            {totalPages > 1 && (
+              <Pagination className="mt-2 justify-end">
+                <PaginationContent>
+                  <PaginationItem>
+                    <PaginationPrevious
+                      href="#"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setCurrentPage((prev) => Math.max(1, prev - 1));
+                      }}
+                      aria-disabled={currentPage === 1}
+                      className={
+                        currentPage === 1
+                          ? "pointer-events-none opacity-50"
+                          : undefined
+                      }
+                    />
+                  </PaginationItem>
+                  <PaginationItem>
+                    <PaginationLink href="#" isActive>
+                      {currentPage}
+                    </PaginationLink>
+                  </PaginationItem>
+                  {currentPage < totalPages && (
+                    <PaginationItem>
+                      <PaginationEllipsis />
+                    </PaginationItem>
+                  )}
+                  <PaginationItem>
+                    <PaginationNext
+                      href="#"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setCurrentPage((prev) =>
+                          Math.min(totalPages, prev + 1)
+                        );
+                      }}
+                      aria-disabled={currentPage === totalPages}
+                      className={
+                        currentPage === totalPages
+                          ? "pointer-events-none opacity-50"
+                          : undefined
+                      }
+                    />
+                  </PaginationItem>
+                </PaginationContent>
+              </Pagination>
+            )}
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }

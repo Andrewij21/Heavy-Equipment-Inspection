@@ -113,92 +113,87 @@ export default function VerificationPage() {
     counts.pendingCount + counts.approvedCount + counts.rejectedCount;
 
   return (
-    <div className="min-h-screen bg-background">
-      <main className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-foreground">
-            Verifikasi Inspeksi
-          </h1>
-          <p className="mt-1 text-sm text-muted-foreground">
-            Tinjau dan verifikasi inspeksi peralatan yang diserahkan oleh
-            mekanik
-          </p>
-        </div>
+    <div className="min-h-screen py-6">
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold text-foreground">
+          Verifikasi Inspeksi
+        </h1>
+        <p className="mt-1 text-sm text-muted-foreground">
+          Tinjau dan verifikasi inspeksi peralatan yang diserahkan oleh mekanik
+        </p>
+      </div>
 
-        {/* Kartu Statistik - sekarang nilainya konsisten */}
-        <div className="grid gap-4 md:grid-cols-3 mb-6">
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">
-                Menunggu Tinjauan
-              </CardTitle>
-              <Clock className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{counts.pendingCount}</div>
-              <p className="text-xs text-muted-foreground">
-                Menunggu verifikasi
-              </p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Disetujui</CardTitle>
-              <CheckCircle className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{counts.approvedCount}</div>
-              <p className="text-xs text-muted-foreground">
-                Berhasil diverifikasi
-              </p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Ditolak</CardTitle>
-              <XCircle className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{counts.rejectedCount}</div>
-              <p className="text-xs text-muted-foreground">Memerlukan revisi</p>
-            </CardContent>
-          </Card>
-        </div>
+      {/* Kartu Statistik - sekarang nilainya konsisten */}
+      <div className="grid gap-4 md:grid-cols-3 mb-6">
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">
+              Menunggu Tinjauan
+            </CardTitle>
+            <Clock className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{counts.pendingCount}</div>
+            <p className="text-xs text-muted-foreground">Menunggu verifikasi</p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Disetujui</CardTitle>
+            <CheckCircle className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{counts.approvedCount}</div>
+            <p className="text-xs text-muted-foreground">
+              Berhasil diverifikasi
+            </p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Ditolak</CardTitle>
+            <XCircle className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{counts.rejectedCount}</div>
+            <p className="text-xs text-muted-foreground">Memerlukan revisi</p>
+          </CardContent>
+        </Card>
+      </div>
 
-        <Tabs
-          value={activeTab}
-          onValueChange={(value) =>
-            setActiveTab(value as "PENDING" | "APPROVED" | "REJECTED" | "ALL")
-          }
-        >
-          <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="PENDING">
-              Menunggu ({counts.pendingCount})
-            </TabsTrigger>
-            <TabsTrigger value="APPROVED">
-              Disetujui ({counts.approvedCount})
-            </TabsTrigger>
-            <TabsTrigger value="REJECTED">
-              Ditolak ({counts.rejectedCount})
-            </TabsTrigger>
-            <TabsTrigger value="ALL">Semua ({totalCount})</TabsTrigger>
-          </TabsList>
+      <Tabs
+        value={activeTab}
+        onValueChange={(value) =>
+          setActiveTab(value as "PENDING" | "APPROVED" | "REJECTED" | "ALL")
+        }
+      >
+        <TabsList className="grid w-full grid-cols-4">
+          <TabsTrigger value="PENDING">
+            Menunggu ({counts.pendingCount})
+          </TabsTrigger>
+          <TabsTrigger value="APPROVED">
+            Disetujui ({counts.approvedCount})
+          </TabsTrigger>
+          <TabsTrigger value="REJECTED">
+            Ditolak ({counts.rejectedCount})
+          </TabsTrigger>
+          <TabsTrigger value="ALL">Semua ({totalCount})</TabsTrigger>
+        </TabsList>
 
-          {/* Gunakan TabsContent yang berbeda untuk setiap tab agar React dapat mengelolanya dengan benar */}
-          <TabsContent value="PENDING">
-            <VerificationTable data={tableData} />
-          </TabsContent>
-          <TabsContent value="APPROVED">
-            <VerificationTable data={tableData} />
-          </TabsContent>
-          <TabsContent value="REJECTED">
-            <VerificationTable data={tableData} />
-          </TabsContent>
-          <TabsContent value="ALL">
-            <VerificationTable data={tableData} />
-          </TabsContent>
-        </Tabs>
-      </main>
+        {/* Gunakan TabsContent yang berbeda untuk setiap tab agar React dapat mengelolanya dengan benar */}
+        <TabsContent value="PENDING">
+          <VerificationTable data={tableData} />
+        </TabsContent>
+        <TabsContent value="APPROVED">
+          <VerificationTable data={tableData} />
+        </TabsContent>
+        <TabsContent value="REJECTED">
+          <VerificationTable data={tableData} />
+        </TabsContent>
+        <TabsContent value="ALL">
+          <VerificationTable data={tableData} />
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }

@@ -360,41 +360,31 @@ const ScheduleTable = ({ data, title }: { data: any[]; title: string }) => {
   };
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="border rounded-md">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                {headers.map((day) => (
-                  <TableHead key={day} className="font-bold text-center">
-                    {/* Tampilkan nama hari yang sudah diterjemahkan */}
-                    {dayTranslations[day]}
-                  </TableHead>
-                ))}
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {data.map((row, rowIndex) => (
-                <TableRow key={rowIndex}>
-                  {headers.map((day) => (
-                    <TableCell
-                      key={`${rowIndex}-${day}`}
-                      className="text-center"
-                    >
-                      {row[day] || "-"}
-                    </TableCell>
-                  ))}
-                </TableRow>
+    <div className="border rounded-md">
+      <Table>
+        <TableHeader>
+          <TableRow>
+            {headers.map((day) => (
+              <TableHead key={day} className="font-bold text-center">
+                {/* Tampilkan nama hari yang sudah diterjemahkan */}
+                {dayTranslations[day]}
+              </TableHead>
+            ))}
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {data.map((row, rowIndex) => (
+            <TableRow key={rowIndex}>
+              {headers.map((day) => (
+                <TableCell key={`${rowIndex}-${day}`} className="text-center">
+                  {row[day] || "-"}
+                </TableCell>
               ))}
-            </TableBody>
-          </Table>
-        </div>
-      </CardContent>
-    </Card>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </div>
   );
 };
 

@@ -16,7 +16,7 @@ import { useRouter } from "next/navigation";
 import { useGetGeneralInspections } from "@/queries/inspection"; // Ganti dengan path hook Anda
 import { useAuth } from "@/context/AuthContext"; // ASUMSI: Import AuthContext untuk mendapatkan userId
 import clsx from "clsx";
-import { formatDate, getStatusColor } from "@/lib/utils";
+import { formatDate, getEquipmentTypeLabel, getStatusColor } from "@/lib/utils";
 
 interface Inspection {
   id: string;
@@ -54,19 +54,6 @@ export function RecentInspections({ userRole }: RecentInspectionsProps) {
   } = useGetGeneralInspections(queryParams);
 
   const inspections: Inspection[] = apiResponse?.data || [];
-
-  const getEquipmentTypeLabel = (type: string) => {
-    switch (type) {
-      case "track":
-        return "Peralatan Track";
-      case "wheel":
-        return "Peralatan Roda";
-      case "support":
-        return "Peralatan Pendukung";
-      default:
-        return type;
-    }
-  };
 
   // Tampilan Loading
   if (isLoading) {

@@ -82,7 +82,7 @@ export default function CreateUserPage() {
   };
 
   return (
-    <div className="container mx-auto p-6 pt-12 space-y-6 max-w-5xl">
+    <div className="container sm:mx-auto py-6  space-y-6 max-w-5xl">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex flex-col sm:flex-row items-start sm:items-center space-x-4">

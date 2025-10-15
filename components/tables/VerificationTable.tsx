@@ -8,7 +8,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import {
@@ -18,6 +18,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 // 2. Impor komponen Paginasi
 import {
   Pagination,
@@ -49,9 +59,13 @@ import {
   ArrowUp,
   ArrowDown,
   Loader2,
+  Trash2,
 } from "lucide-react";
 import Link from "next/link";
-import { useUpdateInspectionStatus } from "@/queries/inspection";
+import {
+  useDeleteInspection,
+  useUpdateInspectionStatus,
+} from "@/queries/inspection";
 import { toast } from "sonner";
 import {
   formatDate,
@@ -82,12 +96,14 @@ interface PendingInspection {
 interface VerificationTableProps {
   data: PendingInspection[];
   statusFilter?: string;
+  role: string;
 }
 
 type SortField = keyof PendingInspection;
 type SortDirection = "asc" | "desc";
 
 export function VerificationTable({
+  role,
   data,
   statusFilter = "all",
 }: VerificationTableProps) {
@@ -97,6 +113,8 @@ export function VerificationTable({
   const [sortField, setSortField] = useState<SortField>("createdAt");
   const [sortDirection, setSortDirection] = useState<SortDirection>("desc");
   const [currentPage, setCurrentPage] = useState(1);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [inspectionToDelete, setInspectionToDelete] = useState<any>(null);
   const ITEMS_PER_PAGE = 10; // Tentukan jumlah item per halaman
   // BARU: Inisialisasi hook mutasi track spesifik
   const updateStatusMutation = useUpdateInspectionStatus();
@@ -110,6 +128,13 @@ export function VerificationTable({
     sortDirection,
     statusFilter,
   ]);
+  const deleteMutation = useDeleteInspection();
+  const isDeleting = deleteMutation.isPending;
+
+  const handleOpenDeleteDialog = (inspection: PendingInspection) => {
+    setInspectionToDelete(inspection);
+    setIsDeleteDialogOpen(true);
+  };
   const getStatusIcon = (status: string): React.ReactNode => {
     switch (normalizeStatus(status)) {
       case "APPROVED":
@@ -129,7 +154,29 @@ export function VerificationTable({
       setSortDirection("asc");
     }
   };
+  const handleConfirmDelete = () => {
+    if (!inspectionToDelete) return;
 
+    const toastId = toast.loading("Menghapus inspeksi...");
+
+    deleteMutation.mutate(inspectionToDelete.id, {
+      onSuccess: () => {
+        toast.success("Inspeksi berhasil dihapus.", { id: toastId });
+      },
+      onError: (error) => {
+        toast.error("Gagal menghapus inspeksi.", {
+          id: toastId,
+          description: "Silakan coba lagi.",
+        });
+        console.error("Delete failed:", error);
+      },
+      onSettled: () => {
+        // Tutup dialog dan reset state setelah selesai
+        setIsDeleteDialogOpen(false);
+        setInspectionToDelete(null);
+      },
+    });
+  };
   const getSortIcon = (field: SortField) => {
     if (sortField !== field) {
       return <ArrowUpDown className="w-4 h-4" />;
@@ -482,6 +529,21 @@ export function VerificationTable({
                               Sudah Diselesaikan
                             </DropdownMenuItem>
                           )}
+                          {role === "admin" && (
+                            <>
+                              <DropdownMenuSeparator />
+                              <DropdownMenuItem
+                                onClick={() =>
+                                  handleOpenDeleteDialog(inspection)
+                                }
+                                className="text-destructive"
+                                disabled={isDeleting}
+                              >
+                                <Trash2 className="w-4 h-4 mr-2" />
+                                Hapus Inspeksi
+                              </DropdownMenuItem>
+                            </>
+                          )}
                         </DropdownMenuContent>
                       </DropdownMenu>
                     </TableCell>
@@ -504,6 +566,34 @@ export function VerificationTable({
           )}
         </CardContent>
       </Card>
+      <AlertDialog
+        open={isDeleteDialogOpen}
+        onOpenChange={setIsDeleteDialogOpen}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Anda yakin ingin menghapus?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Tindakan ini tidak dapat dibatalkan. Ini akan menghapus data
+              inspeksi untuk unit{" "}
+              <span className="font-semibold">
+                {inspectionToDelete?.equipmentId}
+              </span>{" "}
+              secara permanen.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={isDeleting}>Batal</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleConfirmDelete}
+              disabled={isDeleting}
+              className={buttonVariants({ variant: "destructive" })}
+            >
+              {isDeleting ? "Menghapus..." : "Ya, Hapus"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
       {totalPages > 1 && (
         <div className="flex items-center justify-between">
           <p className="text-sm text-muted-foreground w-full">

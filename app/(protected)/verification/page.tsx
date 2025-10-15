@@ -7,6 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Clock, CheckCircle, XCircle, Loader2 } from "lucide-react";
 import { VerificationTable } from "@/components/tables/VerificationTable";
 import { useGetGeneralInspections } from "@/queries/inspection";
+import { useAuth } from "@/context/AuthContext";
 
 // ... (Interface tidak berubah)
 interface InspectionListItem {
@@ -28,6 +29,8 @@ interface TableData extends InspectionListItem {
 }
 
 export default function VerificationPage() {
+  const { user } = useAuth();
+  const role = user?.role;
   const [activeTab, setActiveTab] = useState<
     "PENDING" | "APPROVED" | "REJECTED" | "ALL"
   >("PENDING");
@@ -101,7 +104,7 @@ export default function VerificationPage() {
     );
   }
 
-  if (isError) {
+  if (isError || !role) {
     return (
       <div className="text-red-600 text-center mt-10">
         Kesalahan memuat inspeksi. Harap periksa koneksi jaringan.
@@ -182,16 +185,16 @@ export default function VerificationPage() {
 
         {/* Gunakan TabsContent yang berbeda untuk setiap tab agar React dapat mengelolanya dengan benar */}
         <TabsContent value="PENDING">
-          <VerificationTable data={tableData} />
+          <VerificationTable data={tableData} role={role} />
         </TabsContent>
         <TabsContent value="APPROVED">
-          <VerificationTable data={tableData} />
+          <VerificationTable data={tableData} role={role} />
         </TabsContent>
         <TabsContent value="REJECTED">
-          <VerificationTable data={tableData} />
+          <VerificationTable data={tableData} role={role} />
         </TabsContent>
         <TabsContent value="ALL">
-          <VerificationTable data={tableData} />
+          <VerificationTable data={tableData} role={role} />
         </TabsContent>
       </Tabs>
     </div>

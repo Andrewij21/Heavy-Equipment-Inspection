@@ -54,18 +54,11 @@ export default function CreateUserPage() {
   const createUserMutation = useCreateUser();
   const loading = createUserMutation.isPending;
 
-  // Ambil nilai role saat ini untuk rendering kondisional
-  const currentRole = form.watch("role");
-
-  // 3. Ganti handleSubmit lama dengan fungsi onSubmit dari useForm
   const onSubmit = (data: CreateUserSchema) => {
-    // Pastikan data yang dikirim sesuai dengan skema API
     const userPayload = {
       ...data,
-      // Jika departemen kosong (string ""), kirim null ke backend
       department: data.department === "" ? null : data.department,
     };
-
     // Panggil mutasi
     createUserMutation.mutate(userPayload as any, {
       onSuccess: () => {
@@ -75,7 +68,8 @@ export default function CreateUserPage() {
       onError: (error) => {
         console.error("Creation Error:", error);
         toast.error("Gagal membuat pengguna", {
-          description: "Terjadi kesalahan saat menghubungi server.",
+          description:
+            error.message || "Terjadi kesalahan saat menghubungi server.",
         });
       },
     });

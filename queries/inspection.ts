@@ -53,6 +53,12 @@ const updateInspectionStatus = async ({
   // Uses the dedicated status route: PATCH /tracks/:id/status
   return await apiClient.patch(`/inspections/${id}/status`, statusData);
 };
+
+const deleteInspection = async (
+  inspectionId: string
+): Promise<ApiResponse<InspectionListItem[]>> => {
+  return await apiClient.delete(`/inspections/${inspectionId}`);
+};
 // --- REACT QUERY HOOK ---
 export const useGetGeneralInspections = (params: Record<string, any> = {}) => {
   return useQuery({
@@ -98,5 +104,18 @@ export const useUpdateInspectionStatus = () => {
         }
       );
     },
+  });
+};
+
+export const useDeleteInspection = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (inspectionId: string) => deleteInspection(inspectionId),
+    onSuccess: () => {
+      // Invalidate semua query list inspeksi agar UI otomatis diperbarui
+      queryClient.invalidateQueries({ queryKey: inspectionKeys.lists() });
+    },
+    // Penanganan error akan kita lakukan di komponen dengan toast
   });
 };

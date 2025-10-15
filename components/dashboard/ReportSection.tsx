@@ -10,6 +10,16 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import {
   Pagination,
   PaginationContent,
   PaginationEllipsis,
@@ -18,7 +28,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -51,6 +61,8 @@ import {
   Search,
   Loader2,
   FileText,
+  Trash2,
+  EllipsisVertical,
 } from "lucide-react";
 import {
   type ExportFilters,
@@ -61,7 +73,10 @@ import {
 } from "@/lib/exportUtils";
 import { toast } from "sonner";
 // API Imports
-import { useGetGeneralInspections } from "@/queries/inspection";
+import {
+  useDeleteInspection,
+  useGetGeneralInspections,
+} from "@/queries/inspection";
 import { downloadInspectionReport } from "@/queries/report"; // Asumsi utility ini diimpor/didefinisikan
 import {
   DropdownMenu,
@@ -111,7 +126,9 @@ export default function ReportsPage({ role }: { role: string }) {
   const dateFrom = apiFilters.dateFrom;
   const dateTo = apiFilters.dateTo;
   const debouncedSearchTerm = useDebounce(searchTerm, 500);
-
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [inspectionToDelete, setInspectionToDelete] =
+    useState<FilterableInspection | null>(null);
   useEffect(() => {
     setCurrentPage(1);
   }, [
@@ -174,6 +191,14 @@ export default function ReportsPage({ role }: { role: string }) {
   } = useGetGeneralInspections(queryParams);
   const { data: dashboardSummary, isLoading: dashboardSummaryLoading } =
     useDashboardSummary(queryParams);
+
+  const deleteMutation = useDeleteInspection();
+  const isDeleting = deleteMutation.isPending;
+
+  const handleOpenDeleteDialog = (inspection: FilterableInspection) => {
+    setInspectionToDelete(inspection);
+    setIsDeleteDialogOpen(true);
+  };
 
   // Petakan dan normalisasi data API sekali (useMemo tetap sama)
   const inspections: FilterableInspection[] = useMemo(() => {
@@ -329,7 +354,29 @@ export default function ReportsPage({ role }: { role: string }) {
       setIsExporting(false);
     }
   };
+  const handleConfirmDelete = () => {
+    if (!inspectionToDelete) return;
 
+    const toastId = toast.loading("Menghapus inspeksi...");
+
+    deleteMutation.mutate(inspectionToDelete.id, {
+      onSuccess: () => {
+        toast.success("Inspeksi berhasil dihapus.", { id: toastId });
+      },
+      onError: (error) => {
+        toast.error("Gagal menghapus inspeksi.", {
+          id: toastId,
+          description: "Silakan coba lagi.",
+        });
+        console.error("Delete failed:", error);
+      },
+      onSettled: () => {
+        // Tutup dialog dan reset state setelah selesai
+        setIsDeleteDialogOpen(false);
+        setInspectionToDelete(null);
+      },
+    });
+  };
   // Jika memuat, tampilkan spinner
   if (isLoading || dashboardSummaryLoading) {
     return (
@@ -561,7 +608,8 @@ export default function ReportsPage({ role }: { role: string }) {
                   <th className="text-left p-3 font-medium">Status</th>
                   <th className="text-left p-3 font-medium">Lokasi</th>
                   <th className="text-left p-3 font-medium">Tanggal</th>
-                  <th className="text-left p-3 font-medium">Unduh</th>
+                  {/* <th className="text-left p-3 font-medium">Unduh</th> */}
+                  <th className="text-left font-medium">Aksi</th>
                 </tr>
               </thead>
               <tbody>
@@ -591,23 +639,27 @@ export default function ReportsPage({ role }: { role: string }) {
                     <td className="p-3 text-sm text-muted-foreground">
                       {formatDate(inspection.createdAt)}
                     </td>
-                    <td className="p-3 text-sm">
+                    <td className=" text-sm">
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                          <Button variant="default" disabled={isExporting}>
-                            <Download className="w-4 h-4 mr-2" />
-                            Unduh
+                          <Button
+                            variant="ghost"
+                            disabled={isExporting || isDeleting}
+                            asChild
+                            size={"icon"}
+                          >
+                            <EllipsisVertical size={4} className="h-4 w-4" />
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                          <DropdownMenuLabel>Pilih Format</DropdownMenuLabel>
+                          <DropdownMenuLabel>Pilih Aksi</DropdownMenuLabel>
                           <DropdownMenuSeparator />
                           <DropdownMenuItem
                             onClick={() => handleExport([inspection], "pdf")}
                             disabled={isExporting}
                           >
                             <FileText className="w-4 h-4 mr-2" />
-                            Formulir Inspeksi (PDF)
+                            Unduh PDF
                           </DropdownMenuItem>
                           {role === "admin" && (
                             <DropdownMenuItem
@@ -617,8 +669,24 @@ export default function ReportsPage({ role }: { role: string }) {
                               disabled={isExporting}
                             >
                               <FileSpreadsheet className="w-4 h-4 mr-2" />
-                              Data Mentah (Excel)
+                              Unduh Excel
                             </DropdownMenuItem>
+                          )}
+                          {/* 8. Tambahkan Aksi Hapus (hanya untuk Admin) */}
+                          {role === "admin" && (
+                            <>
+                              <DropdownMenuSeparator />
+                              <DropdownMenuItem
+                                onClick={() =>
+                                  handleOpenDeleteDialog(inspection)
+                                }
+                                className="text-destructive"
+                                disabled={isDeleting}
+                              >
+                                <Trash2 className="w-4 h-4 mr-2" />
+                                Hapus Inspeksi
+                              </DropdownMenuItem>
+                            </>
                           )}
                         </DropdownMenuContent>
                       </DropdownMenu>
@@ -694,6 +762,34 @@ export default function ReportsPage({ role }: { role: string }) {
           </div>
         </CardContent>
       </Card>
+      <AlertDialog
+        open={isDeleteDialogOpen}
+        onOpenChange={setIsDeleteDialogOpen}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Anda yakin ingin menghapus?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Tindakan ini tidak dapat dibatalkan. Ini akan menghapus data
+              inspeksi untuk unit{" "}
+              <span className="font-semibold">
+                {inspectionToDelete?.equipmentId}
+              </span>{" "}
+              secara permanen.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={isDeleting}>Batal</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleConfirmDelete}
+              disabled={isDeleting}
+              className={buttonVariants({ variant: "destructive" })}
+            >
+              {isDeleting ? "Menghapus..." : "Ya, Hapus"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

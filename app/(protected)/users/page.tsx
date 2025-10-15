@@ -24,7 +24,7 @@ import { useDeleteUser, useGetUsers } from "@/queries/user";
 
 export default function UsersPage() {
   const router = useRouter();
-  const { data, isLoading, isError } = useGetUsers();
+  const { data, isLoading, isError } = useGetUsers({ limit: "9999999" });
   const deleteMutation = useDeleteUser();
   const isDeleting = deleteMutation.isPending;
   const users = data?.data || [];

@@ -7,8 +7,10 @@ import type {
 } from "@/schemas/userSchema";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-const getUsers = async (): Promise<ApiResponse<User[]>> => {
-  return await apiClient.get("/users");
+const getUsers = async (
+  params: Record<string, any>
+): Promise<ApiResponse<User[]>> => {
+  return await apiClient.get("/users", params);
 };
 const getUser = async (userId: string): Promise<ApiResponse<User>> => {
   return await apiClient.get(`/users/${userId}`);
@@ -37,10 +39,10 @@ export const userKeys = {
   detail: (userId: string) => [...userKeys.all, "detail", userId] as const,
 };
 
-export const useGetUsers = () => {
+export const useGetUsers = (params: Record<string, any> = {}) => {
   return useQuery({
     queryKey: userKeys.lists(),
-    queryFn: getUsers,
+    queryFn: () => getUsers(params),
   });
 };
 

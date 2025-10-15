@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import {
   Table,
   TableBody,
@@ -9,6 +9,15 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -66,7 +75,8 @@ export function UsersTable({
   const [statusFilter, setStatusFilter] = useState("all");
   const [sortField, setSortField] = useState<SortField>("createdAt");
   const [sortDirection, setSortDirection] = useState<SortDirection>("desc");
-
+  const [currentPage, setCurrentPage] = useState(1);
+  const ITEMS_PER_PAGE = 5; // Tentukan jumlah item per halaman
   const handleSort = (field: SortField) => {
     if (sortField === field) {
       setSortDirection(sortDirection === "asc" ? "desc" : "asc");
@@ -86,6 +96,9 @@ export function UsersTable({
       <ArrowDown className="w-4 h-4" />
     );
   };
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, roleFilter, statusFilter, sortField, sortDirection]);
 
   const filteredAndSortedData = useMemo(() => {
     const filtered = data.filter((user) => {
@@ -132,7 +145,11 @@ export function UsersTable({
 
     return filtered;
   }, [data, searchTerm, roleFilter, statusFilter, sortField, sortDirection]);
-
+  const totalPages = Math.ceil(filteredAndSortedData.length / ITEMS_PER_PAGE);
+  const paginatedData = useMemo(() => {
+    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+    return filteredAndSortedData.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+  }, [filteredAndSortedData, currentPage]);
   const clearFilters = () => {
     setSearchTerm("");
     setRoleFilter("all");
@@ -281,7 +298,7 @@ export function UsersTable({
               </TableRow>
             </TableHeader>
             <TableBody>
-              {filteredAndSortedData.map((user) => (
+              {paginatedData.map((user) => (
                 <TableRow key={user.id} className="hover:bg-muted/50">
                   <TableCell className="font-medium px-5">
                     {user.username}
@@ -351,6 +368,72 @@ export function UsersTable({
           )}
         </CardContent>
       </Card>
+      {totalPages > 1 && (
+        <div className="flex items-center justify-between">
+          <p className="text-sm text-muted-foreground w-full">
+            Halaman {currentPage} dari {totalPages}
+          </p>
+          <Pagination className="justify-end">
+            <PaginationContent>
+              <PaginationItem>
+                <PaginationPrevious
+                  href="#"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setCurrentPage((prev) => Math.max(1, prev - 1));
+                  }}
+                  aria-disabled={currentPage === 1}
+                  className={
+                    currentPage === 1
+                      ? "pointer-events-none opacity-50"
+                      : undefined
+                  }
+                />
+              </PaginationItem>
+              <PaginationItem>
+                <PaginationLink href="#" isActive>
+                  {currentPage}
+                </PaginationLink>
+              </PaginationItem>
+
+              {/* Tampilkan elipsis hanya jika ada celah lebih dari 1 halaman */}
+              {currentPage < totalPages - 1 && (
+                <PaginationItem>
+                  <PaginationEllipsis />
+                </PaginationItem>
+              )}
+
+              {/* Tampilkan halaman terakhir hanya jika BUKAN halaman saat ini */}
+              {currentPage !== totalPages && (
+                <PaginationItem>
+                  {/* Ganti `setPage` dengan fungsi navigasi Anda */}
+                  <PaginationLink
+                    href="#"
+                    onClick={() => setCurrentPage(totalPages)}
+                  >
+                    {totalPages}
+                  </PaginationLink>
+                </PaginationItem>
+              )}
+              <PaginationItem>
+                <PaginationNext
+                  href="#"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setCurrentPage((prev) => Math.min(totalPages, prev + 1));
+                  }}
+                  aria-disabled={currentPage === totalPages}
+                  className={
+                    currentPage === totalPages
+                      ? "pointer-events-none opacity-50"
+                      : undefined
+                  }
+                />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
+        </div>
+      )}
     </div>
   );
 }

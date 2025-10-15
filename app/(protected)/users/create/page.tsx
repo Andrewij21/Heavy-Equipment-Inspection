@@ -165,6 +165,16 @@ export default function CreateUserPage() {
                           id="employeeId"
                           placeholder="Contoh: 123456789"
                           {...field}
+                          // Tambahkan handler onChange untuk memfilter input
+                          onChange={(e) => {
+                            const value = e.target.value;
+                            // Hanya izinkan string yang berisi angka atau string kosong
+                            if (/^[0-9]*$/.test(value)) {
+                              field.onChange(value);
+                            }
+                          }}
+                          // (Opsional) Menampilkan keyboard numerik di perangkat mobile
+                          inputMode="numeric"
                         />
                       </FormControl>
                       <FormMessage />
@@ -212,6 +222,16 @@ export default function CreateUserPage() {
                           placeholder="Contoh: 081234567890"
                           {...field}
                           value={field.value || ""}
+                          // Add a custom onChange handler to filter the input
+                          onChange={(e) => {
+                            const value = e.target.value;
+                            // Allow only strings that contain numbers or are empty
+                            if (/^[0-9]*$/.test(value)) {
+                              field.onChange(value);
+                            }
+                          }}
+                          // (Optional) Display the numeric keyboard on mobile devices
+                          inputMode="numeric"
                         />
                       </FormControl>
                       <FormMessage />

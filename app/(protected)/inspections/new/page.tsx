@@ -29,9 +29,11 @@ import { useAuth } from "@/context/AuthContext";
 import { toast } from "sonner";
 import { useCreateWheelInspection } from "@/queries/wheele";
 import { useCreateSupportInspection } from "@/queries/support";
+import TyreInspectionForm from "@/components/inspections/tyre/TyreDetailsInspectionForm";
+import { useCreateTyreInspection } from "@/queries/tyre";
 // Note: Assuming you have a separate utility to show toasts/notifications
 
-type EquipmentType = "track" | "wheel" | "support";
+type EquipmentType = "track" | "wheel" | "support" | "tyre";
 
 export default function NewInspectionPage() {
   const [selectedType, setSelectedType] = useState<EquipmentType | null>(null);
@@ -44,6 +46,7 @@ export default function NewInspectionPage() {
   const trackMutation = useCreateTrackInspection();
   const wheelMutation = useCreateWheelInspection();
   const supportMutation = useCreateSupportInspection();
+  const tyreMutation = useCreateTyreInspection();
   // const wheelMutation = useCreateWheelInspection(); // Placeholder
   // const supportMutation = useCreateSupportInspection(); // Placeholder
 
@@ -71,6 +74,14 @@ export default function NewInspectionPage() {
       description: "Generator, Tower Lamp dan struktur pendukung lainya", // Diubah ke Bahasa Indonesia
       icon: <FileText className="w-8 h-8" />,
       color: "bg-orange-50 border-orange-200 hover:bg-orange-100",
+    },
+    {
+      type: "tyre" as const,
+      title: "Section Tyre",
+      description:
+        "Pemeriksaan ban, termasuk posisi, tekanan, dan kondisi fisik.",
+      icon: <Wrench className="w-8 h-8" />, // Icon changed to a wrench
+      color: "bg-slate-50 border-slate-200 hover:bg-slate-100", // Color changed to gray/slate
     },
   ];
 
@@ -117,6 +128,14 @@ export default function NewInspectionPage() {
           duration: 3000,
         });
         router.push("/inspections");
+      } else if (data.equipmentType === "tyre") {
+        await tyreMutation.mutateAsync(payload as any);
+        toast.success("Pemeriksaan Berhasil Dibuat", {
+          description:
+            "Pemeriksaan tyre telah berhasil diserahkan dan menunggu tinjauan.",
+          duration: 3000,
+        });
+        router.push("/inspections");
       }
     } catch (error) {
       console.error("Gagal mengirimkan pemeriksaan:", error); // Diubah ke Bahasa Indonesia
@@ -147,6 +166,13 @@ export default function NewInspectionPage() {
       case "support":
         return (
           <SupportInspectionForm
+            onSubmit={handleSubmit}
+            isSubmitting={isSubmitting}
+          />
+        );
+      case "tyre":
+        return (
+          <TyreInspectionForm
             onSubmit={handleSubmit}
             isSubmitting={isSubmitting}
           />

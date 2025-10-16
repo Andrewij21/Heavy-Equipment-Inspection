@@ -24,7 +24,6 @@ export const apiClient = {
 
     if (!res.ok) {
       const errorBody = await res.json();
-      console.log({ errorBody });
       throw new Error(errorBody.message || "API Error");
     }
 

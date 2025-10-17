@@ -337,6 +337,7 @@ export function VerificationTable({
                 <SelectItem value="track">Track Equipment</SelectItem>
                 <SelectItem value="wheel">Wheel Equipment</SelectItem>
                 <SelectItem value="support">Support Equipment</SelectItem>
+                <SelectItem value="tyre">Tyre</SelectItem>
               </SelectContent>
             </Select>
             <Button variant="outline" onClick={clearFilters}>

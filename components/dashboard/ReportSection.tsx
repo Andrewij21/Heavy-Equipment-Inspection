@@ -547,6 +547,7 @@ export default function ReportsPage({ role }: { role: string }) {
                 <SelectItem value="track">Track</SelectItem>
                 <SelectItem value="wheel">Wheel</SelectItem>
                 <SelectItem value="support">Support</SelectItem>
+                <SelectItem value="tyre">Tyre</SelectItem>
               </SelectContent>
             </Select>
             <Select value={statusFilter} onValueChange={setStatusFilter}>

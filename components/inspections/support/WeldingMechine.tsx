@@ -267,19 +267,18 @@ export default function WeldingMechineInspectionForm({
                     <FormLabel>HM DOWN</FormLabel>
                     <FormControl>
                       <Input
-                        type="text" // 1. Ubah tipe menjadi "text"
-                        inputMode="numeric" // 2. Tampilkan keyboard numerik di perangkat mobile
+                        type="text"
+                        inputMode="decimal" // Tampilkan keyboard desimal (termasuk titik) di mobile
                         placeholder="0"
-                        {...field} // Sebarkan properti field dari react-hook-form
+                        {...field}
                         onChange={(e) => {
-                          // 3. Handler untuk memvalidasi input
                           const inputValue = e.target.value;
-                          // Hanya izinkan string kosong atau string yang berisi angka
+                          // Regex diubah untuk memperbolehkan satu titik (.)
                           if (
                             inputValue === "" ||
-                            /^[0-9]+$/.test(inputValue)
+                            /^[0-9]*(\.[0-9]*)?$/.test(inputValue)
                           ) {
-                            field.onChange(inputValue); // Perbarui nilai form jika valid
+                            field.onChange(inputValue);
                           }
                         }}
                       />
@@ -296,16 +295,16 @@ export default function WeldingMechineInspectionForm({
                     <FormLabel>HM RFU</FormLabel>
                     <FormControl>
                       <Input
-                        type="text" // 1. Ubah tipe menjadi "text"
-                        inputMode="numeric" // 2. Tampilkan keyboard numerik di perangkat mobile
+                        type="text"
+                        inputMode="decimal"
                         placeholder="0"
                         {...field}
                         onChange={(e) => {
-                          // 3. Handler yang sama untuk validasi
                           const inputValue = e.target.value;
+                          // Regex yang sama untuk memperbolehkan satu titik (.)
                           if (
                             inputValue === "" ||
-                            /^[0-9]+$/.test(inputValue)
+                            /^[0-9]*(\.[0-9]*)?$/.test(inputValue)
                           ) {
                             field.onChange(inputValue);
                           }

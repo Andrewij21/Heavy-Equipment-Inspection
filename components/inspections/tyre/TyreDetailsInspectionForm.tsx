@@ -166,7 +166,7 @@ export default function TyreDetailsInspectionForm({
                   </FormItem>
                 )}
               />
-              <FormField
+              {/* <FormField
                 name="formNumber"
                 control={form.control}
                 render={({ field }) => (
@@ -182,8 +182,8 @@ export default function TyreDetailsInspectionForm({
                     <FormMessage />
                   </FormItem>
                 )}
-              />
-              <FormField
+              /> */}
+              {/* <FormField
                 name="revision"
                 control={form.control}
                 render={({ field }) => (
@@ -195,8 +195,8 @@ export default function TyreDetailsInspectionForm({
                     <FormMessage />
                   </FormItem>
                 )}
-              />
-              <FormField
+              /> */}
+              {/* <FormField
                 name="dateOfIssue"
                 control={form.control}
                 render={({ field }) => (
@@ -208,7 +208,7 @@ export default function TyreDetailsInspectionForm({
                     <FormMessage />
                   </FormItem>
                 )}
-              />
+              /> */}
             </div>
           </CardContent>
         </Card>

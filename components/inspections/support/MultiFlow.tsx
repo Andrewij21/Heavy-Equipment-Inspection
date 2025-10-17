@@ -201,6 +201,7 @@ export default function MultiFlowInspectionForm({
       timeDown: "",
       timeOut: "",
       findings: [{ description: "", status: "open" }],
+      timeStop: "",
       ...initialData,
     },
   });
@@ -258,7 +259,21 @@ export default function MultiFlowInspectionForm({
                 render={({ field }) => (
                   <FormItem>
                     {/* <FormLabel>Time Down</FormLabel> */}
-                    <FormLabel>TIME</FormLabel>
+                    <FormLabel>Time Start</FormLabel>
+                    <FormControl>
+                      <Input type="time" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="timeStop"
+                render={({ field }) => (
+                  <FormItem>
+                    {/* <FormLabel>Time Down</FormLabel> */}
+                    <FormLabel>Time Stop</FormLabel>
                     <FormControl>
                       <Input type="time" {...field} />
                     </FormControl>

@@ -476,7 +476,7 @@ export function BigDiggerInspectionForm({
     resolver: zodResolver(TrackInspectionSchema),
     defaultValues: {
       equipmentType: "track",
-      // Add 'Big Digger' to match the new required schema field 'equipmentGeneralType'
+      timeStop: "",
       equipmentGeneralType: "BigDigger",
       equipmentId: "",
       modelUnit: "",
@@ -542,36 +542,27 @@ export function BigDiggerInspectionForm({
                   </FormItem>
                 )}
               />
-              {/* <FormField
-                control={form.control}
-                name="smr"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>SMR (Service Meter Reading)</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="number"
-                        placeholder="0"
-                        {...field}
-                        value={field.value === 0 ? "" : field.value}
-                        onChange={(e) => {
-                          const rawValue = e.target.value;
-                          const numericValue = Number.parseFloat(rawValue);
-                          field.onChange(rawValue === "" ? 0 : numericValue);
-                        }}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              /> */}
               <FormField
                 control={form.control}
                 name="smr"
                 render={({ field }) => (
                   <FormItem>
                     {/* <FormLabel>Time Down</FormLabel> */}
-                    <FormLabel>TIME</FormLabel>
+                    <FormLabel>Time Start</FormLabel>
+                    <FormControl>
+                      <Input type="time" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="timeStop"
+                render={({ field }) => (
+                  <FormItem>
+                    {/* <FormLabel>Time Down</FormLabel> */}
+                    <FormLabel>Time Stop</FormLabel>
                     <FormControl>
                       <Input type="time" {...field} />
                     </FormControl>

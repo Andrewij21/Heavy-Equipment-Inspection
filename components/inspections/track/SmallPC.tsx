@@ -436,7 +436,7 @@ export function SmallPCInspectionForm({
     resolver: zodResolver(TrackInspectionSchema),
     defaultValues: {
       equipmentType: "track",
-      // Add 'Big Digger' to match the new required schema field 'equipmentGeneralType'
+      timeStop: "",
       equipmentGeneralType: "SmallPC",
       equipmentId: "",
       modelUnit: "",
@@ -505,7 +505,21 @@ export function SmallPCInspectionForm({
                 render={({ field }) => (
                   <FormItem>
                     {/* <FormLabel>Time Down</FormLabel> */}
-                    <FormLabel>TIME</FormLabel>
+                    <FormLabel>Time Start</FormLabel>
+                    <FormControl>
+                      <Input type="time" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="timeStop"
+                render={({ field }) => (
+                  <FormItem>
+                    {/* <FormLabel>Time Down</FormLabel> */}
+                    <FormLabel>Time Stop</FormLabel>
                     <FormControl>
                       <Input type="time" {...field} />
                     </FormControl>

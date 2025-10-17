@@ -259,10 +259,11 @@ export const SupportInspectionSchema = z
     inspectionDate: z.string().min(1, "Tanggal inspeksi wajib diisi."),
     inspectionTime: z.string().min(1, "Waktu inspeksi wajib diisi."),
     workingHours: z.number().nonnegative("Jam kerja tidak valid."),
-    smr: z.string().min(1, "SMR wajib diisi."),
+    smr: z.string().min(1, "Waktu mulai wajib diisi."),
     timeDown: z.string().min(1, "Waktu Down wajib diisi."),
     timeOut: z.string().min(1, "Waktu Out wajib diisi."),
     shift: ShiftEnum,
+    timeStop: z.string().min(1, "Waktu berhenti wajib di isi"),
 
     // TYPE DISCRIMINATOR
     equipmentType: z.literal("support"),

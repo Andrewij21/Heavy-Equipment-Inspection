@@ -9,6 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -108,7 +109,7 @@ const mapApiToFilterStatus = (status: string) =>
 
 export default function ReportsPage({ role }: { role: string }) {
   const [isExporting, setIsExporting] = useState(false);
-
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
   // States untuk filtering API (Sumber Data)
   const [apiFilters, setApiFilters] = useState({
     status: "ALL",
@@ -285,7 +286,7 @@ export default function ReportsPage({ role }: { role: string }) {
     dateTo,
   ]);
 
-  // BARU: Handler Ekspor INTI diperbarui untuk memanggil API backend untuk PDF/Excel
+  //Handler Ekspor INTI diperbarui untuk memanggil API backend untuk PDF/Excel
   const handleExport = async (
     inspectionsToExport: FilterableInspection[],
     format: "csv" | "pdf" | "excel"
@@ -317,11 +318,18 @@ export default function ReportsPage({ role }: { role: string }) {
           format: format,
         });
 
-        // 2. PERBAIKAN PENTING EKSTENSI FRONTEND
         let finalFilename = apiFilename;
-        if (format === "excel") {
-          // Pastikan nama file diakhiri dengan .xlsx untuk memenuhi browser/OS,
-          // menimpa ekstensi perantara yang salah seperti '.excel' atau '.xls'
+
+        // Periksa apakah backend mengirim file zip
+        if (
+          inspectionIds.length > 1 &&
+          (format === "pdf" || format === "excel")
+        ) {
+          // Pastikan nama file diakhiri dengan .zip
+          const baseName = finalFilename.replace(/\.zip$/i, "");
+          finalFilename = `${baseName}.zip`;
+        } else if (format === "excel") {
+          // Logika lama Anda untuk file excel tunggal
           const baseName = finalFilename.replace(
             /\.(xlsx|xls|excel|bin)?$/i,
             ""
@@ -377,6 +385,31 @@ export default function ReportsPage({ role }: { role: string }) {
       },
     });
   };
+
+  useEffect(() => {
+    setSelectedIds([]);
+  }, [queryParams]); // Bergantung pada queryParams yang sudah mencakup semua filter
+  const handleSelectRow = (id: string) => {
+    setSelectedIds((prev) =>
+      prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]
+    );
+  };
+  const handleSelectAll = () => {
+    // Jika semua item yang difilter sudah dipilih, kosongkan pilihan.
+    // Jika tidak, pilih semua item yang difilter.
+    if (selectedIds.length === filteredInspections.length) {
+      setSelectedIds([]);
+    } else {
+      setSelectedIds(filteredInspections.map((i) => i.id));
+    }
+  };
+  const handleBulkExport = (format: "csv" | "pdf" | "excel") => {
+    const inspectionsToExport = filteredInspections.filter((i) =>
+      selectedIds.includes(i.id)
+    );
+    handleExport(inspectionsToExport, format);
+  };
+
   // Jika memuat, tampilkan spinner
   if (isLoading || dashboardSummaryLoading) {
     return (
@@ -520,11 +553,38 @@ export default function ReportsPage({ role }: { role: string }) {
 
       {/* Tabel Data Inspeksi */}
       <Card>
-        <CardHeader>
-          <CardTitle>Data Inspeksi</CardTitle>
-          <CardDescription>
-            Tampilan detail semua inspeksi dengan kemampuan filter
-          </CardDescription>
+        <CardHeader className="flex flex-row items-center justify-between">
+          <div>
+            <CardTitle>Data Inspeksi</CardTitle>
+            <CardDescription>
+              Tampilan detail semua inspeksi dengan kemampuan filter
+            </CardDescription>
+          </div>
+          {/* Tombol ini hanya muncul jika ada item yang dipilih */}
+          {selectedIds.length > 0 && (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button disabled={isExporting}>
+                  <Download className="w-4 h-4 mr-2" />
+                  Export Selected ({selectedIds.length})
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuLabel>Pilih Format Ekspor</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={() => handleBulkExport("pdf")}>
+                  <FileText className="w-4 h-4 mr-2" />
+                  Formulir (PDF)
+                </DropdownMenuItem>
+                {role === "admin" && (
+                  <DropdownMenuItem onClick={() => handleBulkExport("excel")}>
+                    <FileSpreadsheet className="w-4 h-4 mr-2" />
+                    Data Mentah (Excel)
+                  </DropdownMenuItem>
+                )}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
         </CardHeader>
         <CardContent>
           {/* Filter */}
@@ -603,6 +663,16 @@ export default function ReportsPage({ role }: { role: string }) {
             <table className="w-full border-collapse">
               <thead>
                 <tr className="border-b">
+                  <th className="text-left p-3 font-medium">
+                    <Checkbox
+                      checked={
+                        filteredInspections.length > 0 &&
+                        selectedIds.length === filteredInspections.length
+                      }
+                      onCheckedChange={handleSelectAll}
+                      aria-label="Pilih semua"
+                    />
+                  </th>
                   <th className="text-left p-3 font-medium">ID Peralatan</th>
                   <th className="text-left p-3 font-medium">Tipe</th>
                   <th className="text-left p-3 font-medium">Mekanik</th>
@@ -616,6 +686,13 @@ export default function ReportsPage({ role }: { role: string }) {
               <tbody>
                 {inspections.map((inspection) => (
                   <tr key={inspection.id} className="border-b hover:bg-gray-50">
+                    <td className="p-3">
+                      <Checkbox
+                        checked={selectedIds.includes(inspection.id)}
+                        onCheckedChange={() => handleSelectRow(inspection.id)}
+                        aria-label={`Pilih inspeksi ${inspection.equipmentId}`}
+                      />
+                    </td>
                     <td className="p-3 font-medium">
                       {inspection.equipmentId}
                     </td>

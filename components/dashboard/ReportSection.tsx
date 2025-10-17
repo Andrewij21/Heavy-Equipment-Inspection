@@ -750,7 +750,7 @@ export default function ReportsPage({ role }: { role: string }) {
                               Unduh Excel
                             </DropdownMenuItem>
                           )}
-                          {/* 8. Tambahkan Aksi Hapus (hanya untuk Admin) */}
+                          {/* Tambahkan Aksi Hapus (hanya untuk Admin) */}
                           {role === "admin" && (
                             <>
                               <DropdownMenuSeparator />

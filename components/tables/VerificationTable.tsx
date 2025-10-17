@@ -284,7 +284,7 @@ export function VerificationTable({
     updateStatusMutation.mutate(
       {
         id: id,
-        statusData: { status },
+        statusData: { status, comments: "" },
       },
       {
         onSuccess: () => {

@@ -21,6 +21,7 @@ interface InspectionListItem {
 }
 interface StatusUpdatePayload {
   status: "APPROVED" | "REJECTED";
+  comments: string;
 }
 // --- KEYS ---
 export const inspectionKeys = {

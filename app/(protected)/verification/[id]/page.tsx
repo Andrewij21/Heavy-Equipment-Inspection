@@ -14,16 +14,16 @@ export default function VerificationDetailPage() {
 
   const handleStatusHandler = async (
     id: string,
-    status: "APPROVED" | "REJECTED"
+    status: "APPROVED" | "REJECTED",
+    comments: string
   ) => {
     // 1. Buat pesan dinamis berdasarkan aksi
     const actionText = status === "APPROVED" ? "Approving" : "Rejecting";
     const toastId = toast.loading(`${actionText} inspection...`);
-
     updateStatusMutation.mutate(
       {
         id: id,
-        statusData: { status },
+        statusData: { status, comments },
       },
       {
         onSuccess: () => {

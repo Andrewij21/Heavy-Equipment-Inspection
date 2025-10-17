@@ -23,7 +23,10 @@ import {
   Tag,
   Truck,
   SunMoon,
+  MessageSquare,
 } from "lucide-react";
+import { Textarea } from "@/components/ui/textarea"; // 1. Import Textarea
+import { Label } from "@/components/ui/label";
 import { useState } from "react";
 import { useGetInspection } from "@/queries/inspection";
 import { trackFormSections as BigDiggerForm } from "@/components/inspections/track/BigDigger";
@@ -42,6 +45,7 @@ import { formSections as CompressorForm } from "@/components/inspections/support
 import { formSections as MultiFlowForm } from "@/components/inspections/support/MultiFlow";
 import { formSections as TyreHandlerForm } from "@/components/inspections/support/TyreHandler";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 // Interface dan helper tetap sama
 export interface FormField {
@@ -117,7 +121,11 @@ const InfoItem = ({
 );
 interface InspectionDetailViewProps {
   id: string;
-  handleStatusHandler?: (id: string, status: "APPROVED" | "REJECTED") => void;
+  handleStatusHandler?: (
+    id: string,
+    status: "APPROVED" | "REJECTED",
+    comments: string
+  ) => void;
   onReject?: (id: string, comments: string) => void;
   showActions?: boolean;
 }
@@ -129,6 +137,7 @@ export function VerificationDetailView({
 }: InspectionDetailViewProps) {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [comments, setComments] = useState("");
   const { data, isLoading, isError, error } = useGetInspection(id);
 
   if (isLoading) {
@@ -163,7 +172,6 @@ export function VerificationDetailView({
   }
 
   const inspection = data?.data;
-
   if (!inspection) {
     return (
       <div className="container mx-auto p-6">
@@ -190,9 +198,15 @@ export function VerificationDetailView({
 
   const handleApprove = async (status: "APPROVED" | "REJECTED") => {
     if (!handleStatusHandler) return;
+    if (comments.trim() === "") {
+      toast.error("Note is required", {
+        description: "Please provide a note before approving or rejecting.",
+      });
+      return;
+    }
     setIsSubmitting(true);
     try {
-      await handleStatusHandler(inspection.id, status);
+      await handleStatusHandler(inspection.id, status, comments);
     } finally {
       setIsSubmitting(false);
     }
@@ -372,14 +386,23 @@ export function VerificationDetailView({
         </Card>
       )}
 
-      {/* Notes */}
-      {inspection.notes && (
+      {inspection.comments && (
         <Card>
           <CardHeader>
-            <CardTitle>Additional Notes</CardTitle>
+            <CardTitle className="flex items-center gap-2">
+              <MessageSquare className="h-5 w-5" />
+              <span>Additional Notes</span>
+            </CardTitle>
+            <CardDescription>
+              Catatan tambahan dari mekanik selama inspeksi.
+            </CardDescription>
           </CardHeader>
           <CardContent>
-            <p className="text-sm whitespace-pre-wrap">{inspection.notes}</p>
+            <div className="rounded-md border bg-slate-50 p-4">
+              <p className="text-sm text-slate-700 whitespace-pre-wrap">
+                {inspection.comments}
+              </p>
+            </div>
           </CardContent>
         </Card>
       )}
@@ -390,14 +413,26 @@ export function VerificationDetailView({
           <CardHeader>
             <CardTitle>Verification</CardTitle>
             <CardDescription>
-              Review and approve or reject this inspection.
+              Review and approve or reject this inspection. A note is required.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
+            {/* 6. Add the Textarea for notes */}
+            <div className="space-y-2">
+              <Label htmlFor="comments">Verification Note *</Label>
+              <Textarea
+                id="comments"
+                placeholder="Add your review comments here..."
+                value={comments}
+                onChange={(e) => setComments(e.target.value)}
+                className="min-h-[100px]"
+                disabled={isSubmitting}
+              />
+            </div>
             <div className="flex space-x-4">
               <Button
                 onClick={() => handleApprove("APPROVED")}
-                disabled={isSubmitting}
+                disabled={isSubmitting || !comments.trim()}
                 className="bg-green-600 hover:bg-green-700"
               >
                 <CheckCircle className="w-4 h-4 mr-2" />
@@ -405,7 +440,7 @@ export function VerificationDetailView({
               </Button>
               <Button
                 onClick={() => handleApprove("REJECTED")}
-                disabled={isSubmitting}
+                disabled={isSubmitting || !comments.trim()}
                 variant="destructive"
               >
                 <XCircle className="w-4 h-4 mr-2" />

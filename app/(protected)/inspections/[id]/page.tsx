@@ -24,6 +24,7 @@ import {
   Tag,
   Truck,
   SunMoon,
+  MessageSquare,
 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { useGetInspection } from "@/queries/inspection";
@@ -398,7 +399,26 @@ export default function InspectionDetailPage() {
           </CardContent>
         </Card>
       )}
-
+      {inspection.comments && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <MessageSquare className="h-5 w-5" />
+              <span>Additional Notes</span>
+            </CardTitle>
+            <CardDescription>
+              Catatan tambahan dari mekanik selama inspeksi.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="rounded-md border bg-slate-50 p-4">
+              <p className="text-sm text-slate-700 whitespace-pre-wrap">
+                {inspection.comments}
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+      )}
       {/* Verification Information */}
       {inspection.verifiedBy && (
         <Card>

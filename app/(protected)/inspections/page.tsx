@@ -20,7 +20,7 @@ import {
   PaginationPrevious,
   PaginationEllipsis,
 } from "@/components/ui/pagination";
-import { Plus, Search, Eye, Clock } from "lucide-react";
+import { Plus, Search, Eye, Clock, FilterX } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import BackButton from "@/components/BackButton";
@@ -41,19 +41,18 @@ export default function InspectionsPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedType, setSelectedType] = useState("all");
   const [selectedStatus, setSelectedStatus] = useState("all");
-
+  const [dateFrom, setDateFrom] = useState("");
+  const [dateTo, setDateTo] = useState("");
   // Debounce search term untuk performa
   const debouncedSearchTerm = useDebounce(searchTerm, 500); // Tunggu 500ms setelah user berhenti mengetik
   // 2. State untuk Paginasi
   const [page, setPage] = useState(1);
   const LIMIT = 10; // Jumlah item per halaman
 
-  // 3. UX Tambahan: Reset ke halaman 1 setiap kali filter berubah
   useEffect(() => {
     setPage(1);
-  }, [debouncedSearchTerm, selectedType, selectedStatus]);
+  }, [debouncedSearchTerm, selectedType, selectedStatus, dateFrom, dateTo]);
 
-  // 4. Tambahkan `page` dan `limit` ke parameter API
   const queryParams = useMemo(() => {
     const params: Record<string, any> = {
       orderBy: "createdAt_desc",
@@ -64,7 +63,6 @@ export default function InspectionsPage() {
     if (userRole === "mechanic" && currentUserId) {
       params.mechanicId = currentUserId;
     }
-
     if (debouncedSearchTerm) {
       params.q = debouncedSearchTerm;
     }
@@ -74,6 +72,13 @@ export default function InspectionsPage() {
     if (selectedStatus !== "all") {
       params.status = selectedStatus;
     }
+    // Tambahkan parameter tanggal jika ada nilainya
+    if (dateFrom) {
+      params.dateFrom = dateFrom;
+    }
+    if (dateTo) {
+      params.dateTo = dateTo;
+    }
 
     return params;
   }, [
@@ -82,7 +87,9 @@ export default function InspectionsPage() {
     debouncedSearchTerm,
     selectedType,
     selectedStatus,
-    page, // Tambahkan `page` sebagai dependency
+    dateFrom, // Tambahkan sebagai dependency
+    dateTo, // Tambahkan sebagai dependency
+    page,
   ]);
 
   const {
@@ -90,6 +97,13 @@ export default function InspectionsPage() {
     isLoading,
     isError,
   } = useGetGeneralInspections(queryParams);
+  const handleClearFilters = () => {
+    setSearchTerm("");
+    setSelectedType("all");
+    setSelectedStatus("all");
+    setDateFrom("");
+    setDateTo("");
+  };
   const inspections = apiResponse?.data || [];
   const totalCount = apiResponse?.count || 0;
   const totalPages = Math.ceil(totalCount / LIMIT);
@@ -118,8 +132,8 @@ export default function InspectionsPage() {
           <CardTitle className="text-lg">Filter</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="relative md:col-span-1">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4 items-end">
+            <div className="relative lg:col-span-2">
               <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
               <Input
                 placeholder="Search Equipment ID..."
@@ -138,6 +152,7 @@ export default function InspectionsPage() {
                 <SelectItem value="track">Track Equipment</SelectItem>
                 <SelectItem value="wheel">Wheel Equipment</SelectItem>
                 <SelectItem value="support">Support Equipment</SelectItem>
+                <SelectItem value="tyre">Tyre</SelectItem>
               </SelectContent>
             </Select>
 
@@ -152,6 +167,27 @@ export default function InspectionsPage() {
                 <SelectItem value="REJECTED">Rejected</SelectItem>
               </SelectContent>
             </Select>
+
+            {/* 7. Tambahkan input tanggal */}
+            <Input
+              type="date"
+              value={dateFrom}
+              onChange={(e) => setDateFrom(e.target.value)}
+              aria-label="From date"
+            />
+            <Input
+              type="date"
+              value={dateTo}
+              onChange={(e) => setDateTo(e.target.value)}
+              aria-label="To date"
+            />
+          </div>
+          {/* 8. Tambahkan tombol Clear Filters */}
+          <div className="mt-4 flex justify-end">
+            <Button variant="ghost" onClick={handleClearFilters}>
+              <FilterX className="w-4 h-4 mr-2" />
+              Clear Filters
+            </Button>
           </div>
         </CardContent>
       </Card>

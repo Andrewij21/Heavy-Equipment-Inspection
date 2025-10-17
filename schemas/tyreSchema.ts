@@ -28,6 +28,7 @@ export const TyreInspectionSchema = z.object({
   timeDown: z.string().min(1, "Waktu Down wajib diisi."),
   timeOut: z.string().min(1, "Waktu Out wajib diisi."),
   shift: ShiftEnum,
+  timeStop: z.string().min(1, "Waktu berhenti wajib di isi"),
 
   // TYPE DISCRIMINATOR
   equipmentType: z.literal("tyre"),

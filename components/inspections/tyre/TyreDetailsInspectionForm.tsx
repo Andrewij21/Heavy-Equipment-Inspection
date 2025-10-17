@@ -61,6 +61,7 @@ export default function TyreDetailsInspectionForm({
       timeDown: "-",
       timeOut: "-",
       shift: "day",
+      timeStop: "-",
       // Inisialisasi 'tyreDetails' sebagai array kosong
       tyreDetails: [
         {

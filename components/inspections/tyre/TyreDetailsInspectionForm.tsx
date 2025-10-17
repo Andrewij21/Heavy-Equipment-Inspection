@@ -78,11 +78,11 @@ export default function TyreDetailsInspectionForm({
       // Inisialisasi field lain dari Zod
       equipmentType: "tyre",
       workingHours: 0,
-      formNumber: "",
-      revision: "",
+      formNumber: "-",
+      revision: "-",
       hm: "",
       size: "",
-      dateOfIssue: "",
+      dateOfIssue: "-",
     },
   });
 

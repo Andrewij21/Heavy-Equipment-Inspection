@@ -51,7 +51,11 @@ export default function NewInspectionPage() {
   // const supportMutation = useCreateSupportInspection(); // Placeholder
 
   // Determine the overall submitting state
-  const isSubmitting = trackMutation.isPending;
+  const isSubmitting =
+    trackMutation.isPending ||
+    wheelMutation.isPending ||
+    supportMutation.isPending ||
+    tyreMutation.isPending;
 
   const equipmentTypes = [
     {

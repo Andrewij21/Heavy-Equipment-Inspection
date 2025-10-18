@@ -138,20 +138,6 @@ export default function LoginForm() {
               </Button>
             </form>
           </Form>
-          <div className="mt-6 text-sm text-muted-foreground">
-            <p className="font-medium mb-2">Demo Accounts:</p>
-            <div className="space-y-1">
-              <p>
-                <strong>Mechanic:</strong> MEC-2510-001 / password
-              </p>
-              <p>
-                <strong>Leader:</strong> LDR-2508-002 / password
-              </p>
-              <p>
-                <strong>Admin:</strong> ADM-2405-003 / password
-              </p>
-            </div>
-          </div>
         </CardContent>
       </Card>
     </div>

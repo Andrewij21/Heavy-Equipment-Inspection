@@ -406,7 +406,19 @@ export function VerificationDetailView({
           </CardContent>
         </Card>
       )}
-
+      {inspection.approver && (
+        <Card>
+          <CardHeader>
+            <CardTitle>Verification Details</CardTitle>
+          </CardHeader>
+          <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <p className="text-sm text-gray-500">Verified By</p>
+              <p className="font-medium">{inspection.approver.username}</p>
+            </div>
+          </CardContent>
+        </Card>
+      )}
       {/* Verification Actions */}
       {showActions && inspection.status === "PENDING" && (
         <Card>

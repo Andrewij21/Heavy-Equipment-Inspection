@@ -420,7 +420,7 @@ export default function InspectionDetailPage() {
         </Card>
       )}
       {/* Verification Information */}
-      {inspection.verifiedBy && (
+      {inspection.approver && (
         <Card>
           <CardHeader>
             <CardTitle>Verification Details</CardTitle>
@@ -428,11 +428,7 @@ export default function InspectionDetailPage() {
           <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <p className="text-sm text-gray-500">Verified By</p>
-              <p className="font-medium">{inspection.verifiedBy}</p>
-            </div>
-            <div>
-              <p className="text-sm text-gray-500">Verified At</p>
-              <p className="font-medium">{inspection.verifiedAt}</p>
+              <p className="font-medium">{inspection.approver.username}</p>
             </div>
           </CardContent>
         </Card>

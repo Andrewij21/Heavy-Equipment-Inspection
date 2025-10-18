@@ -123,7 +123,7 @@ export default function ReportsPage({ role }: { role: string }) {
   const [statusFilter, setStatusFilter] = useState("all");
   const [dateFilter, setDateFilter] = useState("all");
   const [currentPage, setCurrentPage] = useState(1);
-  const ITEMS_PER_PAGE = 10;
+  const ITEMS_PER_PAGE = 50;
   const dateFrom = apiFilters.dateFrom;
   const dateTo = apiFilters.dateTo;
   const debouncedSearchTerm = useDebounce(searchTerm, 500);

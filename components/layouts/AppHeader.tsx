@@ -151,14 +151,13 @@ export default function Navigation() {
                   My Inspections
                 </Link>
               )}
-              {user.role === "mechanic" && (
-                <Link
-                  href="/schedule"
-                  className="text-gray-900 hover:text-primary px-3 py-2 rounded-md text-sm font-medium"
-                >
-                  Schedule
-                </Link>
-              )}
+
+              <Link
+                href="/schedule"
+                className="text-gray-900 hover:text-primary px-3 py-2 rounded-md text-sm font-medium"
+              >
+                Schedule
+              </Link>
 
               {/* Verification (Leader & Admin) */}
               {(user.role === "leader" || user.role === "admin") && (

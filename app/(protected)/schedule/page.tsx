@@ -321,7 +321,7 @@ const supportScheduleData = [
     WEDNESDAY: "GSDE11PPA",
     THURSDAY: "CP510",
     FRIDAY: "TL5169",
-    SATURDAY: "TL5170",
+    SATURDAY: "TL5171",
     SUNDAY: "TL5137",
   },
   {
@@ -329,9 +329,9 @@ const supportScheduleData = [
     TUESDAY: "GS525",
     WEDNESDAY: "",
     THURSDAY: "",
-    FRIDAY: "TL5171",
+    FRIDAY: "",
     SATURDAY: "",
-    SUNDAY: "",
+    SUNDAY: "TL5170",
   },
 ];
 

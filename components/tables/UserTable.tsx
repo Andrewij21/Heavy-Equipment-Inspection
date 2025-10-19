@@ -104,8 +104,8 @@ export function UsersTable({
     const filtered = data.filter((user) => {
       // Filter Pencarian
       const matchesSearch =
-        user.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        user.email.toLowerCase().includes(searchTerm.toLowerCase());
+        user.username?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        user.email?.toLowerCase().includes(searchTerm.toLowerCase());
 
       // Filter Peran (Role)
       const matchesRole = roleFilter === "all" || user.role === roleFilter;

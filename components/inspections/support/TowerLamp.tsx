@@ -289,7 +289,7 @@ export default function TowerLampInspectionForm({
                 render={({ field }) => (
                   <FormItem>
                     {/* <FormLabel>Time Down</FormLabel> */}
-                    <FormLabel>Time Stop</FormLabel>
+                    <FormLabel>Time RFU</FormLabel>
                     <FormControl>
                       <Input type="time" {...field} />
                     </FormControl>

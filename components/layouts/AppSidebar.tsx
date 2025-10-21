@@ -24,11 +24,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const userRole = user?.role;
   const filteredLinks = NAV_LINKS.navMain
     .filter((section) => {
-      const hasParentAccess =
-        !section.roles || (userRole && section.roles.includes(userRole));
-      if (!hasParentAccess) {
-        return false;
-      }
+      // const hasParentAccess =
+      //   !section.roles || (userRole && section.roles.includes(userRole));
+      // if (!hasParentAccess) {
+      //   return false;
+      // }
       if (section.items?.length) {
         const hasAccessibleItems = section.items.some(
           (item) => !item.roles || (userRole && item.roles.includes(userRole))

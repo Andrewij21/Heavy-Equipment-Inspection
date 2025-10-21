@@ -36,11 +36,5 @@ export const NAV_LINKS = {
         },
       ],
     },
-    {
-      title: "admin",
-      url: "/admin",
-      roles: ["admin"],
-      items: [],
-    },
   ],
 };

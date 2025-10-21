@@ -3,6 +3,7 @@ export const NAV_LINKS = {
     {
       title: "Getting Started",
       url: "#",
+      roles: ["mechanic", "admin", "leader"],
       items: [
         {
           title: "dashboard",
